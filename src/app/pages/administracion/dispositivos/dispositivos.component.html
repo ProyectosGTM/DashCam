@@ -11,14 +11,6 @@
           [crumbs]="['Apps', 'All-In-One Table']"></vex-breadcrumbs>
       </div>
 
-      <div class="hidden sm:block">
-        <mat-button-toggle-group
-          [formControl]="layoutCtrl"
-          class="mt-4 sm:mt-0">
-          <mat-button-toggle value="boxed">Boxed</mat-button-toggle>
-          <mat-button-toggle value="fullwidth">Full-Width</mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
     </div>
   </vex-page-layout-header>
 
@@ -79,7 +71,21 @@
           <mat-icon svgIcon="mat:add"></mat-icon>
         </button>
       </div>
+<dx-data-grid
+    [dataSource]="dispositivos"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [rowAlternationEnabled]="true"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [hoverStateEnabled]="true">
+    
+    <dxi-column dataField="id" caption="ID" width="70"></dxi-column>
+    <dxi-column dataField="nombre" caption="Nombre"></dxi-column>
+    <dxi-column dataField="tipo" caption="Tipo"></dxi-column>
+    <dxi-column dataField="status" caption="Estado"></dxi-column>
 
+  </dx-data-grid>
 
     </div>
   </vex-page-layout-content>

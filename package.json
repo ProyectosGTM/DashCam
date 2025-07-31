@@ -11,6 +11,7 @@
     "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
+    "postinstall": "node add-devextreme-license",
     "e2e": "ng e2e"
   },
   "dependencies": {
@@ -31,6 +32,9 @@
     "angular-calendar": "~0.31.0",
     "apexcharts": "~3.44.0",
     "date-fns": "~2.30.0",
+    "devextreme": "^23.2.4",
+    "devextreme-angular": "^23.2.4",
+    "devextreme-aspnet-data-nojquery": "^5.0.0-beta",
     "highlight.js": "~11.9.0",
     "luxon": "~3.4.3",
     "ngx-quill": "~24.0.0",

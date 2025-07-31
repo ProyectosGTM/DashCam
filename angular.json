@@ -37,7 +37,9 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/@vex/styles/tailwind.scss"
+              "src/@vex/styles/tailwind.scss",
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "node_modules/devextreme/dist/css/dx.material.orange.light.compact.css"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
@@ -115,7 +117,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "node_modules/devextreme/dist/css/dx.material.orange.light.compact.css"
             ],
             "scripts": []
           }

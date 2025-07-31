@@ -41,6 +41,7 @@ import { VexPageLayoutHeaderDirective } from '@vex/components/vex-page-layout/ve
 import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInputModule } from '@angular/material/input';
+import { DxDataGridModule } from 'devextreme-angular';
 
 @Component({
   selector: 'vex-dispositivos',
@@ -68,7 +69,8 @@ import { MatInputModule } from '@angular/material/input';
     MatPaginatorModule,
     FormsModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    DxDataGridModule
   ]
 })
 export class DispositivosComponent implements OnInit {
@@ -86,6 +88,13 @@ export class DispositivosComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  dispositivos = [
+    { id: 1, nombre: 'Cámara 4K', tipo: 'Cámara', status: 'Activo' },
+    { id: 2, nombre: 'Sensor GPS', tipo: 'Sensor', status: 'Inactivo' },
+    { id: 3, nombre: 'Router WiFi', tipo: 'Red', status: 'Activo' },
+    { id: 4, nombre: 'Sensor de Temperatura', tipo: 'Sensor', status: 'Mantenimiento' }
+  ];
 
   
 }

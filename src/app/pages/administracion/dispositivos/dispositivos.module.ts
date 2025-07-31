@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DispositivosRoutingModule } from './dispositivos-routing.module';
 import { DispositivosComponent } from './dispositivos.component';
+import { DxDataGridModule } from 'devextreme-angular';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { DispositivosComponent } from './dispositivos.component';
   imports: [
     CommonModule,
     DispositivosComponent,
-    DispositivosRoutingModule
+    DispositivosRoutingModule,
+    DxDataGridModule
   ]
 })
 export class DispositivosModule { }
