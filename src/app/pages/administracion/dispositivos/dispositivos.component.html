@@ -1,0 +1,86 @@
+<vex-page-layout>
+  <vex-page-layout-header
+    class="pb-16 flex flex-col items-start justify-center">
+    <div
+      [class.container]="layoutCtrl.value === 'boxed'"
+      [class.px-6]="layoutCtrl.value === 'fullwidth'"
+      class="w-full flex flex-col sm:flex-row justify-between">
+      <div>
+        <h1 class="title mt-0 mb-1">All-In-One Table</h1>
+        <vex-breadcrumbs
+          [crumbs]="['Apps', 'All-In-One Table']"></vex-breadcrumbs>
+      </div>
+
+      <div class="hidden sm:block">
+        <mat-button-toggle-group
+          [formControl]="layoutCtrl"
+          class="mt-4 sm:mt-0">
+          <mat-button-toggle value="boxed">Boxed</mat-button-toggle>
+          <mat-button-toggle value="fullwidth">Full-Width</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+  </vex-page-layout-header>
+
+  <vex-page-layout-content
+    [class.container]="layoutCtrl.value === 'boxed'"
+    [class.px-6]="layoutCtrl.value === 'fullwidth'"
+    class="-mt-6">
+    <div class="card overflow-auto -mt-16">
+      <div
+        class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+        <h2
+          class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l hidden sm:block flex-none">
+          <span >Customers</span>
+        </h2>
+
+        <div  class="mr-4 pr-4 border-r flex-none">
+          <button
+            color="primary"
+            mat-icon-button
+            matTooltip="Delete selected"
+            type="button">
+            <mat-icon svgIcon="mat:delete"></mat-icon>
+          </button>
+
+          <button
+            color="primary"
+            mat-icon-button
+            matTooltip="Another action"
+            type="button">
+            <mat-icon svgIcon="mat:folder"></mat-icon>
+          </button>
+        </div>
+
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-icon matIconPrefix svgIcon="mat:search"></mat-icon>
+          <input
+            matInput
+            placeholder="Search&hellip;"
+            type="text" />
+        </mat-form-field>
+
+        <span class="flex-1"></span>
+
+        <button
+          class="ml-4 flex-none"
+          mat-icon-button
+          matTooltip="Filter Columns"
+          type="button">
+          <mat-icon svgIcon="mat:filter_list"></mat-icon>
+        </button>
+
+        <button
+          class="ml-4 flex-none"
+          color="primary"
+          mat-mini-fab
+          matTooltip="Add Customer"
+          type="button">
+          <mat-icon svgIcon="mat:add"></mat-icon>
+        </button>
+      </div>
+
+
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>
