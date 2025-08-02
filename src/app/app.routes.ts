@@ -1,7 +1,14 @@
+import { AuthGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './layouts/layout/layout.component';
 import { VexRoutes } from '@vex/interfaces/vex-route.interface';
 
 export const appRoutes: VexRoutes = [
+  // 🔹 Redirección automática al login al iniciar la app
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
   {
     path: 'login',
     loadComponent: () =>
@@ -33,6 +40,7 @@ export const appRoutes: VexRoutes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'dashboards/analytics',

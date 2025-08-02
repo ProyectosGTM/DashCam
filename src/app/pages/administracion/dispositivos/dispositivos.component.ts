@@ -42,12 +42,14 @@ import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInputModule } from '@angular/material/input';
 import { DxDataGridModule } from 'devextreme-angular';
+import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
+import { DispositivosService } from '../../services/dispositivos.service';
 
 @Component({
   selector: 'vex-dispositivos',
   templateUrl: './dispositivos.component.html',
   styleUrl: './dispositivos.component.scss',
-  animations: [fadeInUp400ms, stagger40ms],
+  animations: [fadeInRight400ms],
   standalone: true,
   imports: [
     VexPageLayoutComponent,
@@ -76,17 +78,47 @@ import { DxDataGridModule } from 'devextreme-angular';
 export class DispositivosComponent implements OnInit {
   layoutCtrl = new UntypedFormControl('fullwidth');
 
-  /**
-   * Simulating a service with HTTP that returns Observables
-   * You probably want to remove this and do all requests in a service with HTTP
-   */
-  
-
+  isLoading: boolean = false;
+  listaDispositivos: any[] = [];
+  public grid: boolean = false;
+  public showFilterRow: boolean;
+  public showHeaderFilter: boolean;
+  public loadingVisible: boolean = false;
+  public mensajeAgrupar: string = "Arrastre un encabezado de columna aquí para agrupar por esa columna"
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private disposService: DispositivosService) {
+    this.showFilterRow = true;
+    this.showHeaderFilter = true;
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.obtenerDispositivos();
+  }
+
+  obtenerDispositivos() {
+    setTimeout(() => {
+      this.grid = true;
+    }, 150)
+    this.isLoading = true;
+    this.disposService.obtenerDispositivos().subscribe(
+      (res: any) => {
+        if (Array.isArray(res.dispositivos)) {
+          this.listaDispositivos = res.dispositivos;
+        } else {
+          console.error('El formato de datos recibido no es el esperado.');
+        }
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error al obtener dispositivos:', error);
+        this.isLoading = false;
+      }
+    );
+  }
+
+  showInfo(id: any): void {
+    console.log('Mostrar información del dispositivo con ID:', id);
   }
 
   dispositivos = [

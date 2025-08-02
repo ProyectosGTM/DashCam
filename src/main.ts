@@ -4,8 +4,15 @@ import { appConfig } from './app/app.config';
 
 import { licenseKey } from './devextreme-license';
 import config from 'devextreme/core/config';
+import { provideAnimations } from '@angular/platform-browser/animations';  // ✅ NUEVO
 
 config({ licenseKey });
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+// ✅ Aquí solo agregamos animaciones extra por seguridad
+bootstrapApplication(AppComponent, {
+  ...appConfig,
+  providers: [
+    ...(appConfig.providers || []),
+    provideAnimations() // ✅ habilita Angular Animations globalmente
+  ]
+}).catch((err) => console.error(err));
