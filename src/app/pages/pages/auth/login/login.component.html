@@ -1,63 +1,85 @@
 <div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
   <div class="card overflow-hidden w-full max-w-md">
-    <div class="p-6 pb-0 flex flex-col items-center justify-center">
-      <div class="fill-current text-center">
-        <img class="w-16" src="assets/img/logo/logo.svg" />
+    <div class="p-6 pb-0 flex flex-col">
+      <div class="fill-current text-center" style="display: flex; align-items: center; justify-content: center;">
+        <img style="width: 50%;" src="/assets/img/dashImage/dashcam-1.png" />
       </div>
     </div>
-
     <div class="text-center mt-4">
-      <h2 class="title m-0">Welcome back</h2>
+      <h2 class="title m-0">¡Bienvenido!</h2>
       <h4 class="body-2 text-secondary m-0">
-        Sign in with your credentials below.
+        Inicia sesión con tus credenciales a continuación.
       </h4>
     </div>
-
     <div [formGroup]="loginForm" class="p-6 flex flex-col gap-4">
       <div class="flex flex-col">
         <mat-form-field class="flex-1">
-          <mat-label>E-Mail</mat-label>
+          <mat-label>Correo Electrónico</mat-label>
           <input formControlName="UserName" matInput required />
-          <mat-error *ngIf="form.controls.email.hasError('required')"
-          >We need an email address to log you in
+          <mat-error *ngIf="form.controls.email.hasError('required')">Necesitamos una dirección de correo electrónico
+            para iniciar sesión.
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="flex-1">
-          <mat-label>Password</mat-label>
-          <input
-            [type]="inputType"
-            formControlName="Password"
-            matInput
-            required />
-          <button
-            (click)="toggleVisibility()"
-            mat-icon-button
-            matIconSuffix
-            matTooltip="Toggle Visibility"
-            type="button">
+        <mat-form-field class="flex-1 mt-5">
+          <mat-label>Contraseña</mat-label>
+          <input [type]="inputType" formControlName="Password" matInput required />
+          <button (click)="toggleVisibility()" mat-icon-button matIconSuffix matTooltip="Mostrar/Ocultar" type="button">
+            <mat-icon>{{ inputType === 'password' ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          <mat-hint>Click the eye to toggle visibility</mat-hint>
-          <mat-error *ngIf="form.controls.password.hasError('required')"
-          >We need a password to log you in
+          <mat-hint>Haz clic en el ojo para mostrar u ocultar la contraseña</mat-hint>
+          <mat-error *ngIf="form.controls.password.hasError('required')">
+            Necesitamos una contraseña para iniciar sesión
           </mat-error>
         </mat-form-field>
       </div>
-
-      <div class="flex items-center justify-between">
-        <mat-checkbox class="caption" color="primary">Remember Me</mat-checkbox>
-        <a [routerLink]="['/forgot-password']" class="caption"
-        >Forgot Password?</a
-        >
-      </div>
-
-      <button (click)="onSubmit()" color="primary" mat-raised-button type="button">
-        SIGN IN
+      <button class="mt-2 align" (click)="onSubmit()">
+        <span *ngIf="loading" class="loader"></span> <span style="margin-left: 3%;">{{textLogin}}</span>
       </button>
+    </div>
+  </div>
+</div>
 
-      <p class="text-secondary text-center">
-        Don't have an account?<br />
-        <a [routerLink]="['/register']">Click here to create one</a>
-      </p>
+
+
+<div class="overlay-success" *ngIf="modalOpen || modalClosing" [class.closing]="modalClosing" (click)="onBackdrop()">
+  <div class="modal-success" [class.closing]="modalClosing" (click)="$event.stopPropagation()">
+    <div class="modal-success__header">
+      <button class="close-btn-success" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-success__body">
+      <div class="icon-circle-success">
+        <svg class="icon-success" viewBox="0 0 24 24">
+          <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"></path>
+        </svg>
+      </div>
+      <h3 class="modal-success-title">¡Operación Exitosa!</h3>
+      <p class="message-success">Has iniciado sesión correctamente.</p>
+    </div>
+    <div class="modal-success__divider"></div>
+    <div class="modal-success__footer">
+      <button class="btn-outline-success" (click)="closeModal()">Entendido</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="overlay-danger" *ngIf="modalErrorOpen || modalErrorClosing" [class.closing]="modalErrorClosing" (click)="onBackdropError()">
+  <div class="modal-danger" [class.closing]="modalErrorClosing" (click)="$event.stopPropagation()">
+    <div class="modal-danger__header">
+      <button class="close-btn-danger" (click)="closeErrorModal()">&times;</button>
+    </div>
+    <div class="modal-danger__body">
+      <div class="icon-circle-danger">
+        <svg class="icon-danger" viewBox="0 0 24 24">
+          <path d="M18.3 5.71L12 12l6.3 6.29-1.42 1.42L10.59 13.41 4.29 19.71 2.87 18.29 9.17 12 2.87 5.71 4.29 4.29 10.59 10.59 16.88 4.29z"></path>
+        </svg>
+      </div>
+      <h3 class="modal-danger-title">¡Error!</h3>
+      <p class="message-danger">Ocurrió un problema al procesar tu solicitud.</p>
+    </div>
+    <div class="modal-danger__divider"></div>
+    <div class="modal-danger__footer">
+      <button class="btn-outline-danger" (click)="closeErrorModal()">Entendido</button>
     </div>
   </div>
 </div>

@@ -116,4 +116,17 @@ export class SidenavComponent implements OnInit {
       maxWidth: '600px'
     });
   }
+
+  @Input() item: any;
+  @Input() level = 0;
+
+  isOpen = false;
+
+  get hasChildren(): boolean {
+    return !!this.item?.children?.length;
+  }
+
+  toggleOpen() {
+    this.isOpen = !this.isOpen;
+  }
 }

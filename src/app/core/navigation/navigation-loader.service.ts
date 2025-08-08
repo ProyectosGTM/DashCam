@@ -20,223 +20,152 @@ export class NavigationLoaderService {
 
   loadNavigation(): void {
     this._items.next([
-      {
-        type: 'subheading',
-        label: 'Dashboards',
-        children: [
-          {
-            type: 'link',
-            label: 'Analytics',
-            route: '/',
-            icon: 'mat:insights',
-            routerLinkActiveOptions: { exact: true }
-          }
-        ]
-      },
+      // {
+      //   type: 'subheading',
+      //   label: 'Dashboards',
+      //   children: [
+      //     {
+      //       type: 'link',
+      //       label: 'Analytics',
+      //       route: '/',
+      //       icon: 'mat:insights',
+      //       routerLinkActiveOptions: { exact: true }
+      //     }
+      //   ]
+      // },
       {
         type: 'subheading',
         label: 'Apps',
         children: [
           {
             type: 'link',
-            label: 'All-In-One Table',
-            route: '/apps/aio-table',
-            icon: 'mat:assignment'
-          },
-          {
-            type: 'dropdown',
-            label: 'Help Center',
-            icon: 'mat:contact_support',
-            children: [
-              {
-                type: 'link',
-                label: 'Getting Started',
-                route: '/apps/help-center/getting-started'
-              },
-              {
-                type: 'link',
-                label: 'Pricing & Plans',
-                route: '/apps/help-center/pricing'
-              },
-              {
-                type: 'link',
-                label: 'FAQ',
-                route: '/apps/help-center/faq'
-              },
-              {
-                type: 'link',
-                label: 'Guides',
-                route: '/apps/help-center/guides'
-              }
-            ]
-          },
-          {
-            type: 'link',
-            label: 'Calendar',
-            route: '/apps/calendar',
-            icon: 'mat:date_range',
-            badge: {
-              value: '12',
-              bgClass: 'bg-purple-600',
-              textClass: 'text-white'
-            }
-          },
-          {
-            type: 'link',
-            label: 'Chat',
-            route: '/apps/chat',
-            icon: 'mat:chat',
-            badge: {
-              value: '16',
-              bgClass: 'bg-cyan-600',
-              textClass: 'text-white'
-            }
-          },
-          {
-            type: 'link',
             label: 'Dispositivos',
             route: '/administracion/dispositivos',
-            icon: 'mat:mail'
-          },
-          {
-            type: 'dropdown',
-            label: 'Social',
-            icon: 'mat:person_outline',
-            children: [
-              {
-                type: 'link',
-                label: 'Profile',
-                route: '/apps/social',
-                routerLinkActiveOptions: { exact: false }
-              },
-              {
-                type: 'link',
-                label: 'Timeline',
-                route: '/apps/social/timeline'
-              }
-            ]
+            icon: 'mat:important_devices'
           },
           {
             type: 'link',
-            label: 'WYSIWYG Editor',
-            route: '/apps/editor',
-            icon: 'mat:chrome_reader_mode'
-          },
-          {
-            type: 'dropdown',
-            label: 'Contacts',
-            icon: 'mat:contacts',
-            children: [
-              {
-                type: 'link',
-                label: 'List - Grid',
-                route: '/apps/contacts/grid'
-              },
-              {
-                type: 'link',
-                label: 'List - Table',
-                route: '/apps/contacts/table'
-              }
-            ]
+            label: 'Vehículos',
+            route: '/administracion/vehiculos',
+            icon: 'mat:time_to_leave'
           },
           {
             type: 'link',
-            label: 'Scrumboard',
-            route: '/apps/scrumboard',
-            icon: 'mat:assessment',
-            badge: {
-              value: 'NEW',
-              bgClass: 'bg-primary-600',
-              textClass: 'text-on-primary-600'
-            }
-          }
+            label: 'Operadores',
+            route: '/administracion/operadores',
+            icon: 'mat:group',
+          },
+          {
+            type: 'link',
+            label: 'Monederos',
+            route: '/administracion/monederos',
+            icon: 'mat:monetization_on',
+          },
+          {
+            type: 'link',
+            label: 'Pasajeros',
+            route: '/administracion/pasajeros',
+            icon: 'mat:directions_walk',
+          },
+          {
+            type: 'link',
+            label: 'Transacciones',
+            route: '/administracion/transacciones',
+            icon: 'mat:assessment'
+          },
+          {
+            type: 'link',
+            label: 'Bitacora',
+            route: '/administracion/bitacora',
+            icon: 'mat:assignment',
+          },
         ]
       },
-      {
-        type: 'subheading',
-        label: 'Pages',
-        children: [
-          {
-            type: 'dropdown',
-            label: 'Authentication',
-            icon: 'mat:lock',
-            children: [
-              {
-                type: 'link',
-                label: 'Login',
-                route: '/login'
-              },
-              {
-                type: 'link',
-                label: 'Register',
-                route: '/register'
-              },
-              {
-                type: 'link',
-                label: 'Forgot Password',
-                route: '/forgot-password'
-              }
-            ]
-          },
-          {
-            type: 'link',
-            label: 'Coming Soon',
-            icon: 'mat:watch_later',
-            route: '/coming-soon'
-          },
-          {
-            type: 'dropdown',
-            label: 'Errors',
-            icon: 'mat:error',
-            badge: {
-              value: '4',
-              bgClass: 'bg-green-600',
-              textClass: 'text-white'
-            },
-            children: [
-              {
-                type: 'link',
-                label: '404',
-                route: '/pages/error-404'
-              },
-              {
-                type: 'link',
-                label: '500',
-                route: '/pages/error-500'
-              }
-            ]
-          },
-          {
-            type: 'link',
-            label: 'Pricing',
-            icon: 'mat:attach_money',
-            route: '/pages/pricing'
-          },
-          {
-            type: 'link',
-            label: 'Invoice',
-            icon: 'mat:receipt',
-            route: '/pages/invoice'
-          },
-          {
-            type: 'link',
-            label: 'FAQ',
-            icon: 'mat:help',
-            route: '/pages/faq'
-          },
-          {
-            type: 'link',
-            label: 'Guides',
-            icon: 'mat:book',
-            route: '/pages/guides',
-            badge: {
-              value: '18',
-              bgClass: 'bg-teal-600',
-              textClass: 'text-white'
-            }
-          }
-        ]
-      },
+      // {
+      //   type: 'subheading',
+      //   label: 'Pages',
+      //   children: [
+      //     {
+      //       type: 'dropdown',
+      //       label: 'Authentication',
+      //       icon: 'mat:lock',
+      //       children: [
+      //         {
+      //           type: 'link',
+      //           label: 'Login',
+      //           route: '/login'
+      //         },
+      //         {
+      //           type: 'link',
+      //           label: 'Register',
+      //           route: '/register'
+      //         },
+      //         {
+      //           type: 'link',
+      //           label: 'Forgot Password',
+      //           route: '/forgot-password'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       type: 'link',
+      //       label: 'Coming Soon',
+      //       icon: 'mat:watch_later',
+      //       route: '/coming-soon'
+      //     },
+      //     {
+      //       type: 'dropdown',
+      //       label: 'Errors',
+      //       icon: 'mat:error',
+      //       badge: {
+      //         value: '4',
+      //         bgClass: 'bg-green-600',
+      //         textClass: 'text-white'
+      //       },
+      //       children: [
+      //         {
+      //           type: 'link',
+      //           label: '404',
+      //           route: '/pages/error-404'
+      //         },
+      //         {
+      //           type: 'link',
+      //           label: '500',
+      //           route: '/pages/error-500'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       type: 'link',
+      //       label: 'Pricing',
+      //       icon: 'mat:attach_money',
+      //       route: '/pages/pricing'
+      //     },
+      //     {
+      //       type: 'link',
+      //       label: 'Invoice',
+      //       icon: 'mat:receipt',
+      //       route: '/pages/invoice'
+      //     },
+      //     {
+      //       type: 'link',
+      //       label: 'FAQ',
+      //       icon: 'mat:help',
+      //       route: '/pages/faq'
+      //     },
+      //     {
+      //       type: 'link',
+      //       label: 'Guides',
+      //       icon: 'mat:book',
+      //       route: '/pages/guides',
+      //       badge: {
+      //         value: '18',
+      //         bgClass: 'bg-teal-600',
+      //         textClass: 'text-white'
+      //       }
+      //     }
+      //   ]
+      // },
       // {
       //   type: 'subheading',
       //   label: 'UI Elements',

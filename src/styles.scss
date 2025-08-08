@@ -28,3 +28,64 @@ html {
   // --vex-color-warn: yellow;
   // --vex-color-warn-contrast: black;
 }
+
+.swal2-popup .swal2-actions {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 999999 !important;
+  background: none !important;
+  height: auto !important;
+  min-height: 48px !important;
+  margin-top: 20px !important;
+}
+
+.swal2-popup .swal2-confirm,
+.swal2-popup .swal2-cancel {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  min-width: 120px !important;
+  height: 44px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  z-index: 999999 !important;
+  margin: 1.25em auto 0 auto !important;
+  pointer-events: auto !important;
+}
+
+
+.dx-page.dx-selection,
+.dx-page-size.dx-selection {
+  background: #940027 !important;
+  color: #fff !important;
+  border-color: #940027 !important;
+}
+
+.dx-datagrid .dx-row.dx-header-row > td {
+  background-color: #a8002d !important;
+  color: #fff !important;
+}
+
+.dx-datagrid .dx-row.dx-header-row > td:hover {
+  background-color: #8a1421 !important;
+  color: #fff !important;
+}
+
+.dx-datagrid .dx-header-row > td:hover,
+.dx-datagrid .dx-header-row > td.dx-datagrid-action:hover {
+  background-color: #8a1421 !important;
+  color: #fff !important;
+}
+
+.dx-datagrid .dx-header-row > td:hover * {
+  color: #fff !important;
+}
+
+.dx-header-filter,
+.dx-sort-up,
+.dx-sort-down {
+  color: #fff !important;
+}
+

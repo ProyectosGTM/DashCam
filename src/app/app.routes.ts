@@ -126,6 +126,36 @@ export const appRoutes: VexRoutes = [
             path: 'dispositivos',
             loadChildren: () => import('./pages/administracion/dispositivos/dispositivos.module')
               .then(m => m.DispositivosModule)
+          },
+          {
+            path: 'vehiculos',
+            loadChildren: () => import('./pages/administracion/vehiculos/vehiculos.module')
+              .then(m => m.VehiculosModule)
+          },
+          {
+            path: 'operadores',
+            loadChildren: () => import('./pages/administracion/operadores/operadores.module')
+              .then(m => m.OperadoresModule)
+          },
+          {
+            path: 'monederos',
+            loadChildren: () => import('./pages/administracion/monederos/monederos.module')
+              .then(m => m.MonederosModule)
+          },
+          {
+            path: 'pasajeros',
+            loadChildren: () => import('./pages/administracion/pasajeros/pasajeros.module')
+              .then(m => m.PasajerosModule)
+          },
+          {
+            path: 'transacciones',
+            loadChildren: () => import('./pages/administracion/transacciones/transacciones.module')
+              .then(m => m.TransaccionesModule)
+          },
+          {
+            path: 'bitacora',
+            loadChildren: () => import('./pages/administracion/bitacora/bitacora.module')
+              .then(m => m.BitacoraModule)
           }
         ]
       },

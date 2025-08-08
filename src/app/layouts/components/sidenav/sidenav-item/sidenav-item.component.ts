@@ -74,7 +74,6 @@ export class SidenavItemComponent implements OnInit, OnChanges {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        filter(() => this.isDropdown(this.item)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => this.onRouteChange());
@@ -85,13 +84,14 @@ export class SidenavItemComponent implements OnInit, OnChanges {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((item) => this.onOpenChange(item));
+
+    this.onRouteChange(); // Inicializa estado activo también al cargar
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
       changes &&
-      changes.hasOwnProperty('item') &&
-      this.isDropdown(this.item)
+      changes.hasOwnProperty('item')
     ) {
       this.onRouteChange();
     }
@@ -104,11 +104,11 @@ export class SidenavItemComponent implements OnInit, OnChanges {
   }
 
   onOpenChange(item: NavigationDropdown) {
-    if (this.isChildrenOf(this.item as NavigationDropdown, item)) {
+    if (this.isDropdown(this.item) && this.isChildrenOf(this.item as NavigationDropdown, item)) {
       return;
     }
 
-    if (this.hasActiveChilds(this.item as NavigationDropdown)) {
+    if (this.isDropdown(this.item) && this.hasActiveChilds(this.item as NavigationDropdown)) {
       return;
     }
 
@@ -119,24 +119,31 @@ export class SidenavItemComponent implements OnInit, OnChanges {
   }
 
   onRouteChange() {
-    if (this.hasActiveChilds(this.item as NavigationDropdown)) {
-      this.isActive = true;
+  if (this.isDropdown(this.item)) {
+    const wasActive = this.isActive;
+    this.isActive = this.hasActiveChilds(this.item as NavigationDropdown);
+
+    // Opcional: abre el menú si entra directo a ruta hija
+    if (this.isActive) {
       this.isOpen = true;
       this.navigationService.triggerOpenChange(this.item as NavigationDropdown);
-      this.cd.markForCheck();
-    } else {
-      this.isActive = false;
+    } else if (wasActive) {
+      // Cierra el menú si ya no está activo (opcional)
       this.isOpen = false;
       this.navigationService.triggerOpenChange(this.item as NavigationDropdown);
-      this.cd.markForCheck();
     }
+    this.cd.markForCheck();
+  } else if (this.isLink(this.item) && !this.isFunction(this.item.route)) {
+    this.isActive = this.router.isActive(this.item.route as string, false);
+    this.cd.markForCheck();
   }
+}
+
 
   isChildrenOf(parent: NavigationDropdown, item: NavigationDropdown): boolean {
     if (parent.children.indexOf(item) !== -1) {
       return true;
     }
-
     return parent.children
       .filter((child) => this.isDropdown(child))
       .some((child) => this.isChildrenOf(child as NavigationDropdown, item));
@@ -147,10 +154,10 @@ export class SidenavItemComponent implements OnInit, OnChanges {
       if (this.isDropdown(child)) {
         return this.hasActiveChilds(child);
       }
-
       if (this.isLink(child) && !this.isFunction(child.route)) {
         return this.router.isActive(child.route as string, false);
       }
+      return false;
     });
   }
 

@@ -24,7 +24,7 @@
     </h1>
   </a>
 
-  <button
+  <!-- <button
     *ngIf="isHorizontalLayout$ | async"
     [class.hidden]="!(isDesktop$ | async)"
     [matMenuTriggerFor]="addNewMenu"
@@ -32,9 +32,9 @@
     mat-flat-button
     type="button">
     Add New
-  </button>
+  </button> -->
 
-  <mat-menu
+  <!-- <mat-menu
     #addNewMenu="matMenu"
     [overlapTrigger]="false"
     xPosition="after"
@@ -75,9 +75,9 @@
       <mat-icon svgIcon="mat:receipt"></mat-icon>
       <span>Add Receipt</span>
     </button>
-  </mat-menu>
+  </mat-menu> -->
 
-  <div #megaMenuOriginRef class="ltr:ml-2 rtl:mr-2">
+  <!-- <div #megaMenuOriginRef class="ltr:ml-2 rtl:mr-2">
     <button
       (click)="openMegaMenu(megaMenuOriginRef)"
       *ngIf="isHorizontalLayout$ | async"
@@ -89,7 +89,7 @@
       <span>Mega Menu</span>
       <mat-icon class="icon-sm" svgIcon="mat:arrow_drop_down"></mat-icon>
     </button>
-  </div>
+  </div> -->
 
   <div
     *ngIf="(isVerticalLayout$ | async) && (isNavbarInToolbar$ | async)"
@@ -103,7 +103,7 @@
   <span class="flex-1"></span>
 
   <div class="-mx-1 flex items-center">
-    <div class="px-1">
+    <!-- <div class="px-1">
       <button (click)="openSearch()" mat-icon-button type="button">
         <mat-icon color="primary" svgIcon="mat:search"></mat-icon>
       </button>
@@ -111,7 +111,7 @@
 
     <div class="px-1">
       <vex-toolbar-notifications></vex-toolbar-notifications>
-    </div>
+    </div> -->
 
     <div class="px-1">
       <button (click)="openQuickpanel()" mat-icon-button type="button">
@@ -120,9 +120,11 @@
     </div>
 
     <div class="px-1">
-      <button [matMenuTriggerFor]="languageMenu" mat-icon-button type="button">
-        <mat-icon svgIcon="flag:united-states"></mat-icon>
-      </button>
+      <button class="btn-user" [matMenuTriggerFor]="languageMenu" type="button">
+  <mat-icon class="btn-user__icon">person</mat-icon>
+  <span class="btn-user__text">Administrador</span>
+</button>
+
     </div>
 
     <div *ngIf="userVisible$ | async" class="px-1">
@@ -135,14 +137,15 @@
       xPosition="before"
       yPosition="below">
       <button mat-menu-item>
-        <mat-icon svgIcon="flag:united-states"></mat-icon>
-        <span>English</span>
-      </button>
+  <mat-icon>account_circle</mat-icon>
+  <span>Perfil de Usuario</span>
+</button>
 
-      <button mat-menu-item>
-        <mat-icon svgIcon="flag:germany"></mat-icon>
-        <span>German</span>
-      </button>
+<button mat-menu-item>
+  <mat-icon>exit_to_app</mat-icon>
+  <span>Cerrar Sesión</span>
+</button>
+
     </mat-menu>
   </div>
 </div>

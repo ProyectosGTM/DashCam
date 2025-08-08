@@ -280,7 +280,8 @@
 }
 :host ::ng-deep .vex-sidenav-user:hover,
 :host ::ng-deep .vex-sidenav-user--open {
-  background: #000 !important;
+  background: #460013 !important;
+  color: white;
 }
 :host ::ng-deep .vex-sidenav-user:hover .vex-sidenav-user__title,
 :host ::ng-deep .vex-sidenav-user:hover .vex-sidenav-user__subtitle,
@@ -288,7 +289,7 @@
 :host ::ng-deep .vex-sidenav-user--open .vex-sidenav-user__title,
 :host ::ng-deep .vex-sidenav-user--open .vex-sidenav-user__subtitle,
 :host ::ng-deep .vex-sidenav-user--open .vex-sidenav-user__dropdown-icon {
-  color: #000 !important;
+  color: #ffffff !important;
 }
 
 /* Scrollbar oculto (simplebar) */

@@ -41,7 +41,7 @@ import { VexPageLayoutHeaderDirective } from '@vex/components/vex-page-layout/ve
 import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInputModule } from '@angular/material/input';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { DispositivosService } from '../../services/dispositivos.service';
 
@@ -83,9 +83,31 @@ export class DispositivosComponent implements OnInit {
   public grid: boolean = false;
   public showFilterRow: boolean;
   public showHeaderFilter: boolean;
+  
+  modalOpen = false;
+modalAnim: 'in' | 'out' = 'in';
+
+abrirModal() {
+  this.modalOpen = true;
+  this.modalAnim = 'in';
+}
+
+cerrarModal() {
+  this.modalAnim = 'out';
+}
+
+onAnimationEnd() {
+  if (this.modalAnim === 'out') {
+    this.modalOpen = false;
+  }
+}
+
   public loadingVisible: boolean = false;
   public mensajeAgrupar: string = "Arrastre un encabezado de columna aquí para agrupar por esa columna"
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  @ViewChild('gridContainer', { static: false }) dataGrid!: DxDataGridComponent;
+  isGrouped: boolean = false;
+  public autoExpandAllGroups: boolean = true;
 
   constructor(private disposService: DispositivosService) {
     this.showFilterRow = true;
@@ -127,6 +149,25 @@ export class DispositivosComponent implements OnInit {
     { id: 3, nombre: 'Router WiFi', tipo: 'Red', status: 'Activo' },
     { id: 4, nombre: 'Sensor de Temperatura', tipo: 'Sensor', status: 'Mantenimiento' }
   ];
+
+  limpiarCampos() {
+    const today = new Date();
+    this.dataGrid.instance.clearGrouping();
+    this.isGrouped = false;
+    this.obtenerDispositivos();
+    this.dataGrid.instance.refresh();
+  }
+
+  toggleExpandGroups() {
+  const groupedColumns = this.dataGrid.instance.getVisibleColumns()
+    .filter(col => typeof col.groupIndex === 'number' && col.groupIndex >= 0);
+
+  if (groupedColumns.length === 0) {
+  } else {
+    this.autoExpandAllGroups = !this.autoExpandAllGroups;
+    this.dataGrid.instance.refresh();
+  }
+}
 
   
 }

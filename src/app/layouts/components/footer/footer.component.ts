@@ -15,4 +15,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit() {}
 
   ngOnDestroy(): void {}
+
+  year: number = new Date().getFullYear();
 }

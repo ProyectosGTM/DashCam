@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  NgZone,
   OnInit
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormGroup, Validators } from '@angular/forms';
@@ -18,15 +19,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Credentials } from 'src/app/entities/Credentials';
 import { AuthenticationService } from 'src/app/core/services/auth.service';
 import { catchError, throwError } from 'rxjs';
-import Swal from 'sweetalert2';
 import { User } from 'src/app/entities/User';
+import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 
 @Component({
   selector: 'vex-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [fadeInUp400ms],
+  animations: [fadeInRight400ms],
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -41,6 +42,7 @@ import { User } from 'src/app/entities/User';
     MatSnackBarModule
   ]
 })
+
 export class LoginComponent implements OnInit {
   form = this.fb.group({
     email: ['', Validators.required],
@@ -49,6 +51,12 @@ export class LoginComponent implements OnInit {
 
   inputType = 'password';
   visible = false;
+  public textLogin: string = 'Iniciar Sesión';
+  public loading: boolean = false;
+  public loginForm: UntypedFormGroup;
+  public credentials: Credentials;
+  modalOpen = false;
+  modalClosing = false;
 
   constructor(
     private router: Router,
@@ -56,17 +64,18 @@ export class LoginComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private snackbar: MatSnackBar,
     private auth: AuthenticationService,
+    private zone: NgZone, private cdr: ChangeDetectorRef,
   ) {
     this.loginForm = this.fb.group({
-    email: [''],
-    password: ['']
-  });
+      email: [''],
+      password: ['']
+    });
 
-  this.credentials = {};
+    this.credentials = {};
   }
 
   ngOnInit(): void {
-      this.initForm();
+    this.initForm();
   }
 
   send() {
@@ -101,57 +110,74 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public textLogin: string = 'Iniciar Sesión';
-  public loading: boolean = false;
-  public loginForm: UntypedFormGroup;
-  public credentials: Credentials;
-   onSubmit() {
-    this.loading = true;
-    this.textLogin = 'Cargando...';
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth' // Para un desplazamiento suave
-    });
-    // this.loading = true;
-    this.credentials = this.loginForm.value;
-    
-    this.auth.authenticate(this.credentials).pipe(
-      catchError((error) => {
+onSubmit() {
+  this.loading = true;
+  this.textLogin = 'Cargando...';
+  const credentials = this.loginForm.value;
+
+  this.auth.authenticate(credentials).subscribe({
+    next: (result: User) => {
+      this.zone.run(() => {
+        this.modalOpen = true;
+        this.modalClosing = false;
         this.loading = false;
         this.textLogin = 'Iniciar Sesión';
-        Swal.fire({
-  title: "Good job!",
-  text: "You clicked the button!",
-  icon: "success"
-});
-        return throwError(() => "")
-      })
-      ).subscribe((result: User) => {
-        setTimeout(()=> {
-          this.auth.setData(result);
-    
-          this.router.navigate(['/administracion/dispositivos']);
-          const nombreUsuario = result.nombre;
-          const apellidoUsuario = result.apellidoPaterno;
-      
-          Swal.fire({
-  title: "Good job!",
-  text: "You clicked the button!",
-  icon: "success"
-});
-      
-          this.loading = false;
-          this.textLogin = 'Iniciar Sesión';
-        },700)
-    });
-    // this.auth.authenticate(this.credentials).subscribe(
-    //   (result: User) => {
-    //     this.auth.setData(result);
-    //     this.router.navigate(['']);
-    //   },
-    //   err=>{
-    //     console.log(err);
-    //     // this.toastr.error('Usuario o contraseña incorrectos')
-    //   })
+        this.cdr.detectChanges();
+        setTimeout(() => this.auth.setData(result), 0);
+      });
+    },
+    error: (err) => {
+      this.zone.run(() => {
+        this.modalErrorOpen = true;
+        this.modalErrorClosing = false;
+        this.loading = false;
+        this.textLogin = 'Iniciar Sesión';
+        this.cdr.detectChanges();
+      });
+    }
+  });
+}
+
+// Handlers específicos del modal rojo
+closeErrorModal() {
+  this.modalErrorClosing = true;
+  this.cdr.detectChanges();
+  setTimeout(() => {
+    this.modalErrorOpen = false;
+    this.modalErrorClosing = false;
+    this.cdr.detectChanges();
+  }, 200);
+}
+onBackdropError() { this.closeErrorModal(); }
+
+closeModal() {
+  this.modalClosing = true;
+  this.cdr.detectChanges();
+
+  // Navega DESPUÉS de la animación
+  setTimeout(() => {
+    this.modalOpen = false;
+    this.modalClosing = false;
+    this.cdr.detectChanges();
+    this.router.navigate(['/administracion/dispositivos']);
+  }, 200);
+}
+
+  openModal() {
+    this.modalOpen = true;
+    this.modalClosing = false;
   }
+
+
+
+// Agrega estos dos si los referencías en el HTML
+onBackdrop() { this.closeModal(); }
+onAnimEnd() { /* no-op para evitar errores de plantilla */ }
+
+
+
+modalErrorOpen = false;
+modalErrorClosing = false;
+
+
 }
