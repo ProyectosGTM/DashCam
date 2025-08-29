@@ -1,16 +1,36 @@
-const { exec } = require('child_process');
+// add-devextreme-license.js (en la raíz, junto a package.json)
+const fs = require('fs');
+const path = require('path');
 
-// Reemplaza 'your-license-key' con tu clave de licencia proporcionada por DevExpress
-const licenseKey = 'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogImEwODE3YzBkLTNmNzYtNDJjYS1hZDE5LTllYmMyYzVmMWI5ZSIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjQxCn0=.jDVYl8D2frZn/DKgp33IHvycOBynlH7eg3YIyIo4TFkrIsKibx4k5SKn0UGtuM6pUwB+ZaG+v/qxpM20xJN8PNfFqZAd5oX6ZnRHVjGWrSy/8lRcq+6WwmuHDNwRU22lnRi/lQ==';
+const target = path.join(__dirname, 'src', 'devextreme-license.ts');
+const example = path.join(__dirname, 'src', 'devextreme-license.example.ts');
 
-// Comando para registrar la licencia de DevExtreme
-const command = `npx devextreme register ${licenseKey}`;
+// ✅ Si existe la variable de entorno DX_LICENSE, la usamos para generar el archivo.
+//    Útil para CI/CD o máquinas de otros devs sin tocar el repo.
+const envKey = process.env.DX_LICENSE;
 
-exec(command, (err, stdout, stderr) => {
-  if (err) {
-    console.error(`Error al registrar la licencia de DevExtreme: ${stderr}`);
-    process.exit(1); // Termina el proceso si hay un error
+function writeWithKey(key) {
+  const content =
+    `// Archivo generado automáticamente por postinstall\n` +
+    `export const licenseKey = ${JSON.stringify(key)};\n`;
+  fs.writeFileSync(target, content, 'utf8');
+  console.log('> Creado src/devextreme-license.ts con clave desde DX_LICENSE.');
+}
+
+try {
+  if (fs.existsSync(target)) {
+    console.log('> src/devextreme-license.ts ya existe. No se hace nada.');
+  } else if (envKey) {
+    writeWithKey(envKey);
+  } else if (fs.existsSync(example)) {
+    fs.copyFileSync(example, target);
+    console.log('> Copiado devextreme-license.example.ts -> devextreme-license.ts');
   } else {
-    console.log(`Licencia de DevExtreme registrada exitosamente: ${stdout}`);
+    // fallback: crear archivo vacío para no romper el build
+    writeWithKey('');
+    console.warn('> No hay example ni DX_LICENSE; se creó con licencia vacía.');
   }
-});
+} catch (e) {
+  console.error('> Error creando devextreme-license.ts:', e);
+  process.exit(0); // no rompas la instalación por esto
+}

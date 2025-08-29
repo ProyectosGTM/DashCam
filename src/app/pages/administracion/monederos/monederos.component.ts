@@ -71,7 +71,6 @@ import { AlertsService } from '../../pages/modal/alerts.service';
     MatTableModule,
     MatSortModule,
     MatCheckboxModule,
-    NgFor,
     NgClass,
     MatPaginatorModule,
     FormsModule,

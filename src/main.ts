@@ -2,17 +2,29 @@ import { AppComponent } from './app/app.component';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 
-import { licenseKey } from './devextreme-license';
 import config from 'devextreme/core/config';
-import { provideAnimations } from '@angular/platform-browser/animations';  // ✅ NUEVO
+import { provideAnimations } from '@angular/platform-browser/animations';
 
-config({ licenseKey });
+async function getLicenseKey(): Promise<string> {
+  try {
+    // 👇 Import dinámico: no rompe el build si el archivo no existe
+    const mod = await import('./devextreme-license');
+    return (mod as any).licenseKey ?? '';
+  } catch {
+    console.warn('DevExtreme: devextreme-license.ts no encontrado. Usando licencia vacía.');
+    return '';
+  }
+}
 
-// ✅ Aquí solo agregamos animaciones extra por seguridad
-bootstrapApplication(AppComponent, {
-  ...appConfig,
-  providers: [
-    ...(appConfig.providers || []),
-    provideAnimations() // ✅ habilita Angular Animations globalmente
-  ]
-}).catch((err) => console.error(err));
+(async () => {
+  const key = await getLicenseKey();
+  config({ licenseKey: key });
+
+  await bootstrapApplication(AppComponent, {
+    ...appConfig,
+    providers: [
+      ...(appConfig.providers || []),
+      provideAnimations(),
+    ],
+  });
+})();

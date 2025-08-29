@@ -49,12 +49,8 @@ export interface PerfilUsuario {
   animations: [fadeInRight400ms],
   imports: [
     CommonModule,
-    VexPageLayoutComponent,
-    VexPageLayoutHeaderDirective,
-    VexBreadcrumbsComponent,
     MatButtonToggleModule,
     ReactiveFormsModule,
-    VexPageLayoutContentDirective,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
