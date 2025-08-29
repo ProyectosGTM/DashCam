@@ -41,10 +41,11 @@ import { VexPageLayoutHeaderDirective } from '@vex/components/vex-page-layout/ve
 import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInputModule } from '@angular/material/input';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { PasajerosService } from '../../services/pasajeros.service';
 import { Router } from '@angular/router';
+import { AlertsService } from '../../pages/modal/alerts.service';
 
 
 @Component({
@@ -91,8 +92,11 @@ export class PasajerosComponent implements OnInit {
   public loadingVisible: boolean = false;
   public mensajeAgrupar: string = "Arrastre un encabezado de columna aquí para agrupar por esa columna"
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  public autoExpandAllGroups: boolean = true;
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid!: DxDataGridComponent;
+  isGrouped: boolean = false;
 
-  constructor(private pasaService: PasajerosService, private route:Router) {
+  constructor(private pasaService: PasajerosService, private route:Router, private alerts: AlertsService) {
     this.showFilterRow = true;
     this.showHeaderFilter = true;
    }
@@ -115,6 +119,30 @@ export class PasajerosComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+
+  limpiarCampos() {
+    const today = new Date();
+    this.dataGrid.instance.clearGrouping();
+    this.isGrouped = false;
+    this.obtenerListaPasajeros();
+    this.dataGrid.instance.refresh();
+  }
+
+  toggleExpandGroups() {
+    const groupedColumns = this.dataGrid.instance.getVisibleColumns()
+      .filter(col => (col.groupIndex ?? -1) >= 0);
+    if (groupedColumns.length === 0) {
+      this.alerts.open({
+        type: 'info',
+        title: '¡Ops!',
+        message: 'Debes arrastar un encabezado de una columna para expandir o contraer grupos.',
+        backdropClose: false
+      });
+    } else {
+      this.autoExpandAllGroups = !this.autoExpandAllGroups;
+      this.dataGrid.instance.refresh();
+    }
   }
 
 }

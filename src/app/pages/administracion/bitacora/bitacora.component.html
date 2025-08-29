@@ -4,7 +4,7 @@
       class="w-full flex flex-col sm:flex-row justify-between">
       <div>
         <h1 class="title mt-0 mb-1">Bitácora</h1>
-        <vex-breadcrumbs [crumbs]="['Apps', 'Bitácora']"></vex-breadcrumbs>
+        <vex-breadcrumbs [crumbs]="['Aplicaciones', 'Bitácora']"></vex-breadcrumbs>
       </div>
     </div>
   </vex-page-layout-header>
@@ -17,11 +17,11 @@
           <span>Registro de Actividades</span>
         </h2>
         <div class="mr-4 pr-4 border-r flex-none">
-          <button color="primary" mat-raised-button type="button">
-            <mat-icon svgIcon="mat:add"></mat-icon> Agrupar
+          <button color="primary" mat-raised-button type="button" (click)="toggleExpandGroups()">
+            <mat-icon svgIcon="mat:compare_arrows"></mat-icon> {{ autoExpandAllGroups ? ' Contraer Grupos' : ' Expandir Grupos' }}
           </button>&nbsp;&nbsp;
-          <button color="accent" mat-raised-button type="button">
-            <mat-icon svgIcon="mat:add"></mat-icon> Limpiar
+          <button color="accent" mat-raised-button type="button" (click)="limpiarCampos()">
+            <mat-icon svgIcon="mat:restore"></mat-icon> Limpiar
           </button>
         </div>
       </div>
@@ -35,7 +35,7 @@
           <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
           <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
           <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
-          <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+          <dxo-grouping #expand [autoExpandAll]="autoExpandAllGroups"></dxo-grouping>
           <dxi-column dataField="Id" caption="ID" alignment="center" [width]="150"></dxi-column>
           <dxi-column dataField="Modulo" caption="Módulo" alignment="center" [width]="200"></dxi-column>
           <dxi-column dataField="Accion" caption="Acción" alignment="center" [width]="250"></dxi-column>

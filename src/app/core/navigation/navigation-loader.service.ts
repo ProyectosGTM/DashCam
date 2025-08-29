@@ -35,7 +35,7 @@ export class NavigationLoaderService {
       // },
       {
         type: 'subheading',
-        label: 'Apps',
+        label: 'Administración',
         children: [
           {
             type: 'link',
@@ -79,6 +79,12 @@ export class NavigationLoaderService {
             route: '/administracion/bitacora',
             icon: 'mat:assignment',
           },
+          // {
+          //   type: 'link',
+          //   label: 'Perfil de Usuario',
+          //   route: '/administracion/perfil-usuario',
+          //   icon: 'mat:person',
+          // },
         ]
       },
       // {

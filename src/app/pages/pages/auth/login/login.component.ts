@@ -21,6 +21,7 @@ import { AuthenticationService } from 'src/app/core/services/auth.service';
 import { catchError, throwError } from 'rxjs';
 import { User } from 'src/app/entities/User';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
+import { AlertsService } from '../../modal/alerts.service';
 
 @Component({
   selector: 'vex-login',
@@ -61,6 +62,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private alerts: AlertsService,
     private cd: ChangeDetectorRef,
     private snackbar: MatSnackBar,
     private auth: AuthenticationService,
@@ -118,18 +120,36 @@ onSubmit() {
   this.auth.authenticate(credentials).subscribe({
     next: (result: User) => {
       this.zone.run(() => {
-        this.modalOpen = true;
-        this.modalClosing = false;
+        // this.modalOpen = true;
+        // this.modalClosing = false;
+        this.alerts.open({
+          type: 'success',
+          title: 'Inicio de sesión correcto',
+          message: 'Tu cuenta ha sido autenticada exitosamente.',
+          showCancel: false,
+          confirmText: 'Confirmar',
+          cancelText: 'Cancelar'
+        }).then(result => {
+          if (result === 'confirm') {
+            // lógica de reintento
+            this.router.navigate(['/administracion/dispositivos']);
+          } else {
+            // lógica si cancela
+          }
+        });
         this.loading = false;
         this.textLogin = 'Iniciar Sesión';
         this.cdr.detectChanges();
         setTimeout(() => this.auth.setData(result), 0);
       });
     },
-    error: (err) => {
+    error: (err: any) => {
       this.zone.run(() => {
-        this.modalErrorOpen = true;
-        this.modalErrorClosing = false;
+        this.alerts.open({
+          type: 'error',
+          title: '¡Ops!',
+          message: 'Ocurrio un error al ingresar sus credenciales.',
+        });
         this.loading = false;
         this.textLogin = 'Iniciar Sesión';
         this.cdr.detectChanges();
@@ -160,7 +180,7 @@ closeModal() {
     this.modalClosing = false;
     this.cdr.detectChanges();
     this.router.navigate(['/administracion/dispositivos']);
-  }, 200);
+  }, 600);
 }
 
   openModal() {

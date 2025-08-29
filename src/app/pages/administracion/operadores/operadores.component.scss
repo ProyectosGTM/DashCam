@@ -5,6 +5,7 @@
   --radii: 0.5em;
   cursor: pointer;
   min-height: 38px;
+  color: white;
   font-size: var(--size, 14px);
   font-weight: 500;
   transition: 0.8s;
@@ -12,6 +13,11 @@
   background-color: #940027;
   border: none;
   border-radius: var(--radii);
+}
+
+::ng-deep .dx-datagrid-search-text {
+    color: #fff;
+    background-color: #940027;
 }
 
 ::ng-deep .dx-searchbox .dx-texteditor-input:hover {

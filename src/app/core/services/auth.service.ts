@@ -127,9 +127,8 @@ export class AuthenticationService extends BaseServicesService {
     return permissions ? JSON.parse(permissions) : [];
   }
 
-  /** ✅ Llama al login y maneja token */
   public authenticate(body: Credentials): Observable<User> {
     return this.http.post<User>(environment.API_SECURITY + "/api/login", body)
-      .pipe(catchError(this.handleError));
+    .pipe(catchError(this.handleError));
   }
 }

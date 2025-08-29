@@ -4,9 +4,8 @@
       class="w-full flex flex-col sm:flex-row justify-between">
       <div>
         <h1 class="title mt-0 mb-1">Monederos</h1>
-        <vex-breadcrumbs [crumbs]="['Apps', 'Monederos']"></vex-breadcrumbs>
+        <vex-breadcrumbs [crumbs]="['Aplicaciones', 'Monederos']"></vex-breadcrumbs>
       </div>
-
     </div>
   </vex-page-layout-header>
 
@@ -17,30 +16,14 @@
         <h2 class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l hidden sm:block flex-none">
           <span>Lista de Monederos</span>
         </h2>
-
         <div class="mr-4 pr-4 border-r flex-none">
-          <button color="primary" mat-raised-button type="button">
-             <mat-icon svgIcon="mat:add"></mat-icon> Agrupar
-            </button>&nbsp;&nbsp;
-            <button color="accent" mat-raised-button type="button">
-              <mat-icon svgIcon="mat:add"></mat-icon> Limpiar
-            </button>
+          <button color="primary" mat-raised-button type="button" (click)="toggleExpandGroups()">
+            <mat-icon svgIcon="mat:compare_arrows"></mat-icon> {{ autoExpandAllGroups ? ' Contraer Grupos' : ' Expandir Grupos' }}
+          </button>&nbsp;&nbsp;
+          <button color="accent" mat-raised-button type="button" (click)="limpiarCampos()">
+            <mat-icon svgIcon="mat:restore"></mat-icon> Limpiar
+          </button>
         </div>
-
-        <!-- <mat-form-field subscriptSizing="dynamic">
-          <mat-icon matIconPrefix svgIcon="mat:search"></mat-icon>
-          <input matInput placeholder="Search&hellip;" type="text" />
-        </mat-form-field>
-
-        <span class="flex-1"></span>
-
-        <button class="ml-4 flex-none" mat-icon-button matTooltip="Filter Columns" type="button">
-          <mat-icon svgIcon="mat:filter_list"></mat-icon>
-        </button>
-
-        <button class="ml-4 flex-none" color="primary" mat-mini-fab matTooltip="Add Customer" type="button">
-          <mat-icon svgIcon="mat:add"></mat-icon>
-        </button> -->
       </div>
       <div class="mt-3 p-2">
         <dx-data-grid id="gridContainer" [columnHidingEnabled]="true" [showBorders]="true" [showColumnLines]="true"
@@ -52,9 +35,8 @@
           <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
           <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
           <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
-          <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-  
-          <dxi-column caption="Acciones" cellTemplate="Acciones" alignment="center" [width]="150"></dxi-column>
+          <dxo-grouping #expand [autoExpandAll]="autoExpandAllGroups"></dxo-grouping>
+          <dxi-column caption="Acciones" cellTemplate="Acciones" alignment="center" [width]="220"></dxi-column>
           <dxi-column dataField="Id" caption="Id" alignment="center"></dxi-column>
           <dxi-column dataField="NumeroSerie" caption="NumeroSerie" alignment="center"></dxi-column>
           <dxi-column dataField="FechaActivacion" caption="Fecha Activación" alignment="center" cellTemplate="fecActi">
@@ -71,19 +53,16 @@
             <dxi-total-item column="Saldo" summaryType="sum" displayFormat="Total: {0}" valueFormat="currency">
             </dxi-total-item>
           </dxo-summary>
-  
           <div *dxTemplate="let monedero of 'Acciones'" class="d-flex gap-3 justify-content-center">
             <div style="display: flex; align-items: center; justify-content: center;">
               <div>
-                <button class="ml-4 flex-none" color="success" (click)="createCustomer()" mat-mini-fab
-                  matTooltip="Add Customer" type="button">
-                  <mat-icon svgIcon="mat:add"></mat-icon>
+                <button class="btn-success" (click)="abrirModal('recarga', monedero.data)">
+                  + Recarga
                 </button>
               </div>
-              <div>
-                <button class="ml-4 flex-none" color="primary" (click)="createCustomer()" mat-mini-fab
-                  matTooltip="Add Customer" type="button">
-                  <mat-icon svgIcon="mat:add"></mat-icon>
+              <div style="margin-left: 5px;">
+                <button class="btn-danger" (click)="abrirModal('debito', monedero.data)">
+                  - Debito
                 </button>
               </div>
             </div>
@@ -93,7 +72,53 @@
           </dxo-export>
         </dx-data-grid>
       </div>
-
     </div>
   </vex-page-layout-content>
 </vex-page-layout>
+
+
+<div *ngIf="modalOpen" class="am-backdrop" [class.am-fade-out]="modalClosing || modalAnim === 'out'" (click)="onBackdrop()">
+  <div class="am-modal" [class.am-in]="modalAnim === 'in'" [class.am-out]="modalAnim === 'out'"
+    (click)="$event.stopPropagation()">
+    <div class="am-header" [ngClass]="{
+      'am-header--recarga': tipoOperacion === 'recarga',
+      'am-header--debito': tipoOperacion === 'debito' }">
+      <div class="am-icon" aria-hidden="true">
+        <i [ngClass]="tipoOperacion === 'recarga' ? 'fa fa-plus' : 'fa fa-minus'"></i>
+      </div>
+      <h2 class="am-title">
+        {{ tipoOperacion === 'recarga' ? 'Realizar Recarga:' : 'Realizar Débito:' }}
+        <span class="am-id">{{ selectedTransaccion?.id }}</span>
+      </h2>
+      <button class="am-close" type="button" aria-label="Cerrar" (click)="cerrarModal()">
+        <span>×</span>
+      </button>
+    </div>
+    <form [formGroup]="tipoOperacion === 'recarga' ? recargaForm : debitoForm" (ngSubmit)="confirmarOperacion()">
+      <div class="am-body">
+        <div class="am-grid">
+          <div class="am-item">
+            <div class="am-label">Monto Actual</div>
+            <div class="am-value">{{ selectedTransaccion?.saldo | currency: "$" }}</div>
+          </div>
+          <div class="am-item">
+            <div class="am-label">Número Serie</div>
+            <div class="am-value am-value--accent">{{ selectedTransaccion?.numSerie }}</div>
+          </div>
+        </div>
+        <div class="am-item">
+          <div class="am-label">Monto</div>
+          <input type="number" class="am-input" placeholder="Ingrese el monto" formControlName="Monto" />
+        </div>
+        <div class="am-actions">
+          <button class="am-btn am-btn--primary" type="submit" [disabled]="loading">
+            {{ loading ? 'Cargando...' : submitButton || 'Confirmar' }}
+          </button>
+          <button class="am-btn am-btn--secondary" type="button" aria-label="Cerrar" (click)="cerrarModal()">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

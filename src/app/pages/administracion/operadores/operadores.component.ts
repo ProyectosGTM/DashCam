@@ -41,9 +41,10 @@ import { VexPageLayoutHeaderDirective } from '@vex/components/vex-page-layout/ve
 import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInputModule } from '@angular/material/input';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { OperadoresService } from '../../services/operadores.service';
+import { AlertsService } from '../../pages/modal/alerts.service';
 
 @Component({
   selector: 'vex-operadores',
@@ -58,7 +59,6 @@ import { OperadoresService } from '../../services/operadores.service';
     MatButtonToggleModule,
     ReactiveFormsModule,
     VexPageLayoutContentDirective,
-    NgIf,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
@@ -66,8 +66,6 @@ import { OperadoresService } from '../../services/operadores.service';
     MatTableModule,
     MatSortModule,
     MatCheckboxModule,
-    NgFor,
-    NgClass,
     MatPaginatorModule,
     FormsModule,
     MatDialogModule,
@@ -87,8 +85,11 @@ export class OperadoresComponent implements OnInit {
   public loadingVisible: boolean = false;
   public mensajeAgrupar: string = "Arrastre un encabezado de columna aquí para agrupar por esa columna"
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  public autoExpandAllGroups: boolean = true;
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid!: DxDataGridComponent;
+  isGrouped: boolean = false;
 
-  constructor(private opService: OperadoresService) {
+  constructor(private opService: OperadoresService, private alerts: AlertsService) {
     this.showFilterRow = true;
     this.showHeaderFilter = true;
   }
@@ -110,6 +111,30 @@ export class OperadoresComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  limpiarCampos() {
+    const today = new Date();
+    this.dataGrid.instance.clearGrouping();
+    this.isGrouped = false;
+    this.obtenerOperadores();
+    this.dataGrid.instance.refresh();
+  }
+
+  toggleExpandGroups() {
+    const groupedColumns = this.dataGrid.instance.getVisibleColumns()
+      .filter(col => (col.groupIndex ?? -1) >= 0);
+    if (groupedColumns.length === 0) {
+      this.alerts.open({
+        type: 'info',
+        title: '¡Ops!',
+        message: 'Debes arrastar un encabezado de una columna para expandir o contraer grupos.',
+        backdropClose: false
+      });
+    } else {
+      this.autoExpandAllGroups = !this.autoExpandAllGroups;
+      this.dataGrid.instance.refresh();
+    }
   }
 
 }

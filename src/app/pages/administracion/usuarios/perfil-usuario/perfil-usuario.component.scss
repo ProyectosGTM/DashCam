@@ -1,0 +1,267 @@
+/* ======= Variables (paleta en rojos/burdeos) ======= */
+$bg: #f6f7fb;
+$card-bg: #ffffff;
+$border: #e9ecf3;
+$text: #2e2e48;
+$muted: #6f7392;
+
+$red-600: #9b0d2d;   // burdeos
+$red-700: #7f0b25;
+$red-200: #ffd9e1;
+$rose-50: #fff5f7;
+$shadow: 0 10px 24px rgba(20, 20, 43, 0.08);
+
+/* ======= Página ======= */
+.profile-page {
+  background: $bg;
+  min-height: 100vh;
+  color: $text;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+}
+
+/* ======= Cover en rojos ======= */
+.cover {
+  height: 210px;
+  background: radial-gradient(1200px 300px at 50% -30%, #b01234 0%, #8b0d2c 60%, #5a081c 100%);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mix-blend-mode: overlay;
+    opacity: .35;
+  }
+}
+.cover-overlay { display: none; }
+
+/* ======= Grid ======= */
+.container {
+    max-width: 1120px;
+    margin: -70px auto 40px;
+    padding: 0 16px;
+    display: grid !important;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    position: relative; /* necesario para el pseudo-elemento */
+
+    /* FONDO ROJO SOLO EN LA IZQUIERDA */
+    &::before {
+      content: "";
+      position: absolute;
+      top: -40px;          /* sube un poco para “abrazar” las cards */
+      bottom: -40px;       /* baja un poco para sombra agradable */
+      left: 0;
+      width: 320px;        /* coincide con el ancho de la columna izquierda */
+      z-index: -1;         /* detrás del contenido */
+      border-radius: 0 24px 24px 0;
+      background: linear-gradient(180deg, #b01234 0%, #8b0d2c 60%, #5a081c 100%);
+      box-shadow: 0 18px 40px rgba(90, 8, 28, 0.25);
+    }
+
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+      margin-top: -90px;
+
+      /* En móvil quitamos el panel rojo para no tapar contenido */
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+/* ======= Card base ======= */
+.card {
+  background: $card-bg;
+  border: 1px solid $border;
+  border-radius: 16px;
+  box-shadow: $shadow;
+}
+
+/* ======= Sidebar ======= */
+.sidebar {
+  padding: 20px 18px;
+
+  .avatar-wrap {
+    text-align: center;
+    margin-top: -64px;
+
+    .avatar {
+      position: relative;
+      width: 120px; height: 120px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      border: 4px solid $card-bg;
+      box-shadow: 0 6px 18px rgba(155, 13, 45, 0.25);
+
+      img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+      .status-dot {
+        position: absolute; right: 6px; bottom: 6px;
+        width: 12px; height: 12px; border-radius: 999px;
+        background: #22c55e; border: 2px solid $card-bg;
+      }
+    }
+
+    .name { font-size: 20px; margin: 6px 0 2px; font-weight: 700; }
+    .role { font-size: 13px; color: $muted; margin: 0 0 8px; }
+
+    .location {
+      background-color: #225f38;
+      padding: 10px 15px 10px 15px;
+      color: #00ff2b;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12.5px;
+
+      .icon { width: 16px; height: 16px; fill: currentColor; margin-right: 4px; }
+      .dot { opacity: .6; }
+      .loc-item { display: inline-flex; align-items: center; }
+    }
+  }
+
+  .section {
+    margin-top: 14px; padding-top: 12px; border-top: 1px dashed $border;
+
+    .section-title {
+      font-weight: 700; font-size: 13px; color: #ff4d7a; margin: 6px 0 10px;
+      &.pink { color: #ff4d7a; }
+    }
+
+    .kv {
+      list-style: none; margin: 0; padding: 0;
+      li {
+        font-size: 13px; padding: 8px 10px; margin-bottom: 8px;
+        border: 1px solid $border; border-radius: 10px; background: #fff;
+        display: flex; gap: 6px; flex-wrap: wrap;
+
+        span:first-child { color: $muted; min-width: 110px; font-weight: 600; }
+      }
+    }
+  }
+}
+
+/* ======= Contenido ======= */
+.content {
+  padding: 14px;
+
+  .tabs {
+    list-style: none; margin: 0; padding: 6px;
+    display: flex; gap: 8px; align-items: center;
+    background: #fff6f7;
+    border: 1px solid $border; border-radius: 12px;
+
+    li {
+      padding: 8px 14px; font-size: 13px; color: $muted;
+      border-radius: 10px; user-select: none;
+
+      &.active {
+        background: #fff; border: 1px solid $border; color: $text; font-weight: 700;
+        box-shadow: 0 6px 14px rgba(155, 13, 45, 0.08);
+      }
+    }
+  }
+
+  .body { padding: 14px 8px 8px; }
+
+  .block {
+    background: #fff; border: 1px solid $border; border-radius: 14px;
+    padding: 16px 16px 14px; box-shadow: 0 6px 16px rgba(18, 18, 31, 0.06);
+    margin-bottom: 14px;
+
+    .block-title { margin: 0 0 10px; font-size: 14px; font-weight: 800; }
+    .muted { color: $muted; font-size: 13.5px; line-height: 1.6; }
+  }
+
+  /* Lista de contacto */
+  .contact-list {
+    margin: 0; padding: 0; list-style: none;
+    display: grid; gap: 10px;
+
+    li {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      align-items: center; gap: 10px;
+      padding: 10px 12px; border: 1px solid $border; background: $rose-50;
+      border-radius: 12px;
+
+      .ci-icon {
+        width: 36px; height: 36px; border-radius: 10px;
+        background: $red-200; display: grid; place-items: center;
+        svg { width: 18px; height: 18px; fill: $red-700; }
+      }
+      .ci-text { font-size: 13px; b { margin-right: 6px; color: $text; } }
+    }
+  }
+}
+
+/* ======= Responsivo ======= */
+@media (max-width: 992px) {
+  .container { grid-template-columns: 1fr; }
+  .content { padding: 12px; }
+  .content .tabs { flex-wrap: wrap; }
+}
+
+@media (max-width: 560px) {
+  .sidebar .section .kv li span:first-child { min-width: 90px; }
+  .content .contact-list li { grid-template-columns: 36px 1fr; }
+}
+
+/* Utilidad */
+.hidden { display: none !important; }
+
+/* === NUEVO: estilo para “Información de contacto” en el sidebar === */
+.profile-page .sidebar .section .contact-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.profile-page .sidebar .section .contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-page .sidebar .section .contact-list .ci-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #f3f4f6; /* base tenue */
+}
+
+.profile-page .sidebar .section .contact-list .ci-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* colores opcionales por tipo */
+.profile-page .sidebar .section .contact-list .ci-icon.email    { background: #eef1ff; }
+.profile-page .sidebar .section .contact-list .ci-icon.email svg { fill: #6d28d9; }
+.profile-page .sidebar .section .contact-list .ci-icon.website  { background: #ffe8f4; }
+.profile-page .sidebar .section .contact-list .ci-icon.website svg { fill: #e83e8c; }
+.profile-page .sidebar .section .contact-list .ci-icon.location { background: #e6f6ff; }
+.profile-page .sidebar .section .contact-list .ci-icon.location svg { fill: #2563eb; }
+.profile-page .sidebar .section .contact-list .ci-icon.phone    { background: #fff3e6; }
+.profile-page .sidebar .section .contact-list .ci-icon.phone svg { fill: #f97316; }
+
+.profile-page .sidebar .section .contact-list .ci-text {
+  font-size: 16px;
+  line-height: 1.3;
+  color: #6b7280; /* gris azulado para el valor */
+}
+
+.profile-page .sidebar .section .contact-list .ci-text b {
+  font-size: 18px;     /* etiqueta grande */
+  font-weight: 800;
+  color: #0f172a;      /* muy oscuro */
+  margin-right: 6px;
+}

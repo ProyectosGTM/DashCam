@@ -36,7 +36,7 @@
           <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
           <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
           <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
-          <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+          <dxo-grouping #expand [autoExpandAll]="autoExpandAllGroups"></dxo-grouping>
           <dxi-column dataField="Id" caption="ID" alignment="center"></dxi-column>
           <dxi-column dataField="Estatus" caption="Estatus" alignment="center" cellTemplate="est">
             <div *dxTemplate="let f of 'est'">
@@ -55,9 +55,9 @@
   </vex-page-layout-content>
 </vex-page-layout>
 
-<button (click)="abrirModal()" class="open-modal-btn">
+<!-- <button (click)="abrirModal()" class="open-modal-btn">
   Abrir Modal Bonito
-</button>
+</button> -->
 
 <div
   *ngIf="modalOpen"

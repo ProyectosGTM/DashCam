@@ -156,6 +156,11 @@ export const appRoutes: VexRoutes = [
             path: 'bitacora',
             loadChildren: () => import('./pages/administracion/bitacora/bitacora.module')
               .then(m => m.BitacoraModule)
+          },
+          {
+            path: 'perfil-usuario',
+            loadChildren: () => import('./pages/administracion/usuarios/perfil-usuario/perfil-usuario.module')
+              .then(m => m.PerfilUsuarioModule)
           }
         ]
       },

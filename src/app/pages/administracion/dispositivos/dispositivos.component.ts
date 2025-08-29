@@ -44,6 +44,8 @@ import { MatInputModule } from '@angular/material/input';
 import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { DispositivosService } from '../../services/dispositivos.service';
+import Swal from 'sweetalert2';
+import { AlertsService } from '../../pages/modal/alerts.service';
 
 @Component({
   selector: 'vex-dispositivos',
@@ -77,39 +79,24 @@ import { DispositivosService } from '../../services/dispositivos.service';
 })
 export class DispositivosComponent implements OnInit {
   layoutCtrl = new UntypedFormControl('fullwidth');
-
+  isGrouped: boolean = false;
   isLoading: boolean = false;
   listaDispositivos: any[] = [];
-  public grid: boolean = false;
-  public showFilterRow: boolean;
-  public showHeaderFilter: boolean;
-  
-  modalOpen = false;
-modalAnim: 'in' | 'out' = 'in';
-
-abrirModal() {
-  this.modalOpen = true;
-  this.modalAnim = 'in';
-}
-
-cerrarModal() {
-  this.modalAnim = 'out';
-}
-
-onAnimationEnd() {
-  if (this.modalAnim === 'out') {
-    this.modalOpen = false;
-  }
-}
-
   public loadingVisible: boolean = false;
   public mensajeAgrupar: string = "Arrastre un encabezado de columna aquí para agrupar por esa columna"
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
-  @ViewChild('gridContainer', { static: false }) dataGrid!: DxDataGridComponent;
-  isGrouped: boolean = false;
   public autoExpandAllGroups: boolean = true;
+  @ViewChild(DxDataGridComponent, { static: false })dataGrid!: DxDataGridComponent;
+  public grid: boolean = false;
+  public showFilterRow: boolean;
+  public showHeaderFilter: boolean;
+  modalAnim: 'in' | 'out' = 'in';
+  modalOpen = false;
+  modalClosing = false;
+  modalErrorOpen = false;
+  modalErrorClosing = false;
 
-  constructor(private disposService: DispositivosService) {
+  constructor(private disposService: DispositivosService, private alerts: AlertsService) {
     this.showFilterRow = true;
     this.showHeaderFilter = true;
   }
@@ -139,17 +126,6 @@ onAnimationEnd() {
     );
   }
 
-  showInfo(id: any): void {
-    console.log('Mostrar información del dispositivo con ID:', id);
-  }
-
-  dispositivos = [
-    { id: 1, nombre: 'Cámara 4K', tipo: 'Cámara', status: 'Activo' },
-    { id: 2, nombre: 'Sensor GPS', tipo: 'Sensor', status: 'Inactivo' },
-    { id: 3, nombre: 'Router WiFi', tipo: 'Red', status: 'Activo' },
-    { id: 4, nombre: 'Sensor de Temperatura', tipo: 'Sensor', status: 'Mantenimiento' }
-  ];
-
   limpiarCampos() {
     const today = new Date();
     this.dataGrid.instance.clearGrouping();
@@ -159,15 +135,51 @@ onAnimationEnd() {
   }
 
   toggleExpandGroups() {
-  const groupedColumns = this.dataGrid.instance.getVisibleColumns()
-    .filter(col => typeof col.groupIndex === 'number' && col.groupIndex >= 0);
-
-  if (groupedColumns.length === 0) {
-  } else {
-    this.autoExpandAllGroups = !this.autoExpandAllGroups;
-    this.dataGrid.instance.refresh();
+    const groupedColumns = this.dataGrid.instance.getVisibleColumns()
+      .filter(col => (col.groupIndex ?? -1) >= 0);
+    if (groupedColumns.length === 0) {
+      this.alerts.open({
+        type: 'info',
+        title: '¡Ops!',
+        message: 'Debes arrastar un encabezado de una columna para expandir o contraer grupos.',
+        backdropClose: false
+      });
+    } else {
+      this.autoExpandAllGroups = !this.autoExpandAllGroups;
+      this.dataGrid.instance.refresh();
+    }
   }
-}
 
-  
+  onBackdropError() { this.closeErrorModal(); }
+  closeErrorModal() {
+    this.modalErrorClosing = true;
+    setTimeout(() => {
+      this.modalErrorOpen = false;
+      this.modalErrorClosing = false;
+    }, 200);
+  }
+
+  onBackdrop() { this.closeModal(); }
+  closeModal() {
+    this.modalClosing = true;
+    setTimeout(() => {
+      this.modalOpen = false;
+      this.modalClosing = false;
+    }, 600);
+  }
+
+  abrirModal() {
+    this.modalOpen = true;
+    this.modalAnim = 'in';
+  }
+
+  cerrarModal() {
+    this.modalAnim = 'out';
+  }
+
+  onAnimationEnd() {
+    if (this.modalAnim === 'out') {
+      this.modalOpen = false;
+    }
+  }
 }
