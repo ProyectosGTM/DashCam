@@ -37,11 +37,47 @@ export class NavigationLoaderService {
         type: 'subheading',
         label: 'Administración',
         children: [
+          // {
+          //   type: 'link',
+          //   label: 'Dashboard',
+          //   route: '/administracion/dispositivos',
+          //   icon: 'mat:dashboard'
+          // },
           {
             type: 'link',
-            label: 'Dispositivos',
+            label: 'Usuarios',
+            route: '/administracion/usuarios',
+            icon: 'mat:group'
+          },
+          {
+            type: 'link',
+            label: 'Clientes',
+            route: '/administracion/clientes',
+            icon: 'mat:people_alt'
+          },
+          {
+            type: 'link',
+            label: 'Permisos',
+            route: '/administracion/permisos',
+            icon: 'mat:lock'
+          },
+          {
+            type: 'link',
+            label: 'Módulos',
+            route: '/administracion/modulos',
+            icon: 'mat:apps'
+          },
+          {
+            type: 'link',
+            label: 'Validadores',
             route: '/administracion/dispositivos',
-            icon: 'mat:important_devices'
+            icon: 'mat:verified'
+          },
+          {
+            type: 'link',
+            label: 'Contador',
+            route: '/administracion/contadora',
+            icon: 'mat:calculate'
           },
           {
             type: 'link',
@@ -67,6 +103,18 @@ export class NavigationLoaderService {
             route: '/administracion/pasajeros',
             icon: 'mat:directions_walk',
           },
+          {
+            type: 'link',
+            label: 'Rutas',
+            route: '/administracion/rutas',
+            icon: 'mat:map',
+          },
+          // {
+          //   type: 'link',
+          //   label: 'Monitoreo',
+          //   route: '/administracion/monitoreo',
+          //   icon: 'mat:monitor_heart',
+          // },
           {
             type: 'link',
             label: 'Transacciones',

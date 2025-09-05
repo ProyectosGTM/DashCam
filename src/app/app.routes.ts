@@ -161,6 +161,41 @@ export const appRoutes: VexRoutes = [
             path: 'perfil-usuario',
             loadChildren: () => import('./pages/administracion/usuarios/perfil-usuario/perfil-usuario.module')
               .then(m => m.PerfilUsuarioModule)
+          },
+          {
+            path: 'usuarios',
+            loadChildren: () => import('./pages/administracion/usuarios/usuarios.module')  
+              .then(m => m.UsuariosModule)
+          },
+          {
+            path: 'clientes',
+            loadChildren: () => import('./pages/administracion/clientes/clientes.module')  
+              .then(m => m.ClientesModule)
+          },
+          {
+            path: 'permisos',
+            loadChildren:() => import('./pages/administracion/permisos/permisos.module')
+              .then(m => m.PermisosModule)
+          },
+          {
+            path: 'modulos',
+            loadChildren:() => import('./pages/administracion/modulos/modulos.module')
+              .then(m => m.ModulosModule)
+          },
+          {
+            path: 'contadora',
+            loadChildren:() => import('./pages/administracion/contador/contador.module')
+              .then(m => m.ContadorModule)
+          },
+          {
+            path: 'rutas',
+            loadChildren:() => import('./pages/administracion/rutas/rutas.module')
+              .then(m => m.RutasModule)
+          },
+          {
+            path: 'monitoreo',
+            loadChildren:() => import('./pages/administracion/monitoreo/monitoreo.module')
+              .then(m => m.MonitoreoModule)
           }
         ]
       },

@@ -1,0 +1,84 @@
+<vex-page-layout @fadeInRight>
+    <vex-page-layout-header class="pb-16 flex flex-col items-start justify-center">
+        <div [class.container]="layoutCtrl.value === 'boxed'" [class.px-6]="layoutCtrl.value === 'fullwidth'"
+            class="w-full flex flex-col sm:flex-row justify-between">
+            <div>
+                <h1 class="title mt-0 mb-1">Lista de Modulos</h1>
+                <vex-breadcrumbs [crumbs]="['Aplicaciones', 'Registros']"></vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        <div class="card overflow-auto -mt-16">
+            <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+                <h2
+                    class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l hidden sm:block flex-none">
+                    <span>Información General</span>
+                </h2>
+            </div>
+            <div class="mt-3 p-3">
+                <!-- ======= FORMULARIO SIMPLE (3 CAMPOS) ======= -->
+<div class="mf-card">
+  <h3 class="mf-title">Registrar módulo</h3>
+  <p class="mf-sub">Completa los datos mínimos</p>
+
+  <form #f="ngForm" novalidate class="mf-form">
+    <!-- Nombre -->
+    <div class="mf-field">
+      <label class="mf-label">Nombre del módulo <span class="mf-req">*</span></label>
+      <input
+        class="mf-input"
+        type="text"
+        placeholder="Ej. Monitoreo"
+        name="nombre"
+        required
+        minlength="3" />
+      <small class="mf-error" *ngIf="f.submitted && (!f.controls['nombre']?.valid)">
+        El nombre es obligatorio (mínimo 3 caracteres).
+      </small>
+    </div>
+
+    <!-- Correo -->
+    <div class="mf-field">
+      <label class="mf-label">Correo de contacto <span class="mf-req">*</span></label>
+      <input
+        class="mf-input"
+        type="email"
+        placeholder="correo@empresa.com"
+        name="email"
+        required
+        email />
+      <small class="mf-error" *ngIf="f.submitted && (!f.controls['email']?.valid)">
+        Ingresa un correo válido.
+      </small>
+    </div>
+
+    <!-- Estado -->
+    <div class="mf-field">
+      <label class="mf-label">Estado <span class="mf-req">*</span></label>
+      <select class="mf-input" name="estado" required>
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+        <option value="mantenimiento">Mantenimiento</option>
+      </select>
+      <small class="mf-error" *ngIf="f.submitted && (!f.controls['estado']?.valid)">
+        Selecciona un estado.
+      </small>
+    </div>
+
+    <!-- Acciones -->
+    <div class="mf-actions">
+      <button class="mf-btn mf-btn--primary" type="submit">Guardar</button>
+      <button class="mf-btn" type="button" >Limpiar</button>
+    </div>
+  </form>
+</div>
+
+
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
