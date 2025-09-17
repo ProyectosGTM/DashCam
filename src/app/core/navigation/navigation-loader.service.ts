@@ -37,12 +37,11 @@ export class NavigationLoaderService {
         type: 'subheading',
         label: 'Administración',
         children: [
-          // {
-          //   type: 'link',
-          //   label: 'Dashboard',
-          //   route: '/administracion/dispositivos',
-          //   icon: 'mat:dashboard'
-          // },
+          {
+            type: 'link',
+            label: 'Dashboard',
+            icon: 'mat:dashboard'
+          },
           {
             type: 'link',
             label: 'Usuarios',
@@ -57,25 +56,13 @@ export class NavigationLoaderService {
           },
           {
             type: 'link',
-            label: 'Permisos',
-            route: '/administracion/permisos',
-            icon: 'mat:lock'
-          },
-          {
-            type: 'link',
-            label: 'Módulos',
-            route: '/administracion/modulos',
-            icon: 'mat:apps'
-          },
-          {
-            type: 'link',
             label: 'Validadores',
             route: '/administracion/dispositivos',
             icon: 'mat:verified'
           },
           {
             type: 'link',
-            label: 'Contador',
+            label: 'Contadores',
             route: '/administracion/contadora',
             icon: 'mat:calculate'
           },
@@ -127,6 +114,24 @@ export class NavigationLoaderService {
             route: '/administracion/bitacora',
             icon: 'mat:assignment',
           },
+          {
+            type: 'link',
+            label: 'Permisos',
+            route: '/administracion/permisos',
+            icon: 'mat:lock'
+          },
+          {
+            type: 'link',
+            label: 'Módulos',
+            route: '/administracion/modulos',
+            icon: 'mat:apps'
+          },
+          {
+            type: 'link',
+            label: 'Roles',
+            route:'',
+            icon: 'mat:group'
+          }
           // {
           //   type: 'link',
           //   label: 'Perfil de Usuario',

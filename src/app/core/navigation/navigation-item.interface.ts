@@ -5,7 +5,7 @@ export type NavigationItem =
 
 export interface NavigationLink {
   type: 'link';
-  route: string | any;
+  route?: string | any;
   fragment?: string;
   label: string;
   icon?: string;

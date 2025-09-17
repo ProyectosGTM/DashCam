@@ -1,1 +1,151 @@
-<p>alta-usuario works!</p>
+<vex-page-layout @fadeInRight>
+    <vex-page-layout-header class="pb-16 flex flex-col items-start justify-center">
+        <div [class.container]="layoutCtrl.value === 'boxed'" [class.px-6]="layoutCtrl.value === 'fullwidth'"
+            class="w-full flex flex-col sm:flex-row justify-between">
+            <div>
+                <h1 class="title mt-0 mb-1">Lista de Usuarios</h1>
+                <vex-breadcrumbs [crumbs]="['Aplicaciones', 'Registros']"></vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        <div class="card overflow-auto -mt-16">
+            <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+                <h2
+                    class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l hidden sm:block flex-none">
+                    <span>Registro de Usuario</span>
+                </h2>
+
+            </div>
+            <div class="mt-0 p-3">
+                <div class="fm-wrap">
+
+                    <form [formGroup]="usuarioForm">
+                        <div class="fm-grid">
+                            <div class="fm-divider fm-span-3">Datos Generales</div>
+                            <div class="fm-group">
+                                <label>Nombre</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>person</mat-icon>
+                                    <input matInput placeholder="Nombre(s)" formControlName="nombre">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label>Apellido Paterno</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>badge</mat-icon>
+                                    <input matInput placeholder="Apellido paterno" formControlName="apellidoPaterno">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label>Apellido Materno</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>badge</mat-icon>
+                                    <input matInput placeholder="Apellido materno" formControlName="apellidoMaterno">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group fm-span-2">
+                                <label>Correo electrónico</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>mail</mat-icon>
+                                    <input matInput type="email" placeholder="usuario@dominio.com"
+                                        formControlName="userName">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label>Teléfono</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>call</mat-icon>
+                                    <input matInput type="tel" placeholder="10 dígitos" formControlName="telefono">
+                                </mat-form-field>
+                            </div>
+                            <div class="fm-group">
+                                <label>Contraseña</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>lock</mat-icon>
+                                    <input matInput [type]="hidePass ? 'password' : 'text'" placeholder="Contraseña"
+                                        formControlName="passwordHash">
+                                    <button mat-icon-button matSuffix type="button" (click)="hidePass = !hidePass">
+                                        <mat-icon>{{ hidePass ? 'visibility' : 'visibility_off' }}</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label>Confirmar contraseña</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>lock</mat-icon>
+                                    <input matInput [type]="hidePass2 ? 'password' : 'text'"
+                                        placeholder="Confirmar contraseña" formControlName="confirmPassword">
+                                    <button mat-icon-button matSuffix type="button" (click)="hidePass2 = !hidePass2">
+                                        <mat-icon>{{ hidePass2 ? 'visibility' : 'visibility_off' }}</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label>Rol</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>admin_panel_settings</mat-icon>
+                                    <mat-select placeholder="Selecciona un rol" formControlName="idRol">
+                                        <mat-option *ngFor="let r of roles" [value]="r.id">{{ r.nombre }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <!-- <div class="fm-divider fm-span-3">Preferencias y Estatus</div>
+                            <div class="fm-group">
+                                <label>Estatus</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>check_circle</mat-icon>
+                                    <mat-select placeholder="Estatus" formControlName="estatus">
+                                        <mat-option [value]="1">Activo</mat-option>
+                                        <mat-option [value]="0">Inactivo</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="fm-group">
+                                <label>Cliente</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-icon matPrefix>domain</mat-icon>
+                                    <mat-select placeholder="Selecciona cliente" formControlName="idCliente">
+                                        <mat-option *ngFor="let c of clientes" [value]="c.id">{{ c.nombre
+                                            }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="fm-group">
+                                <label>Permite cobro</label>
+                                <div class="fm-toggle">
+                                    <mat-slide-toggle formControlName="permiteCobro">Cobro habilitado</mat-slide-toggle>
+                                </div>
+                            </div> -->
+                            <div class="fm-span-3 fm-actions">
+                                <button mat-stroked-button color="warn" type="button">
+                                    <mat-icon>restore</mat-icon>
+                                    Limpiar
+                                </button>
+
+                                <div class="fm-actions-right">
+                                    <button mat-raised-button color="primary" type="button">
+                                        <mat-icon>save</mat-icon>
+                                        Guardar
+                                    </button>
+                                    <button mat-raised-button color="warn" type="button">
+                                        <mat-icon>close</mat-icon>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

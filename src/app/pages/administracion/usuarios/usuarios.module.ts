@@ -4,12 +4,15 @@ import { CommonModule } from '@angular/common';
 import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { ListaUsuariosComponent } from './lista-usuarios/lista-usuarios.component';
 import { AltaUsuarioComponent } from './alta-usuario/alta-usuario.component';
+
 import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
 import { VexPageLayoutHeaderDirective } from '@vex/components/vex-page-layout/vex-page-layout-header.directive';
 import { VexBreadcrumbsComponent } from '@vex/components/vex-breadcrumbs/vex-breadcrumbs.component';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VexPageLayoutContentDirective } from '@vex/components/vex-page-layout/vex-page-layout-content.directive';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +23,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';   // <-- FALTA
+import { MatSelectModule } from '@angular/material/select';         // <-- FALTA
+import { MatOptionModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // <-- FALTA
 import { DxDataGridModule } from 'devextreme-angular';
 
 @NgModule({
@@ -30,12 +37,19 @@ import { DxDataGridModule } from 'devextreme-angular';
   imports: [
     CommonModule,
     UsuariosRoutingModule,
+
+    // Vex layout
     VexPageLayoutComponent,
     VexPageLayoutHeaderDirective,
     VexBreadcrumbsComponent,
-    MatButtonToggleModule,
-    ReactiveFormsModule,
     VexPageLayoutContentDirective,
+
+    // Forms
+    FormsModule,
+    ReactiveFormsModule,
+
+    // Angular Material
+    MatButtonToggleModule,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
@@ -44,10 +58,14 @@ import { DxDataGridModule } from 'devextreme-angular';
     MatSortModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    FormsModule,
     MatDialogModule,
+    MatFormFieldModule,    // <-- agregado
     MatInputModule,
-    DxDataGridModule
+    MatSelectModule,       // <-- agregado
+    MatOptionModule,
+    MatSlideToggleModule,  // <-- agregado
+    DxDataGridModule,
+    // NO agregar BrowserModule ni BrowserAnimationsModule aquí
   ]
 })
 export class UsuariosModule { }

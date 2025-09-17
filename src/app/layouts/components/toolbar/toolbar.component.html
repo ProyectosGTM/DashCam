@@ -1,6 +1,19 @@
 <div
   [class.container]="isVerticalLayout$ | async"
   class="toolbar text-default w-full px-6 flex items-center">
+  <div class="flex-auto flex items-center ml-l">
+  <a
+    class="action flex-none"
+    color="secondary"
+    id="get-vex"
+    mat-flat-button>
+    <span>DashCam - Sistema de Gestión</span>
+  </a>
+  <!-- <div class="font-medium ltr:ml-4 rtl:mr-4 hidden sm:block">
+    Copyright {{year}} © DashCam
+  </div> -->
+</div>
+
   <button
     (click)="openSidenav()"
     [class.hidden]="isDesktop$ | async"
@@ -102,52 +115,6 @@
 
   <span class="flex-1"></span>
 
-  <div class="-mx-1 flex items-center">
-    <!-- <div class="px-1">
-      <button (click)="openSearch()" mat-icon-button type="button">
-        <mat-icon color="primary" svgIcon="mat:search"></mat-icon>
-      </button>
-    </div>
-
-    <div class="px-1">
-      <vex-toolbar-notifications></vex-toolbar-notifications>
-    </div> -->
-
-    <div class="px-1">
-      <button (click)="openQuickpanel()" mat-icon-button type="button">
-        <mat-icon color="primary" svgIcon="mat:bookmarks"></mat-icon>
-      </button>
-    </div>
-
-    <div class="px-1">
-      <button class="btn-user" [matMenuTriggerFor]="languageMenu" type="button">
-  <mat-icon class="btn-user__icon">person</mat-icon>
-  <span class="btn-user__text">Administrador</span>
-</button>
-
-    </div>
-
-    <div *ngIf="userVisible$ | async" class="px-1">
-      <vex-toolbar-user></vex-toolbar-user>
-    </div>
-
-    <mat-menu
-      #languageMenu="matMenu"
-      overlapTrigger="false"
-      xPosition="before"
-      yPosition="below">
-      <button mat-menu-item>
-  <mat-icon>account_circle</mat-icon>
-  <span>Perfil de Usuario</span>
-</button>
-
-<button mat-menu-item [routerLink]="['/login']">
-  <mat-icon>exit_to_app</mat-icon>
-  <span>Cerrar Sesión</span>
-</button>
-
-    </mat-menu>
-  </div>
 </div>
 
 <vex-navigation
