@@ -58,24 +58,27 @@ html {
 
 .dx-page.dx-selection,
 .dx-page-size.dx-selection {
-  background: #940027 !important;
+  background: #0b5791 !important;
   color: #fff !important;
-  border-color: #940027 !important;
+  border-color: #0b5791 !important;
 }
 
 .dx-datagrid .dx-row.dx-header-row > td {
-  background-color: #a8002d !important;
+  background-color: #0b5791 !important;
+  transition: 0.2s ease-in-out all;
   color: #fff !important;
 }
 
 .dx-datagrid .dx-row.dx-header-row > td:hover {
-  background-color: #8a1421 !important;
+  background-color: #013863 !important;
+  transition: 0.2s ease-in-out all;
   color: #fff !important;
 }
 
 .dx-datagrid .dx-header-row > td:hover,
 .dx-datagrid .dx-header-row > td.dx-datagrid-action:hover {
-  background-color: #8a1421 !important;
+  transition: 0.2s ease-in-out all;
+  background-color: #013863 !important;
   color: #fff !important;
 }
 

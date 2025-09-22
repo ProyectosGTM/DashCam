@@ -1,6 +1,6 @@
 :root {
-  --vex-sidenav-background: #940027 !important;
-  --vex-sidenav-toolbar-background: #940027 !important;
+  --vex-sidenav-background: #0b5791 !important;
+  --vex-sidenav-toolbar-background: #0b5791 !important;
   --vex-sidenav-color: #fff !important;
   --vex-sidenav-section-divider-color: #fff1f5 !important;
 }
@@ -182,7 +182,7 @@
 :host ::ng-deep .vex-sidenav,
 :host ::ng-deep .vex-sidenav-toolbar__container,
 :host ::ng-deep .vex-sidenav-user__container {
-  background: #940027 !important;
+  background: #0b5791 !important;
   color: #fff !important;
 }
 
@@ -194,21 +194,21 @@
 /* --------- ÍTEMS PRINCIPALES Y SUBMENÚ --------- */
 /* Por default, todos los ítems: fondo rojo vino */
 :host ::ng-deep .vex-sidenav-item {
-  background: #940027 !important;
+  background: #0b5791 !important;
   color: #fff !important;
 }
 
 /* Submenú abierto (padre), vino más oscuro */
 :host ::ng-deep .vex-sidenav-item.open,
 :host ::ng-deep .vex-sidenav-item[aria-expanded="true"] {
-  background: #7a0020 !important;
+  background: #0b5791 !important;
   color: #fff !important;
 }
 
 /* Subitems (hijos) normales, rojo vino */
 :host ::ng-deep .vex-sidenav-item.open .vex-sidenav-item__children .vex-sidenav-item,
 :host ::ng-deep .vex-sidenav-item[aria-expanded="true"] .vex-sidenav-item__children .vex-sidenav-item {
-  background: #940027 !important;
+  background: #0b5791 !important;
   color: #fff !important;
 }
 
@@ -253,14 +253,14 @@
 /* Badges (circulitos de cantidad) */
 :host ::ng-deep .vex-sidenav-item__badge {
   background: #fff !important;
-  color: #940027 !important;
+  color: #0b5791 !important;
   font-weight: bold !important;
 }
 
 /* Search bar y keybind */
 :host ::ng-deep .vex-sidenav-search__container,
 :host ::ng-deep .vex-sidenav-search {
-  background: #940027 !important;
+  background: #0b5791 !important;
   color: #fff !important;
 }
 :host ::ng-deep .vex-sidenav-search__placeholder,
@@ -270,7 +270,7 @@
 
 /* Usuario sticky */
 :host ::ng-deep .vex-sidenav-user__container {
-  background: #940027 !important;
+  background: #0b5791 !important;
   border-color: #fff1f5 !important;
 }
 :host ::ng-deep .vex-sidenav-user__title,

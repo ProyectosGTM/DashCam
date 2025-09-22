@@ -11,14 +11,14 @@
   font-weight: 500;
   transition: 0.8s;
   background-size: 280% auto;
-  background-color: #940027;
+  background-color: #0b5791;
   border: none;
   border-radius: var(--radii);
 }
 
 ::ng-deep .dx-datagrid-search-text {
   color: #fff;
-  background-color: #940027;
+  background-color: #0b5791;
 }
 
 ::ng-deep .dx-searchbox .dx-texteditor-input:hover {
@@ -113,7 +113,7 @@
   display: flex;
   align-items: center;
   gap: .75rem;
-  background: #940027;
+  background: #0b5791;
   color: #fff;
   padding: 1rem 1.25rem;
 
@@ -149,7 +149,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #64001b;
+  background: #4291ce;
   color: #fff;
   flex: 0 0 auto;
 
