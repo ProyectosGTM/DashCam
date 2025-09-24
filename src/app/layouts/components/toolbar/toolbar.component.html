@@ -4,14 +4,11 @@
       <mat-icon *ngIf="!collapsed" class="icon-xs" svgIcon="mat:menu"></mat-icon>
       <mat-icon *ngIf="collapsed" class="icon-xs" svgIcon="mat:menu"></mat-icon>
     </button>&nbsp;&nbsp;
-    <div class="action flex-none" color="secondary" id="get-vex" mat-flat-button>
-      <span>DashCam PAY - Sistema de Gestión</span>
+    <div class="action flex-none textPrincipal" color="secondary" id="get-vex" mat-flat-button>
+      <span>DashCam PAY - Sistema de Administración</span>
     </div>
   </div>
 
-  <button (click)="openSidenav()" [class.hidden]="isDesktop$ | async" mat-icon-button type="button">
-    <mat-icon svgIcon="mat:menu"></mat-icon>
-  </button>
 
   <a *ngIf="isVerticalLayout$ | async" [routerLink]="['/']" class="ltr:mr-4 rtl:ml-4 flex items-center">
     <img alt="Logo" class="w-8 select-none" src="assets/img/logo/logo.svg" />

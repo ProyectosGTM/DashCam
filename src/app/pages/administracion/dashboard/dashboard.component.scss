@@ -1,0 +1,43 @@
+/* Estilo mínimo y responsive */
+.ds-wrap { min-width: 640px; }
+
+.ds-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ds-kpi {
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+.ds-kpi-title { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+.ds-kpi-value { font-size: 22px; font-weight: 800; color: #0f172a; }
+
+.ds-charts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.ds-chart {
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  padding: 12px;
+  background: #fff;
+  min-height: 300px;
+}
+
+.ds-chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+@media (min-width: 900px) {
+  .ds-charts { grid-template-columns: 1fr 1fr; }
+}

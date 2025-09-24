@@ -1,0 +1,140 @@
+<vex-page-layout @fadeInRight>
+  <vex-page-layout-content
+    [class.container]="layoutCtrl.value === 'boxed'"
+    [class.px-6]="layoutCtrl.value === 'fullwidth'"
+    class="-mt-6"
+  >
+    <div class="card overflow-auto -mt-16">
+      <div class="p-3">
+  <!-- Filtros de rango -->
+  <div class="d-flex justify-content-end mb-3">
+    <div class="btn-group" role="group" aria-label="Rangos">
+      <button type="button" class="btn btn-primary" [class.active]="rango==='dia'" (click)="setRango('dia')">Al Día</button>
+      <button type="button" class="btn btn-outline-primary" [class.active]="rango==='semana'" (click)="setRango('semana')">A la Semana</button>
+      <button type="button" class="btn btn-outline-primary" [class.active]="rango==='mes'" (click)="setRango('mes')">Al Mes</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-sm-6 col-lg-3" *ngFor="let k of kpis">
+      <div class="card h-100 text-white border-0"
+           [style.background]="k.bg">
+        <div class="card-body d-flex flex-column justify-content-between">
+          <small class="text-uppercase opacity-75">{{ k.title }}</small>
+          <div class="d-flex align-items-center justify-content-between mt-2">
+            <h4 class="mb-0 fw-bold">{{ k.value | number:'1.0-2' }}</h4>
+            <i class="{{ k.icon }} fs-3 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fila de 3 tarjetas -->
+  <div class="row g-3">
+    <!-- Actividad reciente -->
+    <div class="col-12 col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="card-title mb-3">Actividad Reciente</h6>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item px-0" *ngFor="let a of actividad">
+              <div class="d-flex">
+                <div class="me-2 text-success">●</div>
+                <div>
+                  <small class="text-muted d-block">{{ a.fecha }}</small>
+                  <span>{{ a.texto }}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen Recargas/Débitos -->
+    <div class="col-12 col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h6 class="card-title mb-0">Resumen Diario de Recargas y Débitos</h6>
+            <button type="button" class="btn btn-sm btn-light" (click)="rotarTipo('rd')">
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+          <dx-pie-chart
+            [dataSource]="resumenRecargasDebitos"
+            type="doughnut"
+            [palette]="'Soft'"
+          >
+            <dxi-series argumentField="tipo" valueField="monto"></dxi-series>
+            <dxo-tooltip [enabled]="true" format="$ #,##0.##"></dxo-tooltip>
+            <dxo-legend [visible]="true" orientation="horizontal"></dxo-legend>
+          </dx-pie-chart>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado de Dispositivos -->
+    <div class="col-12 col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h6 class="card-title mb-0">Estado de Dispositivos</h6>
+            <button type="button" class="btn btn-sm btn-light" (click)="rotarTipo('disp')">
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+          <dx-pie-chart
+            [dataSource]="estadoDispositivos"
+            type="doughnut"
+            [palette]="'Soft'"
+          >
+            <dxi-series argumentField="estado" valueField="total"></dxi-series>
+            <dxo-tooltip [enabled]="true" format="#,##0"></dxo-tooltip>
+            <dxo-legend [visible]="true" orientation="horizontal"></dxo-legend>
+          </dx-pie-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fila inferior: Entradas/Salidas -->
+  <div class="row g-3 mt-1">
+    <div class="col-12 col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="card-title mb-2">Entradas vs Salidas (Día)</h6>
+          <dx-pie-chart
+            [dataSource]="entradasSalidas"
+            type="doughnut"
+            [palette]="'Soft'"
+          >
+            <dxi-series argumentField="tipo" valueField="total"></dxi-series>
+            <dxo-tooltip [enabled]="true" format="#,##0"></dxo-tooltip>
+            <dxo-legend [visible]="true" orientation="horizontal"></dxo-legend>
+          </dx-pie-chart>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="card-title mb-2">Transacciones por Día (últimos 7)</h6>
+          <dx-chart [dataSource]="txPorDia">
+            <dxi-series type="bar" argumentField="d" valueField="v" name="Transacciones"></dxi-series>
+            <dxo-legend [visible]="false"></dxo-legend>
+            <dxo-tooltip [enabled]="true" format="#,##0"></dxo-tooltip>
+            <dxo-argument-axis [label]="{ overlappingBehavior: 'stagger' }"></dxo-argument-axis>
+          </dx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>

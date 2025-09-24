@@ -54,8 +54,6 @@ import { AlertsService } from '../../pages/modal/alerts.service';
   standalone: true,
   imports: [
     VexPageLayoutComponent,
-    VexPageLayoutHeaderDirective,
-    VexBreadcrumbsComponent,
     MatButtonToggleModule,
     ReactiveFormsModule,
     VexPageLayoutContentDirective,

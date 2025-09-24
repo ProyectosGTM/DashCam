@@ -129,7 +129,6 @@ export class NavigationLoaderService {
           {
             type: 'link',
             label: 'Roles',
-            route:'',
             icon: 'mat:group'
           }
           // {

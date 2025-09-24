@@ -1,5 +1,9 @@
 @import "~simplebar/dist/simplebar.css";
 @import "~highlight.js/styles/androidstudio.css";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
 // Vex Core
 @import "./@vex/styles/core";
 
@@ -58,19 +62,19 @@ html {
 
 .dx-page.dx-selection,
 .dx-page-size.dx-selection {
-  background: #0b5791 !important;
+  background: #0A2E57 !important;
   color: #fff !important;
-  border-color: #0b5791 !important;
+  border-color: #0A2E57 !important;
 }
 
 .dx-datagrid .dx-row.dx-header-row > td {
-  background-color: #0b5791 !important;
+  background-color: #0A2E57 !important;
   transition: 0.2s ease-in-out all;
   color: #fff !important;
 }
 
 .dx-datagrid .dx-row.dx-header-row > td:hover {
-  background-color: #013863 !important;
+  background-color: #1F5AA8 !important;
   transition: 0.2s ease-in-out all;
   color: #fff !important;
 }
@@ -78,7 +82,7 @@ html {
 .dx-datagrid .dx-header-row > td:hover,
 .dx-datagrid .dx-header-row > td.dx-datagrid-action:hover {
   transition: 0.2s ease-in-out all;
-  background-color: #013863 !important;
+  background-color: #1F5AA8 !important;
   color: #fff !important;
 }
 
@@ -779,4 +783,78 @@ $fm-shadow: 0 18px 40px rgba(15, 80, 233, 0.25);
   .fm-grid { grid-template-columns: 1fr; }
   .fm-span-2, .fm-span-3 { grid-column: span 1; }
   .fm-header { grid-template-columns: auto 1fr; .fm-aux { grid-column: 1 / -1; justify-content: flex-start; } }
+}
+
+.textPrincipal{
+  font-weight: 700;   /* Bold */
+  font-style: italic; /* Italic */
+  font-family: 'Montserrat', sans-serif;
+}
+
+.textSub{
+  font-weight: 600; /* SemiBold */
+  font-family: 'Montserrat', sans-serif;
+}
+
+.textNormal{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+
+/* === Breadcrumb simple y elegante === */
+.breadcrumb-simple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+
+  .crumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #1976d2;
+  font-weight: 700;   /* Bold */
+  font-style: italic; /* Italic */
+  font-family: 'Montserrat', sans-serif;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* styles.scss */
+
+
+
+
+
+  .crumb-current {
+  color: #222;
+  font-weight: 600; /* SemiBold */
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+  .sep {
+    opacity: 0.5;
+  }
+
+  mat-icon[inline] {
+    color: #A6CE39;
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.textGenerico {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }

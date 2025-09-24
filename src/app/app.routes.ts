@@ -196,6 +196,11 @@ export const appRoutes: VexRoutes = [
             path: 'monitoreo',
             loadChildren:() => import('./pages/administracion/monitoreo/monitoreo.module')
               .then(m => m.MonitoreoModule)
+          },
+          {
+            path: 'dashboard',
+            loadChildren:() => import('./pages/administracion/dashboard/dashboard.module')
+              .then(m => m.DashboardModule)
           }
         ]
       },

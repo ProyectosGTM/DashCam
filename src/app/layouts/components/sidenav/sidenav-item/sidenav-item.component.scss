@@ -102,6 +102,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 600; /* SemiBold */
+  font-family: 'Montserrat', sans-serif;
 }
 
 .vex-sidenav-item__badge {
@@ -134,7 +136,10 @@
   color: var(--vex-sidenav-subheading-color);
   text-transform: uppercase;
   white-space: nowrap;
-  font-weight: 600;
+  font-weight: 700;   /* Bold */
+  font-style: italic; /* Italic */
+  font-family: 'Montserrat', sans-serif;
+  
   user-select: none;
   @apply text-xs py-3 px-6 mt-6;
 }
