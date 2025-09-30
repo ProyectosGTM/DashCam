@@ -123,7 +123,7 @@ export const appRoutes: VexRoutes = [
         path: 'administracion',
         children: [
           {
-            path: 'dispositivos',
+            path: 'validadores',
             loadChildren: () => import('./pages/administracion/dispositivos/dispositivos.module')
               .then(m => m.DispositivosModule)
           },
@@ -201,6 +201,16 @@ export const appRoutes: VexRoutes = [
             path: 'dashboard',
             loadChildren:() => import('./pages/administracion/dashboard/dashboard.module')
               .then(m => m.DashboardModule)
+          },
+          {
+            path: 'roles',
+            loadChildren:() => import('./pages/administracion/roles/roles.module')
+              .then(m => m.RolesModule)
+          },
+          {
+            path: 'punto-venta',
+            loadChildren:() => import('./pages/administracion/punto-venta/punto-venta.module')
+              .then(m => m.PuntoVentaModule)
           }
         ]
       },

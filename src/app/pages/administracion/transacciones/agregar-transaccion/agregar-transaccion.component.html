@@ -1,0 +1,99 @@
+<vex-page-layout @fadeInRight>
+
+    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        <div class="card mt-4">
+            <div class="dashboard-lite p-4">
+                <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
+                    <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
+                        <a routerLink="/administracion" class="crumb-link">
+                            <mat-icon inline>home</mat-icon>
+                            Administración
+                        </a>
+                        <span class="sep">/</span>
+                        <span class="crumb-current" aria-current="page">Transacciones</span>
+                        <span class="sep">/</span>
+                        <span class="crumb-current" aria-current="page">Agregar Transacción</span>
+                    </nav>
+                </div>
+
+                <section class="mt-5 table-shell">
+                    <form [formGroup]="usuarioForm">
+                        <div class="fm-grid">
+                            <div class="fm-divider fm-span-3">Datos Generales</div>
+
+                            <div class="fm-group">
+                                <label id="lbl-nombre">
+                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+                                    Transacción
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Nombre" formControlName="apellidoPaterno"
+                                        [attr.aria-labelledby]="'lbl-nombre'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label id="lbl-apellido-paterno">
+                                    <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
+                                    Monto
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Apellido Paterno" formControlName="apellidoMaterno"
+                                        [attr.aria-labelledby]="'lbl-apellido-paterno'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label id="lbl-apellido-materno">
+                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+                                    Fecha de Registro
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Apellido Materno" formControlName="nombre"
+                                        [attr.aria-labelledby]="'lbl-apellido-materno'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label id="lbl-telefono">
+                                    <i class="fa fa-phone doc-icon" aria-hidden="true"></i>
+                                    Número de Monedero
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput type="tel" placeholder="Teléfono" formControlName="userName"
+                                        [attr.aria-labelledby]="'lbl-telefono'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label id="lbl-correo">
+                                    <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
+                                    Número de Serie de Validador
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput type="email" placeholder="Correo Electrónico"
+                                        formControlName="userName" [attr.aria-labelledby]="'lbl-correo'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-span-3 fm-actions">
+                                <div class="fm-actions-right">
+                                    <button mat-raised-button color="primary" type="button">
+                                        <mat-icon>save</mat-icon>
+                                        Guardar
+                                    </button>
+                                    <button mat-raised-button (click)="regresar()" color="warn" type="button">
+                                        <mat-icon>close</mat-icon>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </section>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

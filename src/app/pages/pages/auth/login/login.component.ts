@@ -132,7 +132,7 @@ onSubmit() {
         }).then(result => {
           if (result === 'confirm') {
             // lógica de reintento
-            this.router.navigate(['/administracion/dispositivos']);
+            this.router.navigate(['/administracion/validadores']);
           } else {
             // lógica si cancela
           }

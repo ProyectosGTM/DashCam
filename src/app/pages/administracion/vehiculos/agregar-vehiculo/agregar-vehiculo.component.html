@@ -1,0 +1,109 @@
+<vex-page-layout @fadeInRight>
+
+  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+    [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+    <div class="card mt-4">
+      <div class="dashboard-lite p-4">
+        <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
+          <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
+            <a routerLink="/administracion" class="crumb-link">
+              <mat-icon inline>home</mat-icon>
+              Administración
+            </a>
+            <span class="sep">/</span>
+            <span class="crumb-current" aria-current="page">Vehículos</span>
+            <span class="sep">/</span>
+            <span class="crumb-current" aria-current="page">Agregar Vehículo</span>
+          </nav>
+        </div>
+
+        <section class="mt-5 table-shell">
+          <form [formGroup]="usuarioForm">
+            <div class="fm-grid">
+              <div class="fm-divider fm-span-3">Datos Generales</div>
+
+              <div class="fm-group">
+                <label id="lbl-marca">
+                  <i class="fa fa-industry doc-icon" aria-hidden="true"></i>
+                  Marca
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="Marca" formControlName="apellidoPaterno"
+                    >
+                </mat-form-field>
+              </div>
+
+              <div class="fm-group">
+                <label id="lbl-modelo">
+                  <i class="fa fa-cogs doc-icon" aria-hidden="true"></i>
+                  Modelo
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="Modelo" formControlName="apellidoMaterno"
+                    >
+                </mat-form-field>
+              </div>
+
+              <div class="fm-group">
+                <label id="lbl-ano">
+                  <i class="fa fa-calendar-alt doc-icon" aria-hidden="true"></i>
+                  Año
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="Año" formControlName="nombre" >
+                </mat-form-field>
+              </div>
+
+              <div class="fm-group">
+                <label id="lbl-placa">
+                  <i class="fa fa-id-card doc-icon" aria-hidden="true"></i>
+                  Placa
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput type="email" placeholder="Placa" formControlName="userName"
+                    >
+                </mat-form-field>
+              </div>
+
+              <div class="fm-group">
+                <label id="lbl-num-economico">
+                  <i class="fa fa-hashtag doc-icon" aria-hidden="true"></i>
+                  Número Económico
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput type="email" placeholder="Número Económico" formControlName="userName"
+                    >
+                </mat-form-field>
+              </div>
+
+              <div class="fm-group">
+                <label id="lbl-cliente">
+                  <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+                  Cliente
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput type="email" placeholder="Cliente" formControlName="userName"
+                    >
+                </mat-form-field>
+              </div>
+
+              <div class="fm-span-3 fm-actions">
+                <div class="fm-actions-right">
+                  <button mat-raised-button color="primary" type="button">
+                    <mat-icon>save</mat-icon>
+                    Guardar
+                  </button>
+                  <button mat-raised-button (click)="regresar()" color="warn" type="button">
+                    <mat-icon>close</mat-icon>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </section>
+      </div>
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>

@@ -38,6 +38,10 @@ export class AltaUsuarioComponent {
     this.cargarCatalogos();
   }
 
+  regresar(){
+    this.router.navigateByUrl('/administracion/usuarios')
+  }
+
   private initForm(): void {
     this.usuarioForm = this.fb.group(
       {
@@ -193,6 +197,49 @@ export class AltaUsuarioComponent {
     });
     // Si tu AlertsService devuelve algo como 'confirm'/'cancel', manéjalo así:
     if (String(r).toLowerCase() === 'confirm') this.router.navigate(['/app/usuarios']);
+  }
+
+   previewUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
+  isDragOver: boolean = false;
+
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.loadFile(input.files[0]);
+    }
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver = false;
+    if (event.dataTransfer?.files && event.dataTransfer.files[0]) {
+      this.loadFile(event.dataTransfer.files[0]);
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver = false;
+  }
+
+  private loadFile(file: File): void {
+    this.selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
 
 }

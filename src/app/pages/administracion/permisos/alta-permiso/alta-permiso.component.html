@@ -1,1 +1,78 @@
-<p>alta-permiso works!</p>
+<vex-page-layout @fadeInRight>
+
+    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        <div class="card mt-4">
+            <div class="dashboard-lite p-4">
+                <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
+                    <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
+                        <a routerLink="/administracion" class="crumb-link">
+                            <mat-icon inline>home</mat-icon>
+                            Administración
+                        </a>
+                        <span class="sep">/</span>
+                        <span class="crumb-current" aria-current="page">Permisos</span>
+                        <span class="sep">/</span>
+                        <span class="crumb-current" aria-current="page">Agregar Permiso</span>
+                    </nav>
+                </div>
+
+                <section class="mt-5 table-shell">
+                    <form [formGroup]="usuarioForm">
+                        <div class="fm-grid">
+                            <div class="fm-divider fm-span-3">Datos Generales</div>
+
+                            <div class="fm-group">
+                                <label id="lbl-modulo">
+                                    <i class="fa fa-puzzle-piece doc-icon" aria-hidden="true"></i>
+                                    Módulo
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Módulo" formControlName="apellidoPaterno"
+                                        [attr.aria-labelledby]="'lbl-modulo'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label id="lbl-nombre">
+                                    <i class="fa fa-tag doc-icon" aria-hidden="true"></i>
+                                    Nombre
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Nombre" formControlName="apellidoMaterno"
+                                        [attr.aria-labelledby]="'lbl-nombre'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-group">
+                                <label id="lbl-descripcion">
+                                    <i class="fa fa-align-left doc-icon" aria-hidden="true"></i>
+                                    Descripción
+                                </label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Descripción" formControlName="nombre"
+                                        [attr.aria-labelledby]="'lbl-descripcion'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="fm-span-3 fm-actions">
+                                <div class="fm-actions-right">
+                                    <button mat-raised-button color="primary" type="button">
+                                        <mat-icon>save</mat-icon>
+                                        Guardar
+                                    </button>
+                                    <button mat-raised-button (click)="regresar()" color="warn" type="button">
+                                        <mat-icon>close</mat-icon>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </section>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

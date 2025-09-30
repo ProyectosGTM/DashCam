@@ -6,9 +6,11 @@ import { ListaContadoraComponent } from './lista-contadora/lista-contadora.compo
 import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
 import { VexPageLayoutHeaderDirective } from '@vex/components/vex-page-layout/vex-page-layout-header.directive';
 import { VexBreadcrumbsComponent } from '@vex/components/vex-breadcrumbs/vex-breadcrumbs.component';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VexPageLayoutContentDirective } from '@vex/components/vex-page-layout/vex-page-layout-content.directive';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,34 +21,46 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
-import { DxDataGridModule, DxDateBoxModule, DxValidatorModule } from 'devextreme-angular';
+import { MatFormFieldModule } from '@angular/material/form-field';   // <-- FALTA
+import { MatSelectModule } from '@angular/material/select';         // <-- FALTA
+import { MatOptionModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // <-- FALTA
+import { DxDataGridModule } from 'devextreme-angular';
+import { AgregarDispositivoComponent } from '../dispositivos/agregar-dispositivo/agregar-dispositivo.component';
+import { AgregarContadoraComponent } from './agregar-contadora/agregar-contadora.component';
 
 
 @NgModule({
-  declarations: [ListaContadoraComponent],
+  declarations: [ListaContadoraComponent, AgregarContadoraComponent],
   imports: [
     CommonModule,
     ContadorRoutingModule,
     VexPageLayoutComponent,
-    VexPageLayoutHeaderDirective,
-    VexBreadcrumbsComponent,
-    MatButtonToggleModule,
-    ReactiveFormsModule,
-    VexPageLayoutContentDirective,
-    MatButtonModule,
-    MatTooltipModule,
-    MatIconModule,
-    MatMenuModule,
-    MatTableModule,
-    MatSortModule,
-    MatCheckboxModule,
-    MatPaginatorModule,
-    FormsModule,
-    MatDialogModule,
-    MatInputModule,
-    DxDataGridModule,
-    DxDateBoxModule,
-    DxValidatorModule
+        VexPageLayoutHeaderDirective,
+        VexBreadcrumbsComponent,
+        VexPageLayoutContentDirective,
+    
+        // Forms
+        FormsModule,
+        ReactiveFormsModule,
+    
+        // Angular Material
+        MatButtonToggleModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatIconModule,
+        MatMenuModule,
+        MatTableModule,
+        MatSortModule,
+        MatCheckboxModule,
+        MatPaginatorModule,
+        MatDialogModule,
+        MatFormFieldModule,    // <-- agregado
+        MatInputModule,
+        MatSelectModule,       // <-- agregado
+        MatOptionModule,
+        MatSlideToggleModule,  // <-- agregado
+        DxDataGridModule,
   ]
 })
 export class ContadorModule { }

@@ -1,5 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { AlertsService } from 'src/app/pages/pages/modal/alerts.service';
@@ -26,9 +27,13 @@ export class ListaPermisosComponent implements OnInit {
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid!: DxDataGridComponent;
   isGrouped: boolean = false;
 
-  constructor(private permService: PermisosService, private alerts: AlertsService) {
+  constructor(private permService: PermisosService, private alerts: AlertsService, private route: Router) {
     this.showFilterRow = true;
     this.showHeaderFilter = true;
+  }
+
+  agregarPermiso(){
+    this.route.navigateByUrl('/administracion/permisos/agregar-permiso')
   }
 
   ngOnInit(): void {

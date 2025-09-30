@@ -57,7 +57,7 @@ export class NavigationLoaderService {
           {
             type: 'link',
             label: 'Validadores',
-            route: '/administracion/dispositivos',
+            route: '/administracion/validadores',
             icon: 'mat:verified'
           },
           {
@@ -83,6 +83,12 @@ export class NavigationLoaderService {
             label: 'Monederos',
             route: '/administracion/monederos',
             icon: 'mat:monetization_on',
+          },
+          {
+            type: 'link',
+            label: 'Punto de Venta',
+            route: '/administracion/punto-venta',
+            icon: 'mat:storefront',
           },
           {
             type: 'link',
@@ -129,6 +135,7 @@ export class NavigationLoaderService {
           {
             type: 'link',
             label: 'Roles',
+            route: '/administracion/roles',
             icon: 'mat:group'
           }
           // {

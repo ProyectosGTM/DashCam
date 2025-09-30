@@ -1,10 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { OperadoresComponent } from './operadores.component';
+import { ListaOperadoresComponent } from './lista-operadores/lista-operadores.component';
+import { AgregarOperadorComponent } from './agregar-operador/agregar-operador.component';
 
 const routes: Routes = 
 [
-  { path: '', component: OperadoresComponent }
+  { path: '',
+    component: ListaOperadoresComponent
+  },
+  { path: 'agregar-operador',
+    component: AgregarOperadorComponent
+  },
+  {
+    path: 'editar-operador/:idOperador',
+    component: AgregarOperadorComponent,
+  },
 ];
 
 @NgModule({
