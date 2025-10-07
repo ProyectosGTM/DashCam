@@ -39,8 +39,9 @@ export class NavigationLoaderService {
         children: [
           {
             type: 'link',
-            label: 'Dashboard',
-            icon: 'mat:dashboard'
+            label: 'Tablero',
+            icon: 'mat:dashboard',
+            route: '/administracion/dashboard'
           },
           {
             type: 'link',

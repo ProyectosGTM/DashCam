@@ -41,3 +41,132 @@
 @media (min-width: 900px) {
   .ds-charts { grid-template-columns: 1fr 1fr; }
 }
+
+/* dashboard/tablero.component.scss */
+.card-title {
+  font-weight: 600;
+}
+.card {
+  border: 0;
+  border-radius: 1rem;
+}
+
+
+/* ---- TÍTULOS DE GRÁFICAS CORPORATIVOS ---- */
+.card-title {
+  position: relative;
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+  color: #fff;
+  text-transform: uppercase;
+  padding: 1rem 1.5rem;
+  margin: -1.5rem -1.75rem 1.5rem -1.75rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  overflow: hidden;
+
+  /* 💎 Fondo corporativo con textura y profundidad */
+  background:
+    radial-gradient(circle at 15% 30%, rgba(255,255,255,0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(255,255,255,0.08) 0%, transparent 45%),
+    linear-gradient(135deg, #0A2E57 0%, #1F5AA8 100%);
+
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.12),
+    0 4px 10px rgba(0, 0, 0, 0.25);
+
+  /* ✨ Luz superior sutil */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(to right, #ffffff33, #ffffff00);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    pointer-events: none;
+  }
+
+  /* Subtítulo */
+  .subtitle {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 0.25rem;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+}
+
+/* ---- CARDS GENERALES ---- */
+.card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.card-body {
+  background: #f9f9f9;
+  padding: 1.75rem;
+  border-radius: 0 0 1rem 1rem;
+}
+
+
+/* ---- KPIs ---- */
+.kpi-row { margin-top: .25rem; }
+
+.kpi-card {
+  border: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  .kpi-head {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    color: #fff;
+    text-transform: uppercase;
+    padding: .65rem 1rem;
+    /* Degradado corporativo */
+    background:
+      radial-gradient(circle at 15% 30%, rgba(255,255,255,0.10) 0%, transparent 40%),
+      radial-gradient(circle at 85% 70%, rgba(255,255,255,0.08) 0%, transparent 45%),
+      linear-gradient(135deg, #0A2E57 0%, #1F5AA8 100%);
+    letter-spacing: .3px;
+    font-size: .95rem;
+  }
+  .kpi-body {
+    background: #fff;
+    padding: 1rem 1.25rem 1.2rem;
+  }
+  .kpi-value {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: #0A2E57;
+  }
+  .kpi-meta {
+    margin-top: .35rem;
+    font-size: .9rem;
+  }
+}
+
+/* pequeñas mejoras responsivas */
+@media (max-width: 575.98px) {
+  .kpi-card .kpi-value { font-size: 1.6rem; }
+}

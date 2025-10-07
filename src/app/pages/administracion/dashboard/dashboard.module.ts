@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import { DxChartModule, DxPieChartModule, DxSparklineModule } from 'devextreme-angular';
+import { DxChartModule, DxDataGridModule, DxPieChartModule, DxSparklineModule } from 'devextreme-angular';
 import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
 import { VexPageLayoutHeaderDirective } from '@vex/components/vex-page-layout/vex-page-layout-header.directive';
 import { VexBreadcrumbsComponent } from '@vex/components/vex-breadcrumbs/vex-breadcrumbs.component';
 import { VexPageLayoutContentDirective } from '@vex/components/vex-page-layout/vex-page-layout-content.directive';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -15,13 +16,14 @@ import { VexPageLayoutContentDirective } from '@vex/components/vex-page-layout/v
   imports: [
     CommonModule,
     DashboardRoutingModule,
-     DxChartModule,
+    DxChartModule,
     DxPieChartModule,
-    DxSparklineModule,
+    ReactiveFormsModule,
     VexPageLayoutComponent,
-        VexPageLayoutHeaderDirective,
-        VexBreadcrumbsComponent,
-        VexPageLayoutContentDirective,
+    VexPageLayoutHeaderDirective,
+    VexBreadcrumbsComponent,
+    VexPageLayoutContentDirective,
+    DxDataGridModule
   ]
 })
 export class DashboardModule { }
