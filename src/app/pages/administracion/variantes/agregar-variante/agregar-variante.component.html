@@ -1,0 +1,327 @@
+<vex-page-layout @fadeInRight>
+    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        <div class="card mt-4">
+            <div class="dashboard-lite p-4">
+                <section class="mt-2 table-shell">
+                    <div *ngIf="step === 1" class="card zonas-card shadow-sm border-0">
+                        <div class="card-header d-flex flex-wrap align-items-center gap-2 justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="chip-step"><i class="fa fa-map-pin"></i></div>
+                                <h2 class="m-0 titulo-card">Selecciona una Zona</h2>
+                            </div>
+                            <div class="col-12 col-md-auto">
+                                <div class="input-group input-search">
+                                    <span class="input-group-text"><mat-icon inline>search</mat-icon></span>
+                                    <input type="text" class="form-control" placeholder="Buscar zona por nombre…"
+                                        [(ngModel)]="search" (ngModelChange)="filtrar()" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-12 col-sm-6 col-lg-4 col-xxl-3"
+                                    *ngFor="let z of zonasFiltradas; trackBy: trackById">
+                                    <article class="zona-card" [class.zona-card--selected]="z.id === selectedZona?.id"
+                                        (click)="selectZona(z)" tabindex="0" (keyup.enter)="selectZona(z)" role="button"
+                                        [attr.aria-pressed]="z.id === selectedZona?.id">
+                                        <div class="zona-card__bg" [style.--accent]="z.color || '#1F5AA8'"></div>
+                                        <div class="zona-card__head d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="zona-id">{{ z.id }}</div>
+                                                <h3 class="zona-title m-0">{{ z.nombre }}</h3>
+                                            </div>
+                                            <span class="badge estado" [class.estado--activa]="z.activa">Activa</span>
+                                        </div>
+                                        <div class="zona-card__meta">
+                                            <div class="meta-item meta-item--desc">
+                                                <mat-icon inline>description</mat-icon>
+                                                <span>{{ z.descripcion || 'Sin descripción' }}</span>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </div>
+                                <div class="col-12" *ngIf="zonasFiltradas?.length === 0">
+                                    <div class="empty-state text-center">
+                                        <mat-icon inline>travel_explore</mat-icon>
+                                        <p class="m-0">No hay zonas que coincidan con tu búsqueda.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                            <div class="texto-paso">
+                                Paso 1 de 3 — <strong>Zona</strong> &nbsp;→&nbsp; Ruta &nbsp;→&nbsp; Variante
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-secondary"
+                                    (click)="limpiarFiltros()">Limpiar filtros</button>
+                                <button type="button" class="btn btn-primary" [disabled]="!selectedZona"
+                                    (click)="goStep2()">Continuar a Rutas</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="step === 2" class="card rutas-card shadow-sm border-0">
+                        <div class="card-header d-flex flex-wrap align-items-center gap-2 justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="chip-step"><i class="fa fa-map-signs" aria-hidden="true"></i></div>
+                                <h2 class="m-0 titulo-card">
+                                    Selecciona una Ruta
+                                </h2>
+                            </div>
+
+                            <div class="col-12 col-md-auto">
+                                <div class="input-group input-search">
+                                    <span class="input-group-text"><mat-icon inline>search</mat-icon></span>
+                                    <input type="text" class="form-control"
+                                        placeholder="Buscar ruta (nombre, origen, destino)…" [(ngModel)]="searchRuta"
+                                        (ngModelChange)="filtrarRutas()" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6 col-xl-4"
+                                    *ngFor="let r of rutasFiltradas; trackBy: trackByRuta">
+                                    <article class="ruta-card" [class.ruta-card--selected]="r.id===selectedRuta?.id"
+                                        (click)="selectRuta(r)" tabindex="0" (keyup.enter)="selectRuta(r)" role="button"
+                                        [attr.aria-pressed]="r.id===selectedRuta?.id">
+
+                                        <div class="ruta-card__bg"></div>
+
+                                        <div class="ruta-card__head d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <!-- SOLO ID (sin prefijo R-) -->
+                                                <div class="ruta-id">{{ r.id }}</div>
+                                                <h3 class="ruta-title m-0">{{ r.nombre }}</h3>
+                                            </div>
+                                            <span class="badge estado estado--activa">Activa</span>
+                                        </div>
+
+                                        <!-- INFO: se bajó más respecto al título y se redujo el tamaño de card -->
+                                        <div class="ruta-card__meta row g-2">
+                                            <!-- Inicio y Fin en dos chips separados -->
+                                            <div class="col-6">
+                                                <div class="meta-item"><mat-icon inline>trip_origin</mat-icon><span>{{
+                                                        r.origen }}</span></div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="meta-item"><mat-icon inline>flag</mat-icon><span>{{
+                                                        r.destino }}</span></div>
+                                            </div>
+
+                                            <!-- Distancia y Paradas -->
+                                            <div class="col-6">
+                                                <div class="meta-item"><mat-icon inline>straighten</mat-icon><span>{{
+                                                        r.distanciaKm | number:'1.0-1' }} km</span></div>
+                                            </div>
+                                            <!-- DESPUÉS -->
+                                            <div class="col-6">
+                                                <div class="meta-item">
+                                                    <mat-icon inline>event</mat-icon>
+                                                    <span>Creada: {{ r.fechaCreacion | date:'dd/MM/yy' }}</span>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Eliminado: duración, frecuencia, capacidad -->
+                                        </div>
+                                    </article>
+                                </div>
+
+                                <div class="col-12" *ngIf="rutasFiltradas?.length===0">
+                                    <div class="empty-state text-center">
+                                        <mat-icon inline>travel_explore</mat-icon>
+                                        <p class="m-0">No hay rutas que coincidan con tu búsqueda.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                            <div class="texto-paso">Paso 2 de 3 — Zona → <strong>Ruta</strong> → Variante</div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-secondary" (click)="goStep1()">Volver a
+                                    Zonas</button>
+                                <button type="button" class="btn btn-primary" [disabled]="!selectedRuta"
+                                    (click)="goStep3()">Continuar a Variantes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== PASO 3: VARIANTE (MAPA) ==================== -->
+                    <div *ngIf="step === 3" class="card variantes-card shadow-sm border-0">
+                        <div class="card-header d-flex flex-wrap align-items-center gap-2 justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="chip-step"><i class="fa fa-map" aria-hidden="true"></i></div>
+                                <h2 class="m-0 titulo-card">Ubica la Variante en el Mapa</h2>
+                            </div>
+
+                            <div class="col-12 col-md-auto">
+                                <div class="info-ruta-seleccionada">
+                                    <span class="zona-pill">Ruta: #{{selectedRuta?.id}} ·
+                                        {{selectedRuta?.nombre}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <!-- Contenedor del mapa -->
+                                    <div id="map" class="map-wrapper" role="region" aria-label="Mapa de variante"></div>
+
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="meta-item">
+                                        <mat-icon inline>trip_origin</mat-icon>
+                                        <span><strong>Inicio:</strong> {{ selectedRuta?.origen }} ({{
+                                            selectedRuta?.inicio.lat }}, {{ selectedRuta?.inicio.lng }})</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="meta-item">
+                                        <mat-icon inline>flag</mat-icon>
+                                        <span><strong>Fin:</strong> {{ selectedRuta?.destino }} ({{
+                                            selectedRuta?.fin.lat }}, {{ selectedRuta?.fin.lng }})</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                            <div class="texto-paso">
+                                Paso 3 de 4 — Zona → Ruta → <strong>Variante</strong> → Tarifa
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-secondary" (click)="goStep2()">
+                                    Volver a Rutas
+                                </button>
+
+                                <!-- Botón para FINALIZAR (aparece cuando hay ≥ 2 puntos y no está finalizado) -->
+                                <button *ngIf="!isRouteFinalized" type="button" class="btn btn-primary"
+                                    [disabled]="!canFinalize" (click)="finalizarTrayecto()">
+                                    Finalizar trayecto
+                                </button>
+
+                                <!-- Botón para CONTINUAR (solo cuando ya está finalizado) -->
+                                <button *ngIf="isRouteFinalized" type="button" class="btn btn-primary"
+                                    (click)="goStep4()">
+                                    Continuar a Tarifa
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- PASO 4: TARIFA -->
+                    <div *ngIf="step === 4" class="card tarifa-card shadow-sm border-0">
+                        <div class="card-header d-flex flex-wrap align-items-center gap-2 justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="chip-step">4</div>
+                                <h2 class="m-0 titulo-card">Configura la Tarifa</h2>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <form [formGroup]="tarifaForm" (ngSubmit)="guardarTarifa()" autocomplete="off" novalidate>
+                                <div class="row g-3">
+
+                                    <!-- Tarifa Base -->
+                                    <div class="col-12 col-md-6">
+                                        <label id="lbl-tarifa-base" class="form-label d-flex align-items-center gap-2">
+                                            <i class="fa fa-money-bill-alt doc-icon" aria-hidden="true"></i>
+                                            Tarifa Base
+                                        </label>
+                                        <mat-form-field appearance="fill" class="w-100">
+                                            <input matInput type="number" step="0.01" min="0" placeholder="Ej: 100.00"
+                                                formControlName="tarifaBase" [attr.aria-labelledby]="'lbl-tarifa-base'">
+                                            <mat-error
+                                                *ngIf="tarifaForm.get('tarifaBase')?.hasError('required')">Requerido</mat-error>
+                                            <mat-error *ngIf="tarifaForm.get('tarifaBase')?.hasError('min')">Debe ser ≥
+                                                0</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <!-- Distancia -->
+                                    <div class="col-12 col-md-6">
+                                        <label id="lbl-distancia" class="form-label d-flex align-items-center gap-2">
+                                            <i class="fa fa-ruler doc-icon" aria-hidden="true"></i>
+                                            <span>Distancia</span>
+                                        </label>
+                                        <mat-form-field appearance="fill" class="w-100">
+                                            <input matInput type="number" step="0.1" min="0" placeholder="Ej: 120.5"
+                                                formControlName="distancia" [attr.aria-labelledby]="'lbl-distancia'">
+                                            <mat-error
+                                                *ngIf="tarifaForm.get('distancia')?.hasError('required')">Requerido</mat-error>
+                                            <mat-error *ngIf="tarifaForm.get('distancia')?.hasError('min')">Debe ser ≥
+                                                0</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <!-- Incremento Por Metro -->
+                                    <div class="col-12 col-md-6">
+                                        <label id="lbl-incremento" class="form-label d-flex align-items-center gap-2">
+                                            <i class="fa fa-chart-line doc-icon" aria-hidden="true"></i>
+                                            <span>Incremento Por Metro</span>
+                                        </label>
+                                        <mat-form-field appearance="fill" class="w-100">
+                                            <input matInput type="number" step="0.01" min="0" placeholder="Ej: 10.25"
+                                                formControlName="incrementoPorMetro"
+                                                [attr.aria-labelledby]="'lbl-incremento'">
+                                            <mat-error
+                                                *ngIf="tarifaForm.get('incrementoPorMetro')?.hasError('required')">Requerido</mat-error>
+                                            <mat-error
+                                                *ngIf="tarifaForm.get('incrementoPorMetro')?.hasError('min')">Debe ser ≥
+                                                0</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <!-- Costo Adicional -->
+                                    <div class="col-12 col-md-6">
+                                        <label id="lbl-costo-adicional"
+                                            class="form-label d-flex align-items-center gap-2">
+                                            <i class="fa fa-circle-plus doc-icon" aria-hidden="true"></i>
+                                            <span>Costo Adicional</span>
+                                        </label>
+                                        <mat-form-field appearance="fill" class="w-100">
+                                            <input matInput type="number" step="0.01" min="0" placeholder="Ej: 50.00"
+                                                formControlName="costoAdicional"
+                                                [attr.aria-labelledby]="'lbl-costo-adicional'">
+                                            <mat-error
+                                                *ngIf="tarifaForm.get('costoAdicional')?.hasError('required')">Requerido</mat-error>
+                                            <mat-error *ngIf="tarifaForm.get('costoAdicional')?.hasError('min')">Debe
+                                                ser ≥ 0</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card-footer d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                            <div class="texto-paso">Paso 4 de 4 — Zona → Ruta → Variante → <strong>Tarifa</strong></div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-secondary" (click)="goStep3()">Volver a
+                                    Variantes</button>
+                                <button type="button" class="btn btn-primary" [disabled]="!isTarifaValida()"
+                                    (click)="guardarTarifa()">
+                                    Guardar Tarifa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </section>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

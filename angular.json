@@ -40,7 +40,8 @@
               "node_modules/sweetalert2/dist/sweetalert2.min.css",
               "src/@vex/styles/tailwind.scss",
               "node_modules/devextreme/dist/css/dx.common.css",
-              "node_modules/devextreme/dist/css/dx.light.css"
+              "node_modules/devextreme/dist/css/dx.light.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
@@ -121,7 +122,8 @@
               "src/styles.scss",
               "node_modules/sweetalert2/dist/sweetalert2.min.css",
               "node_modules/devextreme/dist/css/dx.common.css",
-              "node_modules/devextreme/dist/css/dx.light.css"
+              "node_modules/devextreme/dist/css/dx.light.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           }

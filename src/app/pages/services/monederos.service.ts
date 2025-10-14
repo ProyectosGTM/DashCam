@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -10,27 +10,44 @@ export class MonederosServices {
 
   constructor(private http: HttpClient) { }
 
-  obtenerMonederos(): Observable<any> {
-    return this.http.get<any>(`${environment.API_SECURITY}/api/monederos`);
+  obtenerMonederosData(page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${environment.API_SECURITY}/monederos/${page}/${pageSize}`);
   }
 
-  crearTransaccion(saveForm: any): Observable<any> {  // Cambiamos 'string' a 'any' para más flexibilidad
-    return this.http.post(`${environment.API_SECURITY}/api/transacciones`, saveForm, {
-        responseType: 'text' // Si esto no es necesario, cámbialo a 'json'
-    }).pipe(
-        catchError((err: HttpErrorResponse) => {
-            let errorMessage = 'Ocurrió un error al registrar la transacción.';
-            if (err.status === HttpStatusCode.BadRequest) {
-                errorMessage = 'Datos incorrectos para la transacción.';
-            } else if (err.status === HttpStatusCode.NotFound) {
-                errorMessage = 'Recurso no encontrado.';
-            } else if (err.status === HttpStatusCode.InternalServerError) {
-                errorMessage = 'Ocurrió un error en el servidor.';
-            }
-            return throwError(errorMessage);
-        })
-    );
-}
+  obtenerMonederos(): Observable<any> {
+    return this.http.get(`${environment.API_SECURITY}/monederos/list`);
+  }
 
- 
+  agregarMonedero(data: FormData) {
+    return this.http.post(environment.API_SECURITY + '/monederos', data);
+  }
+
+  crearTransaccion (data: FormData) {
+    return this.http.post(environment.API_SECURITY + '/transacciones', data);
+  }
+
+  eliminarMonedero(idMonedero: Number) {
+    return this.http.delete(environment.API_SECURITY + '/monederos/' + idMonedero);
+  }
+
+  obtenerMonedero(idMonedero: number): Observable<any> {
+    return this.http.get<any>(environment.API_SECURITY + '/monederos/' + idMonedero);
+  }
+
+  actualizarMonedero(idMonedero: number, saveForm: any): Observable<any> {
+    return this.http.put(`${environment.API_SECURITY}/monederos/${idMonedero}`, saveForm);
+  }
+
+  actualizarMonederoForm(saveForm: any): Observable<any> {
+    return this.http.put(`${environment.API_SECURITY}/monederos/`, saveForm);
+  }
+
+  private apiUrl = `${environment.API_SECURITY}/monederos`;
+  updateEstatus(id: number, estatus: number): Observable<string> {
+    const url = `${this.apiUrl}/estatus/${id}`;
+    const body = { estatus };
+    return this.http.patch(url, body, { responseType: 'text' }).pipe(
+      catchError(error => throwError(() => error))
+    );
+  }
 }

@@ -1,9 +1,10 @@
 <vex-page-layout @fadeInRight>
-
     <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        [class.px-6]="layoutCtrl.value === 'fullwidth'">
+
         <div class="card mt-4">
-            <div class="dashboard-lite p-4">
+            <div class="container-fluid p-4">
+                <!-- Breadcrumb -->
                 <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
                     <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
                         <a routerLink="/administracion" class="crumb-link">
@@ -17,61 +18,187 @@
                     </nav>
                 </div>
 
-                <section class="mt-5 table-shell">
-                    <form [formGroup]="usuarioForm">
-                        <div class="fm-grid">
-                            <div class="fm-divider fm-span-3">Datos Generales</div>
+                <!-- Formulario -->
+                <section class="mt-4">
+                    <form [formGroup]="operadorForm" class="form-skin-lite">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="section-head">
+                                    <h5 class="mb-1">Datos Generales</h5>
+                                </div>
+                                <div class="section-bar"></div>
+                            </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-licencia">
-                                    <i class="fa fa-id-card doc-icon" aria-hidden="true"></i>
-                                    Número de Licencia
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Número de Licencia" formControlName="apellidoPaterno"
-                                        [attr.aria-labelledby]="'lbl-licencia'">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label class="form-label"><i class="fa fa-id-card"></i><span>Número de
+                                        Licencia</span></label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Número de Licencia" formControlName="numeroLicencia" />
                                 </mat-form-field>
                             </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-fecha-nac">
-                                    <i class="fa fa-calendar-day doc-icon" aria-hidden="true"></i>
-                                    Fecha de Nacimiento
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Fecha de Nacimiento" formControlName="apellidoMaterno"
-                                        [attr.aria-labelledby]="'lbl-fecha-nac'">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label class="form-label"><i class="fa fa-calendar-day"></i><span>Fecha de
+                                        Nacimiento</span></label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput type="date" placeholder="Fecha de Nacimiento"
+                                        formControlName="fechaNacimiento" />
                                 </mat-form-field>
                             </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-usuario">
-                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-                                    Usuario
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Usuario" formControlName="nombre"
-                                        [attr.aria-labelledby]="'lbl-usuario'">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label class="form-label"><i class="fa fa-user"></i><span>Usuario</span></label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Usuario" formControlName="idUsuario" />
                                 </mat-form-field>
                             </div>
 
-                            <div class="fm-span-3 fm-actions">
-                                <div class="fm-actions-right">
-                                    <button mat-raised-button color="primary" type="button">
-                                        <mat-icon>save</mat-icon>
-                                        Guardar
-                                    </button>
-                                    <button mat-raised-button (click)="regresar()" color="warn" type="button">
-                                        <mat-icon>close</mat-icon>
-                                        Cancelar
-                                    </button>
+                            <!-- ====== Subida de documentos ====== -->
+                            <!-- ===== Documentación (solo PDF) ===== -->
+                            <div class="row g-3 uploads-skin mt-2 form-skin-lite">
+                                <div class="col-12">
+                                    <div class="section-head">
+                                        <h5 class="mb-1">Documentación</h5>
+                                    </div>
+                                    <div class="section-bar"></div>
+                                </div>
+
+                                <!-- Identificación (PDF) -->
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <label class="form-label">
+                                        <i class="fa fa-address-card"></i><span>Identificación</span>
+                                    </label>
+
+                                    <div class="dropzone" [class.dragging]="identDragging"
+                                        (click)="openIdentFilePicker()" (dragover)="onIdentDragOver($event)"
+                                        (dragleave)="onIdentDragLeave($event)" (drop)="onIdentDrop($event)">
+
+                                        <div class="dz-body" *ngIf="!identFileName">
+                                            <mat-icon class="dz-icon">description</mat-icon>
+                                            <div class="dz-title">Arrastra y suelta o haz clic</div>
+                                        </div>
+
+                                        <div class="dz-file" *ngIf="identFileName">
+                                            <mat-icon>insert_drive_file</mat-icon>
+                                            <span class="ms-1">{{ identFileName }}</span>
+                                        </div>
+
+                                        <button mat-stroked-button type="button" class="dz-action"
+                                            (click)="openIdentFilePicker()">
+                                            <mat-icon>upload</mat-icon> Seleccionar
+                                        </button>
+                                        <button mat-stroked-button color="warn" type="button" class="dz-clear"
+                                            *ngIf="identFileName" (click)="clearIdentFile($event)">
+                                            <mat-icon>close</mat-icon> Quitar
+                                        </button>
+
+                                        <mat-progress-bar *ngIf="uploadingIdent"
+                                            mode="indeterminate"></mat-progress-bar>
+
+                                        <input #identFileInput type="file" class="d-none" accept="application/pdf"
+                                            (change)="onIdentFileSelected($event)">
+                                    </div>
+
+                                    <mat-error *ngIf="operadorForm.get('identificacion')?.hasError('invalid')">
+                                        Archivo no permitido (solo PDF).
+                                    </mat-error>
+                                </div>
+
+                                <!-- Comprobante de domicilio (PDF) -->
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <label class="form-label">
+                                        <i class="fa fa-house-chimney"></i><span>Comprobante de Domicilio</span>
+                                    </label>
+
+                                    <div class="dropzone" [class.dragging]="domDragging" (click)="openDomFilePicker()"
+                                        (dragover)="onDomDragOver($event)" (dragleave)="onDomDragLeave($event)"
+                                        (drop)="onDomDrop($event)">
+
+                                        <div class="dz-body" *ngIf="!domFileName">
+                                            <mat-icon class="dz-icon">description</mat-icon>
+                                            <div class="dz-title">Arrastra y suelta o haz clic</div>
+                                        </div>
+
+                                        <div class="dz-file" *ngIf="domFileName">
+                                            <mat-icon>insert_drive_file</mat-icon>
+                                            <span class="ms-1">{{ domFileName }}</span>
+                                        </div>
+
+                                        <button mat-stroked-button type="button" class="dz-action"
+                                            (click)="openDomFilePicker()">
+                                            <mat-icon>upload</mat-icon> Seleccionar
+                                        </button>
+                                        <button mat-stroked-button color="warn" type="button" class="dz-clear"
+                                            *ngIf="domFileName" (click)="clearDomFile($event)">
+                                            <mat-icon>close</mat-icon> Quitar
+                                        </button>
+
+                                        <mat-progress-bar *ngIf="uploadingDom" mode="indeterminate"></mat-progress-bar>
+
+                                        <input #domFileInput type="file" class="d-none" accept="application/pdf"
+                                            (change)="onDomFileSelected($event)">
+                                    </div>
+
+                                    <mat-error *ngIf="operadorForm.get('comprobanteDomicilio')?.hasError('invalid')">
+                                        Archivo no permitido (solo PDF).
+                                    </mat-error>
+                                </div>
+
+                                <!-- Antecedentes no penales (PDF) -->
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <label class="form-label">
+                                        <i class="fa fa-file-shield"></i><span>Antecedentes No Penales</span>
+                                    </label>
+
+                                    <div class="dropzone" [class.dragging]="antDragging" (click)="openAntFilePicker()"
+                                        (dragover)="onAntDragOver($event)" (dragleave)="onAntDragLeave($event)"
+                                        (drop)="onAntDrop($event)">
+
+                                        <div class="dz-body" *ngIf="!antFileName">
+                                            <mat-icon class="dz-icon">description</mat-icon>
+                                            <div class="dz-title">Arrastra y suelta o haz clic</div>
+                                        </div>
+
+                                        <div class="dz-file" *ngIf="antFileName">
+                                            <mat-icon>insert_drive_file</mat-icon>
+                                            <span class="ms-1">{{ antFileName }}</span>
+                                        </div>
+
+                                        <button mat-stroked-button type="button" class="dz-action"
+                                            (click)="openAntFilePicker()">
+                                            <mat-icon>upload</mat-icon> Seleccionar
+                                        </button>
+                                        <button mat-stroked-button color="warn" type="button" class="dz-clear"
+                                            *ngIf="antFileName" (click)="clearAntFile($event)">
+                                            <mat-icon>close</mat-icon> Quitar
+                                        </button>
+
+                                        <mat-progress-bar *ngIf="uploadingAnt" mode="indeterminate"></mat-progress-bar>
+
+                                        <input #antFileInput type="file" class="d-none" accept="application/pdf"
+                                            (change)="onAntFileSelected($event)">
+                                    </div>
+
+                                    <mat-error *ngIf="operadorForm.get('antecedentesNoPenales')?.hasError('invalid')">
+                                        Archivo no permitido (solo PDF).
+                                    </mat-error>
                                 </div>
                             </div>
-                        </div>
 
+
+                            <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                                <button mat-raised-button color="primary" type="submit">
+                                    <mat-icon>save</mat-icon> Guardar
+                                </button>
+                                <button mat-raised-button color="warn" type="button" (click)="regresar()">
+                                    <mat-icon>close</mat-icon> Cancelar
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </section>
             </div>
         </div>
+
     </vex-page-layout-content>
 </vex-page-layout>

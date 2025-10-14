@@ -27,6 +27,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // <-- FA
 import { DxDataGridModule } from 'devextreme-angular';
 import { ListaOperadoresComponent } from './lista-operadores/lista-operadores.component';
 import { AgregarOperadorComponent } from './agregar-operador/agregar-operador.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -36,31 +37,32 @@ import { AgregarOperadorComponent } from './agregar-operador/agregar-operador.co
     OperadoresRoutingModule,
 
     VexPageLayoutComponent,
-        VexPageLayoutHeaderDirective,
-        VexBreadcrumbsComponent,
-        VexPageLayoutContentDirective,
-    
-        // Forms
-        FormsModule,
-        ReactiveFormsModule,
-    
-        // Angular Material
-        MatButtonToggleModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatIconModule,
-        MatMenuModule,
-        MatTableModule,
-        MatSortModule,
-        MatCheckboxModule,
-        MatPaginatorModule,
-        MatDialogModule,
-        MatFormFieldModule,    // <-- agregado
-        MatInputModule,
-        MatSelectModule,       // <-- agregado
-        MatOptionModule,
-        MatSlideToggleModule,  // <-- agregado
-        DxDataGridModule,
+    VexPageLayoutHeaderDirective,
+    VexBreadcrumbsComponent,
+    VexPageLayoutContentDirective,
+
+    // Forms
+    FormsModule,
+    ReactiveFormsModule,
+
+    // Angular Material
+    MatButtonToggleModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatMenuModule,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatDialogModule,
+    MatFormFieldModule,    // <-- agregado
+    MatInputModule,
+    MatSelectModule,       // <-- agregado
+    MatOptionModule,
+    MatSlideToggleModule,  // <-- agregado
+    DxDataGridModule,
+    MatProgressBarModule
   ]
 })
 export class OperadoresModule { }

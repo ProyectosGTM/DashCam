@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+@import "leaflet/dist/leaflet.css";
 
 // Vex Core
 @import "./@vex/styles/core";
@@ -967,4 +968,83 @@ $fm-shadow: 0 18px 40px rgba(15, 80, 233, 0.25);
   margin-right: 6px;
   color: #A6CE39;
   transition: color 0.2s ease;
+}
+
+
+/* Skin ligera tipo screenshot */
+.form-skin-lite {
+  /* paleta leve y reutilizable */
+  --bar-a: #2a5bff;   /* azul */
+  --bar-b: #8a2be2;   /* morado */
+  --icon:  #8bc34a;   /* verde label */
+  --field-bg: #f3f3f3;
+  --label: #1f2a37;
+  --placeholder: #8d8d8d;
+
+  .section-head h5 {
+    font-weight: 600;
+    color: #1f2a37;
+  }
+
+  .section-bar {
+    height: 3px;
+    margin: 8px 0 12px;
+    background: linear-gradient(90deg, var(--bar-a), var(--bar-b));
+  }
+
+  /* Labels en mayúsculas con icono verde */
+  .form-label {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: .35rem;
+    color: var(--label);
+    text-transform: uppercase;
+    font-size: .78rem;
+    font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+    font-weight: 400; // Regular
+
+    .fa {
+      color: var(--icon);
+      font-size: .95rem;
+    }
+  }
+
+  /* Angular Material (MDC) “fill” con fondo gris suave */
+  mat-form-field,
+  .mat-mdc-form-field {
+    width: 100%;
+
+    /* wrapper gris y bordes sutiles */
+    .mat-mdc-text-field-wrapper,
+    .mdc-text-field--filled {
+      background: var(--field-bg) !important;
+      border-radius: 6px;
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,.08);
+    }
+
+    /* padding cómodo */
+    .mat-mdc-form-field-infix {
+      padding: 12px 12px;
+    }
+
+    /* placeholder gris */
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--placeholder);
+      opacity: 1;
+    }
+
+    /* estado disabled legible */
+    .mdc-text-field--disabled,
+    .mat-mdc-form-field-disabled .mat-mdc-text-field-wrapper {
+      opacity: .85;
+      filter: grayscale(10%);
+    }
+  }
+
+  /* Separación entre campos como en el mock */
+  .row.g-3 > [class*="col-"] {
+    margin-bottom: .25rem;
+  }
 }

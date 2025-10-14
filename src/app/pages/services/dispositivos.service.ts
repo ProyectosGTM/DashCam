@@ -10,8 +10,40 @@ export class DispositivosService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerDispositivos(): Observable<any> {
-    return this.http.get<any>(`${environment.API_SECURITY}/api/dispositivos`);
+  obtenerDispositivosData(page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${environment.API_SECURITY}/dispositivos/${page}/${pageSize}`);
   }
-  
+
+  obtenerDispositivos(): Observable<any> {
+    return this.http.get(`${environment.API_SECURITY}/dispositivos/list`);
+  }
+
+  obtenerDispositivosByCliente(idCliente: any): Observable<any> {
+    return this.http.get(`${environment.API_SECURITY}/dispositivos/clientes/${idCliente}`);
+  }
+
+  agregarDispositivo(data: FormData) {
+    return this.http.post(environment.API_SECURITY + '/dispositivos', data);
+  }
+
+  eliminarDispositivo(idDispositivo: Number) {
+    return this.http.delete(environment.API_SECURITY + '/dispositivos/' + idDispositivo);
+  }
+
+  obtenerDispositivo(idDispositivo: number): Observable<any> {
+    return this.http.get<any>(environment.API_SECURITY + '/dispositivos/' + idDispositivo);
+  }
+
+  actualizarDispositivo(idDispositivo: number, saveForm: any): Observable<any> {
+    return this.http.put(`${environment.API_SECURITY}/dispositivos/` + idDispositivo, saveForm);
+  }
+
+  private apiUrl = `${environment.API_SECURITY}/dispositivos`;
+  updateEstatus(id: number, estatus: number): Observable<string> {
+    const url = `${this.apiUrl}/estatus/${id}`;
+    const body = { estatus };
+    return this.http.patch(url, body, { responseType: 'text' }).pipe(
+      catchError(error => throwError(() => error))
+    );
+  }
 }

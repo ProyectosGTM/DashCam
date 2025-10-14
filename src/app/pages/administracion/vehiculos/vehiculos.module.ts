@@ -27,6 +27,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // <-- FA
 import { DxDataGridModule } from 'devextreme-angular';
 import { ListaVehiculosComponent } from './lista-vehiculos/lista-vehiculos.component';
 import { AgregarVehiculoComponent } from './agregar-vehiculo/agregar-vehiculo.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [ListaVehiculosComponent, AgregarVehiculoComponent],
@@ -59,6 +60,7 @@ import { AgregarVehiculoComponent } from './agregar-vehiculo/agregar-vehiculo.co
     MatOptionModule,
     MatSlideToggleModule,  // <-- agregado
     DxDataGridModule,
+    MatProgressBarModule
   ]
 })
 export class VehiculosModule { }

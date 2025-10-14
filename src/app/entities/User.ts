@@ -10,4 +10,5 @@ export class User {
     email?:string;
     idCliente?:any;
     imagenPerfil?: string;
+    rol: any;
 }

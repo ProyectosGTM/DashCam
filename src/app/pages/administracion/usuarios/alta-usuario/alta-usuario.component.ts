@@ -12,8 +12,8 @@ import { AlertsService } from 'src/app/pages/pages/modal/alerts.service';
 })
 export class AltaUsuarioComponent {
   layoutCtrl = new UntypedFormControl('fullwidth');
-    isLoading: boolean = false;
-    
+  isLoading: boolean = false;
+
   usuarioForm!: FormGroup;
   hidePass = true;
   hidePass2 = true;
@@ -31,14 +31,14 @@ export class AltaUsuarioComponent {
     // Inyecta tus servicios reales
     // private usuariosService: UsuariosService,
     // private catalogosService: CatalogosService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
     this.cargarCatalogos();
   }
 
-  regresar(){
+  regresar() {
     this.router.navigateByUrl('/administracion/usuarios')
   }
 
@@ -54,7 +54,7 @@ export class AltaUsuarioComponent {
         confirmPassword: ['', [Validators.required]],
         idRol: [null, [Validators.required]],
         estatus: [1, [Validators.required]],
-        idCliente: [null, [Validators.required]],
+        idCliente: [null],
         permiteCobro: [false]
       },
       { validators: this.passwordsIgualesValidator }
@@ -118,7 +118,6 @@ export class AltaUsuarioComponent {
       confirmPassword: 'Confirmar contraseña',
       idRol: 'Rol',
       estatus: 'Estatus',
-      idCliente: 'Cliente'
     };
     const faltantes: string[] = [];
     Object.keys(this.usuarioForm.controls).forEach((key) => {
@@ -199,7 +198,7 @@ export class AltaUsuarioComponent {
     if (String(r).toLowerCase() === 'confirm') this.router.navigate(['/app/usuarios']);
   }
 
-   previewUrl: string | ArrayBuffer | null = null;
+  previewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
   isDragOver: boolean = false;
 

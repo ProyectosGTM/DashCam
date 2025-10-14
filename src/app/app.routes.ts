@@ -211,6 +211,21 @@ export const appRoutes: VexRoutes = [
             path: 'punto-venta',
             loadChildren:() => import('./pages/administracion/punto-venta/punto-venta.module')
               .then(m => m.PuntoVentaModule)
+          },
+          {
+            path: 'variantes',
+            loadChildren:() => import('./pages/administracion/variantes/variantes.module')
+              .then(m => m.VariantesModule)
+          },
+          {
+            path: 'zonas',
+            loadChildren:() => import('./pages/administracion/zonas/zonas.module')
+              .then(m => m.ZonasModule)
+          },
+          {
+            path: 'instalaciones',
+            loadChildren:() => import('./pages/administracion/instalacion/instalacion.module')
+              .then(m => m.InstalacionModule)
           }
         ]
       },

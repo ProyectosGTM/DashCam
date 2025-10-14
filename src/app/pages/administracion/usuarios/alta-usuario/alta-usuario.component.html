@@ -17,125 +17,108 @@
                     </nav>
                 </div>
 
-                <section class="mt-5 table-shell">
-                    <form [formGroup]="usuarioForm">
-                        <div class="fm-grid">
-                            <div class="fm-divider fm-span-3">Datos Generales</div>
+                <section class="mt-5">
+  <form [formGroup]="usuarioForm" class="container-fluid">
+    <!-- Bloque: Datos Generales -->
+    <div class="row g-3 align-items-start">
+      <div class="col-12">
+        <h6 class="section-title">Datos Generales</h6>
+      </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-nombre">
-                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-                                    Nombre
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Nombre" formControlName="nombre"
-                                        [attr.aria-labelledby]="'lbl-nombre'">
-                                </mat-form-field>
-                            </div>
+      <!-- Nombre -->
+      <div class="col-12 col-md-6">
+        <label id="lbl-nombre" class="form-label d-flex align-items-center gap-2">
+          <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+          <span>Nombre</span>
+        </label>
+        <mat-form-field appearance="fill" class="w-100">
+          <input
+            matInput
+            placeholder="Nombre"
+            formControlName="nombre"
+            [attr.aria-labelledby]="'lbl-nombre'">
+        </mat-form-field>
+      </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-apellido-paterno">
-                                    <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
-                                    Apellido Paterno
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Apellido Paterno" formControlName="apellidoPaterno"
-                                        [attr.aria-labelledby]="'lbl-apellido-paterno'">
-                                </mat-form-field>
-                            </div>
+      <!-- Apellido Paterno -->
+      <div class="col-12 col-md-6">
+        <label id="lbl-apellido-paterno" class="form-label d-flex align-items-center gap-2">
+          <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
+          <span>Apellido Paterno</span>
+        </label>
+        <mat-form-field appearance="fill" class="w-100">
+          <input
+            matInput
+            placeholder="Apellido Paterno"
+            formControlName="apellidoPaterno"
+            [attr.aria-labelledby]="'lbl-apellido-paterno'">
+        </mat-form-field>
+      </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-apellido-materno">
-                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-                                    Apellido Materno
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Apellido Materno" formControlName="apellidoMaterno"
-                                        [attr.aria-labelledby]="'lbl-apellido-materno'">
-                                </mat-form-field>
-                            </div>
+      <!-- Apellido Materno (ejemplo adicional) -->
+      <div class="col-12 col-md-6">
+        <label id="lbl-apellido-materno" class="form-label d-flex align-items-center gap-2">
+          <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+          <span>Apellido Materno</span>
+        </label>
+        <mat-form-field appearance="fill" class="w-100">
+          <input
+            matInput
+            placeholder="Apellido Materno"
+            formControlName="apellidoMaterno"
+            [attr.aria-labelledby]="'lbl-apellido-materno'">
+        </mat-form-field>
+      </div>
 
-                            <div class="fm-group fm-span-2">
-                                <label id="lbl-correo">
-                                    <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
-                                    Correo electrónico
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="email" placeholder="Correo electrónico"
-                                        formControlName="userName" [attr.aria-labelledby]="'lbl-correo'">
-                                </mat-form-field>
-                            </div>
+      <!-- Email (ejemplo adicional) -->
+      <div class="col-12 col-md-6">
+        <label id="lbl-email" class="form-label d-flex align-items-center gap-2">
+          <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
+          <span>Email</span>
+        </label>
+        <mat-form-field appearance="fill" class="w-100">
+          <input
+            matInput
+            placeholder="correo@dominio.com"
+            type="email"
+            formControlName="email"
+            [attr.aria-labelledby]="'lbl-email'">
+        </mat-form-field>
+      </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-telefono">
-                                    <i class="fa fa-phone doc-icon" aria-hidden="true"></i>
-                                    Teléfono
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="tel" placeholder="Teléfono" formControlName="telefono"
-                                        [attr.aria-labelledby]="'lbl-telefono'">
-                                </mat-form-field>
-                            </div>
+      <!-- Si necesitas más campos, solo duplica <div class="col-12 col-md-6"> ... </div> -->
+    </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-contrasena">
-                                    <i class="fa fa-lock doc-icon" aria-hidden="true"></i>
-                                    Contraseña
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput [type]="hidePass ? 'password' : 'text'" placeholder="Contraseña"
-                                        formControlName="passwordHash" [attr.aria-labelledby]="'lbl-contrasena'">
-                                    <button mat-icon-button matSuffix type="button" (click)="hidePass = !hidePass"
-                                        aria-label="Mostrar/Ocultar contraseña">
-                                        <mat-icon>{{ hidePass ? 'visibility' : 'visibility_off' }}</mat-icon>
-                                    </button>
-                                </mat-form-field>
-                            </div>
+    <!-- Otro bloque/sección (opcional) -->
+    <div class="row g-3 align-items-start mt-4">
+      <div class="col-12">
+        <h6 class="section-title">Dirección</h6>
+      </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-confirmar-contrasena">
-                                    <i class="fa fa-lock doc-icon" aria-hidden="true"></i>
-                                    Confirmar contraseña
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput [type]="hidePass2 ? 'password' : 'text'"
-                                        placeholder="Confirmar contraseña" formControlName="confirmPassword"
-                                        [attr.aria-labelledby]="'lbl-confirmar-contrasena'">
-                                    <button mat-icon-button matSuffix type="button" (click)="hidePass2 = !hidePass2"
-                                        aria-label="Mostrar/Ocultar confirmar contraseña">
-                                        <mat-icon>{{ hidePass2 ? 'visibility' : 'visibility_off' }}</mat-icon>
-                                    </button>
-                                </mat-form-field>
-                            </div>
+      <div class="col-12 col-lg-8">
+        <label id="lbl-calle" class="form-label">Calle</label>
+        <mat-form-field appearance="fill" class="w-100">
+          <input matInput placeholder="Calle" formControlName="calle" [attr.aria-labelledby]="'lbl-calle'">
+        </mat-form-field>
+      </div>
 
-                            <div class="fm-group">
-                                <label id="lbl-rol">
-                                    <i class="fa fa-shield-halved doc-icon" aria-hidden="true"></i>
-                                    Rol
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <mat-select placeholder="Rol" formControlName="idRol"
-                                        [attr.aria-labelledby]="'lbl-rol'">
-                                        <mat-option *ngFor="let r of roles" [value]="r.id">{{ r.nombre }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
+      <div class="col-6 col-lg-2">
+        <label id="lbl-num-ext" class="form-label">Núm. Ext.</label>
+        <mat-form-field appearance="fill" class="w-100">
+          <input matInput placeholder="Ext" formControlName="numExt" [attr.aria-labelledby]="'lbl-num-ext'">
+        </mat-form-field>
+      </div>
 
-                            <div class="fm-span-3 fm-actions">
-                                <div class="fm-actions-right">
-                                    <button mat-raised-button color="primary" type="button">
-                                        <mat-icon>save</mat-icon>
-                                        Guardar
-                                    </button>
-                                    <button mat-raised-button (click)="regresar()" color="warn" type="button">
-                                        <mat-icon>close</mat-icon>
-                                        Cancelar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </section>
+      <div class="col-6 col-lg-2">
+        <label id="lbl-num-int" class="form-label">Núm. Int.</label>
+        <mat-form-field appearance="fill" class="w-100">
+          <input matInput placeholder="Int" formControlName="numInt" [attr.aria-labelledby]="'lbl-num-int'">
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</section>
+
             </div>
         </div>
     </vex-page-layout-content>

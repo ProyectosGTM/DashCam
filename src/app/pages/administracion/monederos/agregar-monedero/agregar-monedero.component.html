@@ -1,9 +1,10 @@
 <vex-page-layout @fadeInRight>
-
     <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        [class.px-6]="layoutCtrl.value === 'fullwidth'">
+
         <div class="card mt-4">
-            <div class="dashboard-lite p-4">
+            <div class="container-fluid p-4">
+                <!-- Breadcrumb -->
                 <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
                     <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
                         <a routerLink="/administracion" class="crumb-link">
@@ -17,72 +18,68 @@
                     </nav>
                 </div>
 
-                <section class="mt-5 table-shell">
-                    <form [formGroup]="usuarioForm">
-                        <div class="fm-grid">
-                            <div class="fm-divider fm-span-3">Datos Generales</div>
-
-                            <div class="fm-group">
-                                <label id="lbl-num-serie">
-                                    <i class="fa fa-id-card doc-icon" aria-hidden="true"></i>
-                                    Número de Serie
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Número de Serie" formControlName="apellidoPaterno"
-                                        [attr.aria-labelledby]="'lbl-num-serie'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-saldo">
-                                    <i class="fa fa-wallet doc-icon" aria-hidden="true"></i>
-                                    Saldo
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Saldo" formControlName="apellidoMaterno"
-                                        [attr.aria-labelledby]="'lbl-saldo'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-pasajero">
-                                    <i class="fa fa-users doc-icon" aria-hidden="true"></i>
-                                    Pasajero
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Pasajero" formControlName="nombre"
-                                        [attr.aria-labelledby]="'lbl-pasajero'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-cliente">
-                                    <i class="fa fa-user-tie doc-icon" aria-hidden="true"></i>
-                                    Cliente
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Cliente" formControlName="nombre"
-                                        [attr.aria-labelledby]="'lbl-cliente'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-span-3 fm-actions">
-                                <div class="fm-actions-right">
-                                    <button mat-raised-button color="primary" type="button">
-                                        <mat-icon>save</mat-icon>
-                                        Guardar
-                                    </button>
-                                    <button mat-raised-button (click)="regresar()" color="warn" type="button">
-                                        <mat-icon>close</mat-icon>
-                                        Cancelar
-                                    </button>
+                <!-- Formulario (sin archivos) -->
+                <section class="mt-4">
+                    <form [formGroup]="monederoForm" class="form-skin-lite">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="section-head">
+                                    <h5 class="mb-1">Datos Generales</h5>
                                 </div>
+                                <div class="section-bar"></div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label">
+                                    <i class="fa fa-id-card"></i><span>Número de Serie</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Número de Serie" formControlName="numeroSerie" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label">
+                                    <i class="fa fa-wallet"></i><span>Saldo</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Saldo" formControlName="saldo" inputmode="decimal"
+                                        (keydown)="moneyKeydown($event)" (input)="moneyInput($event)"
+                                        (paste)="moneyPaste($event)" (blur)="moneyBlur($event)" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label">
+                                    <i class="fa fa-users"></i><span>Pasajero</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Pasajero" formControlName="idPasajero" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label">
+                                    <i class="fa fa-user-tie"></i><span>Cliente</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Cliente" formControlName="idCliente" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                                <button mat-raised-button color="primary" type="submit" (click)="submit()">
+                                    <mat-icon>save</mat-icon> Guardar
+                                </button>
+                                <button mat-raised-button color="warn" type="button" (click)="regresar()">
+                                    <mat-icon>close</mat-icon> Cancelar
+                                </button>
                             </div>
                         </div>
-
                     </form>
                 </section>
             </div>
         </div>
+
     </vex-page-layout-content>
 </vex-page-layout>
