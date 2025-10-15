@@ -226,6 +226,11 @@ export const appRoutes: VexRoutes = [
             path: 'instalaciones',
             loadChildren:() => import('./pages/administracion/instalacion/instalacion.module')
               .then(m => m.InstalacionModule)
+          },
+          {
+            path: 'reportes',
+            loadChildren:() => import('./pages/administracion/reportes/reportes.module')
+              .then(m => m.ReportesModule)
           }
         ]
       },

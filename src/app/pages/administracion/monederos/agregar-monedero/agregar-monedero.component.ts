@@ -386,7 +386,7 @@ export class AgregarMonederoComponent implements OnInit {
   }
 
   regresar() {
-    this.route.navigateByUrl('/administracion/operadores')
+    this.route.navigateByUrl('/administracion/monederos')
   }
 
 }

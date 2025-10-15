@@ -305,8 +305,10 @@ export class AgregarInstalacionComponent implements OnInit {
   }
 
   submit() {
+    if (this.loading) return;            // evita doble clic
     this.submitButton = 'Cargando...';
     this.loading = true;
+
     if (this.idInstalacion) {
       this.actualizar();
     } else {
@@ -314,30 +316,26 @@ export class AgregarInstalacionComponent implements OnInit {
     }
   }
 
-async agregar() {
-  this.submitButton = 'Cargando...';
-  this.loading = true;
+  async agregar() {
+    this.submitButton = 'Cargando...';
+    this.loading = true;
 
-  if (this.instalacionesForm.invalid) {
-    this.submitButton = 'Guardar';
-    this.loading = false;
-
+    // === VALIDACIÓN SIN MÉTODOS NUEVOS (cuenta disabled) ===
     const etiquetas: any = {
       idDispositivo: 'Dispositivo',
       idBlueVox: 'Bluevox',
       idVehiculo: 'Vehículo',
       idCliente: 'Cliente',
     };
+    const requeridos = ['idDispositivo', 'idBlueVox', 'idVehiculo', 'idCliente'];
+    const raw = this.instalacionesForm.getRawValue();
+    const camposFaltantes: string[] = requeridos.filter(k => !raw[k]).map(k => etiquetas[k] || k);
 
-    const camposFaltantes: string[] = [];
-    Object.keys(this.instalacionesForm.controls).forEach((key) => {
-      const control = this.instalacionesForm.get(key);
-      if (control?.invalid && control.errors?.['required']) {
-        camposFaltantes.push(etiquetas[key] || key);
-      }
-    });
+    if (camposFaltantes.length > 0) {
+      this.submitButton = 'Guardar';
+      this.loading = false;
 
-    const lista = camposFaltantes.map((campo, index) => `
+      const lista = camposFaltantes.map((campo, index) => `
       <div style="padding: 8px 12px; border-left: 4px solid #d9534f;
                   background: #caa8a8; text-align: center; margin-bottom: 8px;
                   border-radius: 4px;">
@@ -345,78 +343,75 @@ async agregar() {
       </div>
     `).join('');
 
-    await this.alerts.open({
-      type: 'warning',
-      title: '¡Faltan campos obligatorios!',
-      message: `
+      await this.alerts.open({
+        type: 'warning',
+        title: '¡Faltan campos obligatorios!',
+        message: `
         <p style="text-align: center; font-size: 15px; margin-bottom: 16px; color: white">
           Los siguientes <strong>campos obligatorios</strong> están vacíos.<br>
           Por favor complétalos antes de continuar:
         </p>
         <div style="max-height: 350px; overflow-y: auto;">${lista}</div>
       `,
-      confirmText: 'Entendido',
-      backdropClose: false,
-    });
-    return;
+        confirmText: 'Entendido',
+        backdropClose: false,
+      });
+      return;
+    }
+    // === FIN VALIDACIÓN ===
+
+    const payload = this.instalacionesForm.getRawValue();
+
+    this.instService.agregarInstalacion(payload).subscribe(
+      () => {
+        this.submitButton = 'Guardar';
+        this.loading = false;
+
+        this.alerts.open({
+          type: 'success',
+          title: '¡Operación Exitosa!',
+          message: 'Se agregó una nueva instalación de manera exitosa.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+
+        this.regresar();
+      },
+      () => {
+        this.submitButton = 'Guardar';
+        this.loading = false;
+
+        this.alerts.open({
+          type: 'error',
+          title: '¡Ops!',
+          message: 'Ocurrió un error al agregar la instalación.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+      }
+    );
   }
 
-  const payload = this.instalacionesForm.getRawValue();
+  async actualizar() {
+    this.submitButton = 'Cargando...';
+    this.loading = true;
 
-  this.instService.agregarInstalacion(payload).subscribe(
-    () => {
-      this.submitButton = 'Guardar';
-      this.loading = false;
-
-      this.alerts.open({
-        type: 'success',
-        title: '¡Operación Exitosa!',
-        message: 'Se agregó una nueva instalación de manera exitosa.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
-
-      this.regresar();
-    },
-    () => {
-      this.submitButton = 'Guardar';
-      this.loading = false;
-
-      this.alerts.open({
-        type: 'error',
-        title: '¡Ops!',
-        message: 'Ocurrió un error al agregar la instalación.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
-    }
-  );
-}
-
-async actualizar() {
-  this.submitButton = 'Cargando...';
-  this.loading = true;
-
-  if (this.instalacionesForm.invalid) {
-    this.submitButton = 'Guardar';
-    this.loading = false;
-
+    // === VALIDACIÓN SIN MÉTODOS NUEVOS (cuenta disabled) ===
     const etiquetas: any = {
       idDispositivo: 'Dispositivo',
       idBlueVox: 'Bluevox',
       idVehiculo: 'Vehículo',
       idCliente: 'Cliente',
     };
+    const requeridos = ['idDispositivo', 'idBlueVox', 'idVehiculo', 'idCliente'];
+    const raw = this.instalacionesForm.getRawValue();
+    const camposFaltantes: string[] = requeridos.filter(k => !raw[k]).map(k => etiquetas[k] || k);
 
-    const camposFaltantes: string[] = [];
-    Object.keys(this.instalacionesForm.controls).forEach((key) => {
-      const control = this.instalacionesForm.get(key);
-      if (control?.invalid && control.errors?.['required']) {
-        camposFaltantes.push(etiquetas[key] || key);
-      }
-    });
+    if (camposFaltantes.length > 0) {
+      this.submitButton = 'Actualizar';
+      this.loading = false;
 
-    const lista = camposFaltantes.map((campo, index) => `
+      const lista = camposFaltantes.map((campo, index) => `
       <div style="padding: 8px 12px; border-left: 4px solid #d9534f;
                   background: #caa8a8; text-align: center; margin-bottom: 8px;
                   border-radius: 4px;">
@@ -424,54 +419,54 @@ async actualizar() {
       </div>
     `).join('');
 
-    await this.alerts.open({
-      type: 'warning',
-      title: '¡Faltan campos obligatorios!',
-      message: `
+      await this.alerts.open({
+        type: 'warning',
+        title: '¡Faltan campos obligatorios!',
+        message: `
         <p style="text-align: center; font-size: 15px; margin-bottom: 16px; color: white">
           Los siguientes <strong>campos obligatorios</strong> están vacíos.<br>
           Por favor complétalos antes de continuar:
         </p>
         <div style="max-height: 350px; overflow-y: auto;">${lista}</div>
       `,
-      confirmText: 'Entendido',
-      backdropClose: false,
-    });
-    return;
-  }
-
-  const payload = this.instalacionesForm.getRawValue();
-
-  this.instService.actualizarInstalacion(this.idInstalacion, payload).subscribe(
-    () => {
-      this.submitButton = 'Actualizar';
-      this.loading = false;
-
-      this.alerts.open({
-        type: 'success',
-        title: '¡Operación Exitosa!',
-        message: 'Los datos de la instalación se actualizaron correctamente.',
-        confirmText: 'Confirmar',
+        confirmText: 'Entendido',
         backdropClose: false,
       });
-
-      this.regresar();
-    },
-    () => {
-      this.submitButton = 'Actualizar';
-      this.loading = false;
-
-      this.alerts.open({
-        type: 'error',
-        title: '¡Ops!',
-        message: 'Ocurrió un error al actualizar la instalación.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
+      return;
     }
-  );
-}
+    // === FIN VALIDACIÓN ===
 
+    const payload = this.instalacionesForm.getRawValue();
+
+    this.instService.actualizarInstalacion(this.idInstalacion, payload).subscribe(
+      () => {
+        this.submitButton = 'Actualizar';
+        this.loading = false;
+
+        this.alerts.open({
+          type: 'success',
+          title: '¡Operación Exitosa!',
+          message: 'Los datos de la instalación se actualizaron correctamente.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+
+        this.regresar();
+      },
+      () => {
+        this.submitButton = 'Actualizar';
+        this.loading = false;
+
+        this.alerts.open({
+          type: 'error',
+          title: '¡Ops!',
+          message: 'Ocurrió un error al actualizar la instalación.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+      }
+    );
+  }
 
   private pendingLabels: {
     dispositivo?: string | null;

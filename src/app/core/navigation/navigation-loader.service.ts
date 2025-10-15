@@ -92,6 +92,24 @@ export class NavigationLoaderService {
           // },
           {
             type: 'link',
+            label: 'Zonas',
+            route: '/administracion/zonas',
+            icon: 'mat:map', // o 'mat:layers' / 'mat:grid_view'
+          },
+          {
+            type: 'link',
+            label: 'Rutas',
+            route: '/administracion/rutas',
+            icon: 'mat:alt_route', // o 'mat:route' / 'mat:signpost'
+          },
+          {
+            type: 'link',
+            label: 'Variantes',
+            route: '/administracion/variantes',
+            icon: 'mat:category', // o 'mat:tune' / 'mat:widgets'
+          },
+          {
+            type: 'link',
             label: 'Bitacora',
             route: '/administracion/bitacora',
             icon: 'mat:assignment',
@@ -106,14 +124,15 @@ export class NavigationLoaderService {
             type: 'link',
             label: 'Usuarios',
             route: '/administracion/usuarios',
-            icon: 'mat:group'
+            icon: 'mat:manage_accounts'
           },
           {
             type: 'link',
             label: 'Clientes',
             route: '/administracion/clientes',
-            icon: 'mat:people_alt'
+            icon: 'mat:badge'
           },
+
           {
             type: 'link',
             label: 'Permisos',
@@ -138,6 +157,30 @@ export class NavigationLoaderService {
           //   route: '/administracion/perfil-usuario',
           //   icon: 'mat:person',
           // },
+        ]
+      },
+      {
+        type: 'subheading',
+        label: 'Reportes',
+        children: [
+          {
+            type: 'link',
+            label: 'Recaud. Diaria por Ruta',
+            route: '/administracion/reportes/recaudacion-diaria-ruta',
+            icon: 'mat:group'
+          },
+          {
+            type: 'link',
+            label: 'Recaud. por Operador',
+            route: '/administracion/reportes/recaudacion-operador',
+            icon: 'mat:group'
+          },
+          {
+            type: 'link',
+            label: 'Recaud. por Vehículo',
+            route: '/administracion/reportes/recaudacion-vehiculo',
+            icon: 'mat:group'
+          },
         ]
       },
     ]);

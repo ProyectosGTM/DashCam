@@ -1,9 +1,8 @@
 <vex-page-layout @fadeInRight>
-
     <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        [class.px-6]="layoutCtrl.value === 'fullwidth'">
         <div class="card mt-4">
-            <div class="dashboard-lite p-4">
+            <div class="container-fluid p-4">
                 <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
                     <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
                         <a routerLink="/administracion" class="crumb-link">
@@ -16,51 +15,44 @@
                         <span class="crumb-current" aria-current="page">Agregar Rol</span>
                     </nav>
                 </div>
-
-                <section class="mt-5 table-shell">
-                    <form [formGroup]="usuarioForm">
-                        <div class="fm-grid">
-                            <div class="fm-divider fm-span-3">Datos Generales</div>
-                            <div class="fm-group">
-                                <label id="lbl-nombre">
-                                    <i class="fa fa-tag doc-icon" aria-hidden="true"></i>
-                                    Nombre
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Nombre" formControlName="apellidoMaterno"
-                                        [attr.aria-labelledby]="'lbl-nombre'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-descripcion">
-                                    <i class="fa fa-align-left doc-icon" aria-hidden="true"></i>
-                                    Descripción
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Descripción" formControlName="nombre"
-                                        [attr.aria-labelledby]="'lbl-descripcion'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-span-3 fm-actions">
-                                <div class="fm-actions-right">
-                                    <button mat-raised-button color="primary" type="button">
-                                        <mat-icon>save</mat-icon>
-                                        Guardar
-                                    </button>
-                                    <button mat-raised-button (click)="regresar()" color="warn" type="button">
-                                        <mat-icon>close</mat-icon>
-                                        Cancelar
-                                    </button>
+                <section class="mt-4">
+                    <form [formGroup]="rolForm" class="container-fluid form-skin-lite">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="section-head">
+                                    <h5 class="mb-1">Datos Generales</h5>
                                 </div>
+                                <div class="section-bar"></div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="form-label">
+                                    <i class="fa fa-tag"></i><span>Nombre</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Nombre del rol" formControlName="nombre" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="form-label">
+                                    <i class="fa fa-align-left"></i><span>Descripción</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Descripción del rol" formControlName="descripcion" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                                <button mat-raised-button color="primary" type="button" (click)="submit()">
+                                    <mat-icon>save</mat-icon> Guardar
+                                </button>
+                                <button mat-raised-button color="warn" type="button" (click)="regresar()">
+                                    <mat-icon>close</mat-icon> Cancelar
+                                </button>
                             </div>
                         </div>
-
-
                     </form>
                 </section>
             </div>
         </div>
+
     </vex-page-layout-content>
 </vex-page-layout>

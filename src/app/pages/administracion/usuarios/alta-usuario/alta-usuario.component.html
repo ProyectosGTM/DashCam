@@ -1,125 +1,158 @@
 <vex-page-layout @fadeInRight>
+  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+    [class.px-6]="layoutCtrl.value === 'fullwidth'">
 
-    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
-        <div class="card mt-4">
-            <div class="dashboard-lite p-4">
-                <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
-                    <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
-                        <a routerLink="/administracion" class="crumb-link">
-                            <mat-icon inline>home</mat-icon>
-                            Administración
-                        </a>
-                        <span class="sep">/</span>
-                        <span class="crumb-current" aria-current="page">Usuarios</span>
-                        <span class="sep">/</span>
-                        <span class="crumb-current" aria-current="page">Agregar Usuario</span>
-                    </nav>
+    <div class="card mt-4">
+      <div class="container-fluid p-4">
+        <!-- Breadcrumb -->
+        <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
+          <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
+            <a routerLink="/administracion" class="crumb-link">
+              <mat-icon inline>home</mat-icon>
+              Administración
+            </a>
+            <span class="sep">/</span>
+            <span class="crumb-current" aria-current="page">Usuarios</span>
+            <span class="sep">/</span>
+            <span class="crumb-current" aria-current="page">Agregar Usuario</span>
+          </nav>
+        </div>
+
+        <!-- Formulario -->
+        <section class="mt-4">
+          <form [formGroup]="usuarioForm" class="form-skin-lite">
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="section-head">
+                  <h5 class="mb-1">Datos Generales</h5>
+                </div>
+                <div class="section-bar"></div>
+              </div>
+
+              <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label"><i class="fa fa-user"></i><span>Nombre</span></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <input matInput placeholder="Nombre" formControlName="nombre" />
+                </mat-form-field>
+              </div>
+
+              <!-- Apellido Paterno -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label"><i class="fa fa-user-pen"></i><span>Apellido Paterno</span></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <input matInput placeholder="Apellido Paterno" formControlName="apellidoPaterno" />
+                </mat-form-field>
+              </div>
+
+              <!-- Apellido Materno -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label"><i class="fa fa-user"></i><span>Apellido Materno</span></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <input matInput placeholder="Apellido Materno" formControlName="apellidoMaterno" />
+                </mat-form-field>
+              </div>
+
+              <!-- Email (userName) -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label"><i class="fa fa-envelope"></i><span>Email</span></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <input matInput type="email" placeholder="correo@dominio.com" formControlName="userName" />
+                </mat-form-field>
+              </div>
+
+              <!-- Teléfono -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label"><i class="fa fa-phone"></i><span>Teléfono</span></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <input matInput placeholder="Teléfono" formControlName="telefono" />
+                </mat-form-field>
+              </div>
+
+              <!-- Contraseña -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label"><i class="fa fa-lock"></i><span>Contraseña</span></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <input matInput type="password" placeholder="Contraseña" formControlName="passwordHash" />
+                </mat-form-field>
+              </div>
+
+              <!-- Confirmar Contraseña -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label"><i class="fa fa-lock"></i><span>Confirmar Contraseña</span></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <input matInput type="password" placeholder="Confirma tu contraseña"
+                    formControlName="confirmPassword" />
+                </mat-form-field>
+              </div>
+
+              <!-- ====== Subida de documentos ====== -->
+              <!-- ===== Documentación (solo PDF) ===== -->
+              <div class="row g-3 uploads-skin mt-2 form-skin-lite">
+                <div class="col-12">
+                  <div class="section-head">
+                    <h5 class="mb-1">Documentación</h5>
+                  </div>
+                  <div class="section-bar"></div>
                 </div>
 
-                <section class="mt-5">
-  <form [formGroup]="usuarioForm" class="container-fluid">
-    <!-- Bloque: Datos Generales -->
-    <div class="row g-3 align-items-start">
-      <div class="col-12">
-        <h6 class="section-title">Datos Generales</h6>
-      </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <label class="form-label"><i class="fa fa-camera"></i><span>Imagen del Usuario</span></label>
 
-      <!-- Nombre -->
-      <div class="col-12 col-md-6">
-        <label id="lbl-nombre" class="form-label d-flex align-items-center gap-2">
-          <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-          <span>Nombre</span>
-        </label>
-        <mat-form-field appearance="fill" class="w-100">
-          <input
-            matInput
-            placeholder="Nombre"
-            formControlName="nombre"
-            [attr.aria-labelledby]="'lbl-nombre'">
-        </mat-form-field>
-      </div>
+                  <div class="dropzone" [class.dragging]="fotoDragging" (click)="openFotoFilePicker()"
+                    (dragover)="onFotoDragOver($event)" (dragleave)="onFotoDragLeave($event)"
+                    (drop)="onFotoDrop($event)">
 
-      <!-- Apellido Paterno -->
-      <div class="col-12 col-md-6">
-        <label id="lbl-apellido-paterno" class="form-label d-flex align-items-center gap-2">
-          <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
-          <span>Apellido Paterno</span>
-        </label>
-        <mat-form-field appearance="fill" class="w-100">
-          <input
-            matInput
-            placeholder="Apellido Paterno"
-            formControlName="apellidoPaterno"
-            [attr.aria-labelledby]="'lbl-apellido-paterno'">
-        </mat-form-field>
-      </div>
+                    <!-- Estado vacío -->
+                    <div class="dz-body" *ngIf="!fotoPreviewUrl">
+                      <mat-icon class="dz-icon">image</mat-icon>
+                      <div class="dz-title">Arrastra y suelta o haz clic</div>
+                    </div>
 
-      <!-- Apellido Materno (ejemplo adicional) -->
-      <div class="col-12 col-md-6">
-        <label id="lbl-apellido-materno" class="form-label d-flex align-items-center gap-2">
-          <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-          <span>Apellido Materno</span>
-        </label>
-        <mat-form-field appearance="fill" class="w-100">
-          <input
-            matInput
-            placeholder="Apellido Materno"
-            formControlName="apellidoMaterno"
-            [attr.aria-labelledby]="'lbl-apellido-materno'">
-        </mat-form-field>
-      </div>
+                    <!-- Preview -->
+                    <div class="dz-preview" *ngIf="fotoPreviewUrl">
+                      <img [src]="fotoPreviewUrl!" alt="Vista previa" class="img-fluid rounded" />
+                    </div>
 
-      <!-- Email (ejemplo adicional) -->
-      <div class="col-12 col-md-6">
-        <label id="lbl-email" class="form-label d-flex align-items-center gap-2">
-          <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
-          <span>Email</span>
-        </label>
-        <mat-form-field appearance="fill" class="w-100">
-          <input
-            matInput
-            placeholder="correo@dominio.com"
-            type="email"
-            formControlName="email"
-            [attr.aria-labelledby]="'lbl-email'">
-        </mat-form-field>
-      </div>
+                    <!-- Botones -->
+                    <button mat-stroked-button type="button" class="dz-action" (click)="openFotoFilePicker()">
+                      <mat-icon>upload</mat-icon> Seleccionar
+                    </button>
+                    <button mat-stroked-button color="warn" type="button" class="dz-clear"
+                      *ngIf="fotoPreviewUrl || fotoFileName" (click)="clearFotoFile($event)">
+                      <mat-icon>close</mat-icon> Quitar
+                    </button>
 
-      <!-- Si necesitas más campos, solo duplica <div class="col-12 col-md-6"> ... </div> -->
-    </div>
+                    <!-- Progreso -->
+                    <mat-progress-bar *ngIf="uploadingFoto" mode="indeterminate"></mat-progress-bar>
 
-    <!-- Otro bloque/sección (opcional) -->
-    <div class="row g-3 align-items-start mt-4">
-      <div class="col-12">
-        <h6 class="section-title">Dirección</h6>
-      </div>
+                    <!-- Nombre -->
+                    <div class="dz-filename" *ngIf="fotoFileName">{{ fotoFileName }}</div>
 
-      <div class="col-12 col-lg-8">
-        <label id="lbl-calle" class="form-label">Calle</label>
-        <mat-form-field appearance="fill" class="w-100">
-          <input matInput placeholder="Calle" formControlName="calle" [attr.aria-labelledby]="'lbl-calle'">
-        </mat-form-field>
-      </div>
+                    <!-- Input real -->
+                    <input #fotoFileInput type="file" class="d-none" accept="image/png,image/jpeg,image/webp"
+                      (change)="onFotoFileSelected($event)">
+                  </div>
 
-      <div class="col-6 col-lg-2">
-        <label id="lbl-num-ext" class="form-label">Núm. Ext.</label>
-        <mat-form-field appearance="fill" class="w-100">
-          <input matInput placeholder="Ext" formControlName="numExt" [attr.aria-labelledby]="'lbl-num-ext'">
-        </mat-form-field>
-      </div>
+                  <mat-error *ngIf="usuarioForm.get('fotoPerfil')?.hasError('invalid')">
+                    Formato o tamaño no permitido (solo JPG/PNG/WEBP).
+                  </mat-error>
+                </div>
+              </div>
 
-      <div class="col-6 col-lg-2">
-        <label id="lbl-num-int" class="form-label">Núm. Int.</label>
-        <mat-form-field appearance="fill" class="w-100">
-          <input matInput placeholder="Int" formControlName="numInt" [attr.aria-labelledby]="'lbl-num-int'">
-        </mat-form-field>
-      </div>
-    </div>
-  </form>
-</section>
 
+              <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                <button mat-raised-button color="primary" (click)="submit()">
+                  <mat-icon>save</mat-icon> Guardar
+                </button>
+                <button mat-raised-button color="warn" type="button" (click)="regresar()">
+                  <mat-icon>close</mat-icon> Cancelar
+                </button>
+              </div>
             </div>
-        </div>
-    </vex-page-layout-content>
+          </form>
+        </section>
+      </div>
+    </div>
+
+  </vex-page-layout-content>
 </vex-page-layout>

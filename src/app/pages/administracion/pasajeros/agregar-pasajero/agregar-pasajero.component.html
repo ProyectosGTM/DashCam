@@ -20,93 +20,87 @@
         <section class="mt-5 table-shell">
           <form [formGroup]="usuarioForm">
             <div class="fm-grid">
-  <div class="fm-divider fm-span-3">Datos Generales</div>
+              <div class="fm-divider fm-span-3">Datos Generales</div>
 
-  <div class="fm-group">
-    <label id="lbl-nombre">
-      <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-      Nombre
-    </label>
-    <mat-form-field appearance="fill">
-      <input matInput placeholder="Nombre"
-             formControlName="apellidoPaterno"
-             [attr.aria-labelledby]="'lbl-nombre'">
-    </mat-form-field>
-  </div>
+              <div class="fm-group">
+                <label id="lbl-nombre">
+                  <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+                  Nombre
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="Nombre" formControlName="apellidoPaterno"
+                    [attr.aria-labelledby]="'lbl-nombre'">
+                </mat-form-field>
+              </div>
 
-  <div class="fm-group">
-    <label id="lbl-apellido-paterno">
-      <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
-      Apellido Paterno
-    </label>
-    <mat-form-field appearance="fill">
-      <input matInput placeholder="Apellido Paterno"
-             formControlName="apellidoMaterno"
-             [attr.aria-labelledby]="'lbl-apellido-paterno'">
-    </mat-form-field>
-  </div>
+              <div class="fm-group">
+                <label id="lbl-apellido-paterno">
+                  <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
+                  Apellido Paterno
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="Apellido Paterno" formControlName="apellidoMaterno"
+                    [attr.aria-labelledby]="'lbl-apellido-paterno'">
+                </mat-form-field>
+              </div>
 
-  <div class="fm-group">
-    <label id="lbl-apellido-materno">
-      <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-      Apellido Materno
-    </label>
-    <mat-form-field appearance="fill">
-      <input matInput placeholder="Apellido Materno"
-             formControlName="nombre"
-             [attr.aria-labelledby]="'lbl-apellido-materno'">
-    </mat-form-field>
-  </div>
+              <div class="fm-group">
+                <label id="lbl-apellido-materno">
+                  <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+                  Apellido Materno
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="Apellido Materno" formControlName="nombre"
+                    [attr.aria-labelledby]="'lbl-apellido-materno'">
+                </mat-form-field>
+              </div>
 
-  <div class="fm-group">
-    <label id="lbl-telefono">
-      <i class="fa fa-phone doc-icon" aria-hidden="true"></i>
-      Teléfono
-    </label>
-    <mat-form-field appearance="fill">
-      <input matInput type="tel" placeholder="Teléfono"
-             formControlName="userName"
-             [attr.aria-labelledby]="'lbl-telefono'">
-    </mat-form-field>
-  </div>
+              <div class="fm-group">
+                <label id="lbl-telefono">
+                  <i class="fa fa-phone doc-icon" aria-hidden="true"></i>
+                  Teléfono
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput type="tel" placeholder="Teléfono" formControlName="userName"
+                    [attr.aria-labelledby]="'lbl-telefono'">
+                </mat-form-field>
+              </div>
 
-  <div class="fm-group">
-    <label id="lbl-correo">
-      <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
-      Correo Electrónico
-    </label>
-    <mat-form-field appearance="fill">
-      <input matInput type="email" placeholder="Correo Electrónico"
-             formControlName="userName"
-             [attr.aria-labelledby]="'lbl-correo'">
-    </mat-form-field>
-  </div>
+              <div class="fm-group">
+                <label id="lbl-correo">
+                  <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
+                  Correo Electrónico
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput type="email" placeholder="Correo Electrónico" formControlName="userName"
+                    [attr.aria-labelledby]="'lbl-correo'">
+                </mat-form-field>
+              </div>
 
-  <div class="fm-group">
-    <label id="lbl-fecha-nacimiento">
-      <i class="fa fa-calendar-day doc-icon" aria-hidden="true"></i>
-      Fecha de Nacimiento
-    </label>
-    <mat-form-field appearance="fill">
-      <input matInput type="date" placeholder="Fecha de Nacimiento"
-             formControlName="userName"
-             [attr.aria-labelledby]="'lbl-fecha-nacimiento'">
-    </mat-form-field>
-  </div>
+              <div class="fm-group">
+                <label id="lbl-fecha-nacimiento">
+                  <i class="fa fa-calendar-day doc-icon" aria-hidden="true"></i>
+                  Fecha de Nacimiento
+                </label>
+                <mat-form-field appearance="fill">
+                  <input matInput type="date" placeholder="Fecha de Nacimiento" formControlName="userName"
+                    [attr.aria-labelledby]="'lbl-fecha-nacimiento'">
+                </mat-form-field>
+              </div>
 
-  <div class="fm-span-3 fm-actions">
-    <div class="fm-actions-right">
-      <button mat-raised-button color="primary" type="button">
-        <mat-icon>save</mat-icon>
-        Guardar
-      </button>
-      <button mat-raised-button (click)="regresar()" color="warn" type="button">
-        <mat-icon>close</mat-icon>
-        Cancelar
-      </button>
-    </div>
-  </div>
-</div>
+              <div class="fm-span-3 fm-actions">
+                <div class="fm-actions-right">
+                  <button mat-raised-button color="primary" type="button">
+                    <mat-icon>save</mat-icon>
+                    Guardar
+                  </button>
+                  <button mat-raised-button (click)="regresar()" color="warn" type="button">
+                    <mat-icon>close</mat-icon>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
 
           </form>
         </section>

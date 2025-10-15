@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';         // <-- FALTA
 import { MatOptionModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // <-- FALTA
 import { DxDataGridModule } from 'devextreme-angular';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -39,32 +40,33 @@ import { DxDataGridModule } from 'devextreme-angular';
     CommonModule,
     ClientesRoutingModule,
     // Vex layout
-        VexPageLayoutComponent,
-        VexPageLayoutHeaderDirective,
-        VexBreadcrumbsComponent,
-        VexPageLayoutContentDirective,
-    
-        // Forms
-        FormsModule,
-        ReactiveFormsModule,
-    
-        // Angular Material
-        MatButtonToggleModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatIconModule,
-        MatMenuModule,
-        MatTableModule,
-        MatSortModule,
-        MatCheckboxModule,
-        MatPaginatorModule,
-        MatDialogModule,
-        MatFormFieldModule,    // <-- agregado
-        MatInputModule,
-        MatSelectModule,       // <-- agregado
-        MatOptionModule,
-        MatSlideToggleModule,  // <-- agregado
-        DxDataGridModule,
+    VexPageLayoutComponent,
+    VexPageLayoutHeaderDirective,
+    VexBreadcrumbsComponent,
+    VexPageLayoutContentDirective,
+
+    // Forms
+    FormsModule,
+    ReactiveFormsModule,
+
+    // Angular Material
+    MatButtonToggleModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatMenuModule,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatDialogModule,
+    MatFormFieldModule,    // <-- agregado
+    MatInputModule,
+    MatSelectModule,       // <-- agregado
+    MatOptionModule,
+    MatSlideToggleModule,  // <-- agregado
+    DxDataGridModule,
+    MatProgressBarModule
   ]
 })
 export class ClientesModule { }

@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
     private zone: NgZone, private cdr: ChangeDetectorRef,
   ) {
     this.loginForm = this.fb.group({
-      email: [''],
+      userName: [''],
       password: ['']
     });
 
@@ -105,8 +105,8 @@ export class LoginComponent implements OnInit {
 
   initForm() {
     this.loginForm = this.fb.group({
-      UserName: ['', [Validators.required, Validators.email]],
-      Password: ['', [Validators.required]],
+      userName: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
       // email: ['admin@themesbrand.com', [Validators.required, Validators.email]],
       // password: ['123456', [Validators.required]],
     });
@@ -131,10 +131,9 @@ onSubmit() {
           cancelText: 'Cancelar'
         }).then(result => {
           if (result === 'confirm') {
-            // lógica de reintento
-            this.router.navigate(['/administracion/validadores']);
+            this.router.navigate(['/administracion/dashboard']);
           } else {
-            // lógica si cancela
+            
           }
         });
         this.loading = false;

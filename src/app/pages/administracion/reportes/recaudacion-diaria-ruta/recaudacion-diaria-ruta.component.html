@@ -1,0 +1,108 @@
+<vex-page-layout @fadeInRight>
+
+    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+        [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        <div class="card mt-4">
+            <div class="dashboard-lite p-4">
+                <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
+                    <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
+                        <a routerLink="/administracion" class="crumb-link">
+                            <mat-icon inline>home</mat-icon>
+                            Administración
+                        </a>
+                        <span class="sep">/</span>
+                        <span class="crumb-current" aria-current="page">Recaudación Diaria por Ruta</span>
+                    </nav>
+
+                    <div class="flex-grow"></div>
+
+                    <div class="flex gap-3 actions-bar">
+                        <button mat-raised-button color="primary" type="button" class="btn-soft textGenerico"
+                            (click)="toggleExpandGroups()" matTooltip="Expandir / Contraer grupos">
+                            <mat-icon svgIcon="mat:compare_arrows"></mat-icon>
+                            <span class="btn-text">{{ autoExpandAllGroups ? 'Contraer' : 'Expandir' }}</span>
+                        </button>
+
+                        <button mat-raised-button color="accent" type="button" class="btn-soft textGenerico"
+                            (click)="limpiarCampos()" matTooltip="Limpiar filtros">
+                            <mat-icon svgIcon="mat:restore"></mat-icon>
+                            <span class="btn-text">Limpiar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <section class="mt-5 table-shell">
+                    <dx-data-grid #gridContainer id="gridContainer" [columnHidingEnabled]="true" [showBorders]="true"
+                        [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+                        [dataSource]="informacion" [keyExpr]="'id'" [width]="'100%'"
+                        [remoteOperations]="{ paging: true }" [paging]="{ pageSize: pageSize }" [pager]="{ 
+                                showPageSizeSelector: true, 
+                                allowedPageSizes: [50], 
+                                showInfo: true,
+                                infoText: 'Página {0} de {1}', 
+                                visible: true 
+                            }">
+                        <dxo-search-panel [visible]="true" [width]="200" placeholder="Buscar..."></dxo-search-panel>
+                        <dxo-toolbar>
+                            <dxi-item name="groupPanel" location="before"></dxi-item>
+                            <dxi-item name="exportButton" location="after"
+                                [options]="{ text: 'Exportar Grid', icon: 'export' }" [showText]="'always'">
+                            </dxi-item>
+                            <dxi-item name="searchPanel" location="after"></dxi-item>
+                        </dxo-toolbar>
+                        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20]"
+                            [showInfo]="true"></dxo-pager>
+                        <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
+                        <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+                        <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
+                        <dxo-export [enabled]="false" [allowExportSelectedData]="false"
+                            [texts]="{ exportAll: 'Exportar todos los datos a Excel' }">
+                        </dxo-export>
+                        <!-- Pega estas columnas dentro de <dx-data-grid> -->
+                        <dxi-column dataField="fecha" caption="Fecha" dataType="date" [format]="'dd/MM/yyyy'"
+                            alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="region" caption="Región" dataType="string" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="ruta" caption="Ruta" dataType="string" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="derrotero" caption="Derrotero" dataType="string" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="viajes" caption="Viajes" dataType="number"
+                            [format]="{ type: 'fixedPoint', precision: 0 }" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="validaciones" caption="Validaciones" dataType="number"
+                            [format]="{ type: 'fixedPoint', precision: 0 }" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="ingresosMxn" caption="Ingresos (MXN)" dataType="number"
+                            [format]="{ type: 'currency', currency: 'MXN', precision: 2 }" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="ticketPromedio" caption="Ticket promedio" dataType="number"
+                            [format]="{ type: 'currency', currency: 'MXN', precision: 2 }" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="porcentajeElectronico" caption="% electrónico" dataType="number"
+                            [format]="{ type: 'percent', precision: 2 }" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="evasionAbs" caption="Evasión (abs)" dataType="number"
+                            [format]="{ type: 'currency', currency: 'MXN', precision: 2 }" alignment="center">
+                        </dxi-column>
+
+                        <dxi-column dataField="evasionPorcentaje" caption="Evasión (%)" dataType="number"
+                            [format]="{ type: 'percent', precision: 2 }" alignment="center">
+                        </dxi-column>
+
+                    </dx-data-grid>
+                </section>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';         // <-- FALTA
 import { MatOptionModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // <-- FALTA
 import { DxDataGridModule } from 'devextreme-angular';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { DxDataGridModule } from 'devextreme-angular';
     MatOptionModule,
     MatSlideToggleModule,  // <-- agregado
     DxDataGridModule,
+    MatProgressBarModule
     // NO agregar BrowserModule ni BrowserAnimationsModule aquí
   ]
 })

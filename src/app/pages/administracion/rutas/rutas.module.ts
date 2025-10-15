@@ -20,10 +20,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { DxDataGridModule } from 'devextreme-angular';
 import { ListaRutasComponent } from './lista-rutas/lista-rutas.component';
+import { AgregarRutaComponent } from './agregar-ruta/agregar-ruta.component';
 
 
 @NgModule({
-  declarations: [ListaRutasComponent],
+  declarations: [
+    ListaRutasComponent,
+    AgregarRutaComponent
+  ],
   imports: [
     CommonModule,
     RutasRoutingModule,
