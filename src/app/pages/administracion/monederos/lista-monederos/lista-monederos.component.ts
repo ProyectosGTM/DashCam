@@ -6,7 +6,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { AlertsService } from 'src/app/pages/pages/modal/alerts.service';
 import { MonederosServices } from 'src/app/pages/services/monederos.service';
 import { Router } from '@angular/router';
-import { CustomStore } from 'devextreme-aspnet-data-nojquery';
+import CustomStore from 'devextreme/data/custom_store';
 import { lastValueFrom } from 'rxjs';
 
 @Component({

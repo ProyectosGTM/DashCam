@@ -22,13 +22,24 @@ import { DxDataGridModule } from 'devextreme-angular';
 import { RecaudacionDiariaRutaComponent } from './recaudacion-diaria-ruta/recaudacion-diaria-ruta.component';
 import { RecaudacionOperadorComponent } from './recaudacion-operador/recaudacion-operador.component';
 import { RecaudacionVehiculoComponent } from './recaudacion-vehiculo/recaudacion-vehiculo.component';
+import { RecaudacionDispositivoInstalacionComponent } from './recaudacion-dispositivo-instalacion/recaudacion-dispositivo-instalacion.component';
+import { ValidacionesDetalladasComponent } from './validaciones-detalladas/validaciones-detalladas.component';
+import { ConteoPasajeroViajeComponent } from './conteo-pasajero-viaje/conteo-pasajero-viaje.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 @NgModule({
   declarations: [
     RecaudacionDiariaRutaComponent,
     RecaudacionOperadorComponent,
-    RecaudacionVehiculoComponent
+    RecaudacionVehiculoComponent,
+    RecaudacionDispositivoInstalacionComponent,
+    ValidacionesDetalladasComponent,
+    ConteoPasajeroViajeComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +61,13 @@ import { RecaudacionVehiculoComponent } from './recaudacion-vehiculo/recaudacion
     FormsModule,
     MatDialogModule,
     MatInputModule,
-    DxDataGridModule
+    DxDataGridModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatChipsModule
   ]
 })
 export class ReportesModule { }

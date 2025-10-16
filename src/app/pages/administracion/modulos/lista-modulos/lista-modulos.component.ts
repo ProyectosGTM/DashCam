@@ -3,11 +3,11 @@ import { UntypedFormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { CustomStore } from 'devextreme-aspnet-data-nojquery';
 import { lastValueFrom } from 'rxjs';
 import { AlertsService } from 'src/app/pages/pages/modal/alerts.service';
 import { ModulosService } from 'src/app/pages/services/modulos.service';
 import { UsuariosService } from 'src/app/pages/services/usuarios.service';
+import CustomStore from 'devextreme/data/custom_store';
 
 @Component({
   selector: 'vex-lista-modulos',

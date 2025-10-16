@@ -167,20 +167,38 @@ export class NavigationLoaderService {
             type: 'link',
             label: 'Recaud. Diaria por Ruta',
             route: '/administracion/reportes/recaudacion-diaria-ruta',
-            icon: 'mat:group'
+            icon: 'mat:analytics'
           },
           {
             type: 'link',
             label: 'Recaud. por Operador',
             route: '/administracion/reportes/recaudacion-operador',
-            icon: 'mat:group'
+            icon: 'mat:badge'
           },
           {
             type: 'link',
             label: 'Recaud. por Vehículo',
             route: '/administracion/reportes/recaudacion-vehiculo',
-            icon: 'mat:group'
+            icon: 'mat:directions_bus'
           },
+          {
+            type: 'link',
+            label: 'Recaud. por Val/Inst',
+            route: '/administracion/reportes/recaudacion-dispositivoInstalacion',
+            icon: 'mat:qr_code_2'
+          },
+          {
+            type: 'link',
+            label: 'Validaciones Detalladas',
+            route: '/administracion/reportes/validaciones-detalladas',
+            icon: 'mat:fact_check'
+          },
+          {
+            type: 'link',
+            label: 'Conteo Pasajeros por Viaje',
+            route: '/administracion/reportes/conteo-pasajero-viaje',
+            icon: 'mat:groups'
+          }
         ]
       },
     ]);

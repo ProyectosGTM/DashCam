@@ -128,7 +128,7 @@ export class AuthenticationService extends BaseServicesService {
   }
 
   public authenticate(body: Credentials): Observable<User> {
-    return this.http.post<User>(environment.API_SECURITY + "/api/login", body)
+    return this.http.post<User>(environment.API_SECURITY + "/login", body)
     .pipe(catchError(this.handleError));
   }
 }

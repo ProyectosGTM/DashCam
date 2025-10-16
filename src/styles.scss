@@ -647,6 +647,131 @@ html {
   }
 }
 
+.btn-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.4rem;
+  background-color: #1F5AA8;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover {
+    background-color: #164179;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    background-color: #164179;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #164179;
+  }
+
+  &:disabled {
+    background-color: #617894;
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+.btn-active {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.4rem;
+  background-color: #11b61f;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover {
+    background-color: #0c6414;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    background-color: #0c6414;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #0c6414;
+  }
+
+  &:disabled {
+    background-color: #7dc783;
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+.btn-desactive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.4rem;
+  background-color: #ef4444;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover {
+    background-color: #a72626;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    background-color: #a72626;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #a72626;
+  }
+
+  &:disabled {
+    background-color: #bb6a6a;
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+  }
+}
 
 $fm-bg: #0d1220;
 $fm-grad-a: #1b75ff;
