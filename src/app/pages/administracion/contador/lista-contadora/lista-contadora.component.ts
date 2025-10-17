@@ -167,19 +167,15 @@ export class ListaContadoraComponent implements OnInit {
     console.log('Mostrar información del dispositivo con ID:', id);
   }
 
-  agregarDispositivo() {
-    this.route.navigateByUrl('/bluevox/agregar-bluevox')
-  }
-
-  actualizarDispositivo(idBluevox: number) {
-    this.route.navigateByUrl('/bluevox/editar-bluevox/' + idBluevox);
+  actualizarContadora(idContadora: number) {
+    this.route.navigateByUrl('/administracion/contadora/editar-contadora/' + idContadora);
   };
 
   async activar(rowData: any) {
   const res = await this.alerts.open({
     type: 'warning',
     title: '¡Activar!',
-    message: `¿Está seguro que requiere activar el dispositivo: <strong>${rowData.marca}</strong>?`,
+    message: `¿Está seguro que requiere activar la contadora: <strong>${rowData.marca}</strong>?`,
     showCancel: true,
     confirmText: 'Confirmar',
     cancelText: 'Cancelar',
@@ -193,7 +189,7 @@ export class ListaContadoraComponent implements OnInit {
       this.alerts.open({
         type: 'success',
         title: '¡Confirmación Realizada!',
-        message: 'El dispositivo ha sido activado.',
+        message: 'La contadora ha sido activada.',
         confirmText: 'Confirmar',
         backdropClose: false,
       });
@@ -217,7 +213,7 @@ export class ListaContadoraComponent implements OnInit {
   const res = await this.alerts.open({
     type: 'warning',
     title: '¡Desactivar!',
-    message: `¿Está seguro que requiere desactivar el dispositivo: <strong>${rowData.marca}</strong>?`,
+    message: `¿Está seguro que requiere desactivar la contadora: <strong>${rowData.marca}</strong>?`,
     showCancel: true,
     confirmText: 'Confirmar',
     cancelText: 'Cancelar',
@@ -231,7 +227,7 @@ export class ListaContadoraComponent implements OnInit {
       this.alerts.open({
         type: 'success',
         title: '¡Confirmación Realizada!',
-        message: 'El dispositivo ha sido desactivado.',
+        message: 'La contadora ha sido desactivada.',
         confirmText: 'Confirmar',
         backdropClose: false,
       });

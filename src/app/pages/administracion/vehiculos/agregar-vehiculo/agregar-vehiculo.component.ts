@@ -65,90 +65,90 @@ export class AgregarVehiculoComponent implements OnInit {
     });
   }
 
-obtenerDispositivos() {
-  this.loading = true;
-  this.disposService.obtenerDispositivos().subscribe({
-    next: (res: any) => {
-      setTimeout(() => { this.loading = false; }, 2000);
+  obtenerDispositivos() {
+    this.loading = true;
+    this.disposService.obtenerDispositivos().subscribe({
+      next: (res: any) => {
+        setTimeout(() => { this.loading = false; }, 2000);
 
-      if (Array.isArray(res?.dispositivos)) {
-        this.listaDispositivos = [...res.dispositivos].sort(
-          (a: any, b: any) => b.Id - a.Id
-        );
-      } else {
-        console.error('El formato de datos recibido no es el esperado.');
+        if (Array.isArray(res?.dispositivos)) {
+          this.listaDispositivos = [...res.dispositivos].sort(
+            (a: any, b: any) => b.Id - a.Id
+          );
+        } else {
+          console.error('El formato de datos recibido no es el esperado.');
+        }
+      },
+      error: (error: unknown) => {
+        this.loading = false;
+        console.error('Error al obtener dispositivos:', error);
       }
-    },
-    error: (error: unknown) => {
-      this.loading = false;
-      console.error('Error al obtener dispositivos:', error);
-    }
-  });
-}
-
-obtenerOperadores() {
-  this.loading = true;
-  this.opService.obtenerOperadores().subscribe({
-    next: (res: any) => {
-      setTimeout(() => { this.loading = false; }, 2000);
-
-      this.listaOperadores = (res?.operadores ?? [])
-        .map((op: any) => ({
-          ...op,
-          FechaNacimiento: op.FechaNacimiento
-            ? op.FechaNacimiento.split('T')[0]
-            : ''
-        }))
-        .sort((a: any, b: any) => b.Id - a.Id);
-    },
-    error: (error: unknown) => {
-      this.loading = false;
-      console.error('Error al obtener operadores:', error);
-    }
-  });
-}
-
-
-obtenerVehiculoID() {
-  this.vehiService.obtenerVehiculo(this.idVehiculo).subscribe((response: any) => {
-    const raw = Array.isArray(response?.data)
-      ? response.data[0]
-      : response?.vehiculo ?? response?.data ?? response ?? {};
-
-    const get = (o: any, keys: string[]) => {
-      for (const k of keys) if (o?.[k] !== undefined && o?.[k] !== null) return o[k];
-      return null;
-    };
-
-    const marca = get(raw, ['marca', 'Marca']);
-    const modelo = get(raw, ['modelo', 'Modelo']);
-    const ano = get(raw, ['ano', 'año', 'Ano', 'Año']);
-    const placa = get(raw, ['placa', 'Placa']);
-    const numeroEconomico = get(raw, ['numeroEconomico', 'NumeroEconomico']);
-    const tarjetaCirculacion = get(raw, ['tarjetaCirculacion', 'TarjetaCirculacion']);
-    const polizaSeguro = get(raw, ['polizaSeguro', 'PolizaSeguro']);
-    const permisoConcesion = get(raw, ['permisoConcesion', 'PermisoConcesion']);
-    const inspeccionMecanica = get(raw, ['inspeccionMecanica', 'InspeccionMecanica']);
-    const foto = get(raw, ['foto', 'Foto']);
-    const est = get(raw, ['estatus', 'Estatus']);
-    const idCli = get(raw, ['idCliente', 'idcliente', 'IdCliente', 'IDCliente']);
-
-    this.vehiculosForm.patchValue({
-      marca: marca ?? '',
-      modelo: modelo ?? '',
-      ano: ano ?? '',
-      placa: placa ?? '',
-      numeroEconomico: numeroEconomico ?? '',
-      tarjetaCirculacion: tarjetaCirculacion ?? '',
-      polizaSeguro: polizaSeguro ?? '',
-      permisoConcesion: permisoConcesion ?? '',
-      inspeccionMecanica: inspeccionMecanica ?? '',
-      foto: foto ?? null,
-      estatus: est != null && !Number.isNaN(Number(est)) ? Number(est) : 1,
-      idCliente: idCli != null && idCli !== '' ? Number(idCli) : null,
     });
-  });
-}
+  }
+
+  obtenerOperadores() {
+    this.loading = true;
+    this.opService.obtenerOperadores().subscribe({
+      next: (res: any) => {
+        setTimeout(() => { this.loading = false; }, 2000);
+
+        this.listaOperadores = (res?.operadores ?? [])
+          .map((op: any) => ({
+            ...op,
+            FechaNacimiento: op.FechaNacimiento
+              ? op.FechaNacimiento.split('T')[0]
+              : ''
+          }))
+          .sort((a: any, b: any) => b.Id - a.Id);
+      },
+      error: (error: unknown) => {
+        this.loading = false;
+        console.error('Error al obtener operadores:', error);
+      }
+    });
+  }
+
+
+  obtenerVehiculoID() {
+    this.vehiService.obtenerVehiculo(this.idVehiculo).subscribe((response: any) => {
+      const raw = Array.isArray(response?.data)
+        ? response.data[0]
+        : response?.vehiculo ?? response?.data ?? response ?? {};
+
+      const get = (o: any, keys: string[]) => {
+        for (const k of keys) if (o?.[k] !== undefined && o?.[k] !== null) return o[k];
+        return null;
+      };
+
+      const marca = get(raw, ['marca', 'Marca']);
+      const modelo = get(raw, ['modelo', 'Modelo']);
+      const ano = get(raw, ['ano', 'año', 'Ano', 'Año']);
+      const placa = get(raw, ['placa', 'Placa']);
+      const numeroEconomico = get(raw, ['numeroEconomico', 'NumeroEconomico']);
+      const tarjetaCirculacion = get(raw, ['tarjetaCirculacion', 'TarjetaCirculacion']);
+      const polizaSeguro = get(raw, ['polizaSeguro', 'PolizaSeguro']);
+      const permisoConcesion = get(raw, ['permisoConcesion', 'PermisoConcesion']);
+      const inspeccionMecanica = get(raw, ['inspeccionMecanica', 'InspeccionMecanica']);
+      const foto = get(raw, ['foto', 'Foto']);
+      const est = get(raw, ['estatus', 'Estatus']);
+      const idCli = get(raw, ['idCliente', 'idcliente', 'IdCliente', 'IDCliente']);
+
+      this.vehiculosForm.patchValue({
+        marca: marca ?? '',
+        modelo: modelo ?? '',
+        ano: ano ?? '',
+        placa: placa ?? '',
+        numeroEconomico: numeroEconomico ?? '',
+        tarjetaCirculacion: tarjetaCirculacion ?? '',
+        polizaSeguro: polizaSeguro ?? '',
+        permisoConcesion: permisoConcesion ?? '',
+        inspeccionMecanica: inspeccionMecanica ?? '',
+        foto: foto ?? null,
+        estatus: est != null && !Number.isNaN(Number(est)) ? Number(est) : 1,
+        idCliente: idCli != null && idCli !== '' ? Number(idCli) : null,
+      });
+    });
+  }
 
 
   initForm() {
@@ -180,33 +180,33 @@ obtenerVehiculoID() {
     }
   }
 
-async agregar() {
-  this.submitButton = 'Cargando...';
-  this.loading = true;
+  async agregar() {
+    this.submitButton = 'Cargando...';
+    this.loading = true;
 
-  if (this.vehiculosForm.invalid) {
-    this.submitButton = 'Guardar';
-    this.loading = false;
+    if (this.vehiculosForm.invalid) {
+      this.submitButton = 'Guardar';
+      this.loading = false;
 
-    const etiquetas: any = {
-      Marca: 'Marca',
-      Modelo: 'Modelo',
-      Ano: 'Año',
-      Placa: 'Placa',
-      NumeroEconomico: 'Número Económico',
-      IdOperador: 'Operador',
-      idVehiculo: 'Dispositivo',
-    };
+      const etiquetas: any = {
+        Marca: 'Marca',
+        Modelo: 'Modelo',
+        Ano: 'Año',
+        Placa: 'Placa',
+        NumeroEconomico: 'Número Económico',
+        IdOperador: 'Operador',
+        idVehiculo: 'Dispositivo',
+      };
 
-    const camposFaltantes: string[] = [];
-    Object.keys(this.vehiculosForm.controls).forEach((key) => {
-      const control = this.vehiculosForm.get(key);
-      if (control?.invalid && control.errors?.['required']) {
-        camposFaltantes.push(etiquetas[key] || key);
-      }
-    });
+      const camposFaltantes: string[] = [];
+      Object.keys(this.vehiculosForm.controls).forEach((key) => {
+        const control = this.vehiculosForm.get(key);
+        if (control?.invalid && control.errors?.['required']) {
+          camposFaltantes.push(etiquetas[key] || key);
+        }
+      });
 
-    const lista = camposFaltantes.map((campo, index) => `
+      const lista = camposFaltantes.map((campo, index) => `
       <div style="padding: 8px 12px; border-left: 4px solid #d9534f;
                   background: #caa8a8; text-align: center; margin-bottom: 8px;
                   border-radius: 4px;">
@@ -214,81 +214,81 @@ async agregar() {
       </div>
     `).join('');
 
-    await this.alerts.open({
-      type: 'warning',
-      title: '¡Faltan campos obligatorios!',
-      message: `
+      await this.alerts.open({
+        type: 'warning',
+        title: '¡Faltan campos obligatorios!',
+        message: `
         <p style="text-align: center; font-size: 15px; margin-bottom: 16px; color: white">
           Los siguientes <strong>campos obligatorios</strong> están vacíos.<br>
           Por favor complétalos antes de continuar:
         </p>
         <div style="max-height: 350px; overflow-y: auto;">${lista}</div>
       `,
-      confirmText: 'Entendido',
-      backdropClose: false,
-    });
-    return;
+        confirmText: 'Entendido',
+        backdropClose: false,
+      });
+      return;
+    }
+
+    // igual que en dispositivos: quitar 'id' antes de leer payload
+    this.vehiculosForm.removeControl('id');
+    const raw = this.vehiculosForm.getRawValue();
+    const payload = { ...raw, ano: Number(raw.ano) };
+
+    this.vehiService.agregarVehiculo(payload).subscribe(
+      () => {
+        this.submitButton = 'Guardar';
+        this.loading = false;
+        this.alerts.open({
+          type: 'success',
+          title: '¡Operación Exitosa!',
+          message: 'Se agregó un nuevo vehículo de manera exitosa.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+        this.regresar();
+      },
+      () => {
+        this.submitButton = 'Guardar';
+        this.loading = false;
+        this.alerts.open({
+          type: 'error',
+          title: '¡Ops!',
+          message: 'Ocurrió un error al agregar el vehículo.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+      }
+    );
   }
 
-  // igual que en dispositivos: quitar 'id' antes de leer payload
-  this.vehiculosForm.removeControl('id');
-  const raw = this.vehiculosForm.getRawValue();
-  const payload = { ...raw, ano: Number(raw.ano) };
+  async actualizar() {
+    this.submitButton = 'Cargando...';
+    this.loading = true;
 
-  this.vehiService.agregarVehiculo(payload).subscribe(
-    () => {
+    if (this.vehiculosForm.invalid) {
       this.submitButton = 'Guardar';
       this.loading = false;
-      this.alerts.open({
-        type: 'success',
-        title: '¡Operación Exitosa!',
-        message: 'Se agregó un nuevo vehículo de manera exitosa.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
+
+      const etiquetas: any = {
+        Marca: 'Marca',
+        Modelo: 'Modelo',
+        Ano: 'Año',
+        Placa: 'Placa',
+        NumeroEconomico: 'Número Económico',
+        IdOperador: 'Operador',
+        idVehiculo: 'Dispositivo',
+      };
+
+      const camposFaltantes: string[] = [];
+      Object.keys(this.vehiculosForm.controls).forEach((key) => {
+        const control = this.vehiculosForm.get(key);
+        if (control?.invalid && control.errors?.['required']) {
+          camposFaltantes.push(etiquetas[key] || key);
+        }
       });
-      this.regresar();
-    },
-    () => {
-      this.submitButton = 'Guardar';
-      this.loading = false;
-      this.alerts.open({
-        type: 'error',
-        title: '¡Ops!',
-        message: 'Ocurrió un error al agregar el vehículo.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
-    }
-  );
-}
 
-async actualizar() {
-  this.submitButton = 'Cargando...';
-  this.loading = true;
-
-  if (this.vehiculosForm.invalid) {
-    this.submitButton = 'Guardar';
-    this.loading = false;
-
-    const etiquetas: any = {
-      Marca: 'Marca',
-      Modelo: 'Modelo',
-      Ano: 'Año',
-      Placa: 'Placa',
-      NumeroEconomico: 'Número Económico',
-      IdOperador: 'Operador',
-      idVehiculo: 'Dispositivo',
-    };
-
-    const camposFaltantes: string[] = [];
-    Object.keys(this.vehiculosForm.controls).forEach((key) => {
-      const control = this.vehiculosForm.get(key);
-      if (control?.invalid && control.errors?.['required']) {
-        camposFaltantes.push(etiquetas[key] || key);
-      }
-    });
-
-    const lista = camposFaltantes.map((campo, index) => `
+      const lista = camposFaltantes.map((campo, index) => `
       <div style="padding: 8px 12px; border-left: 4px solid #d9534f;
                   background: #caa8a8; text-align: center; margin-bottom: 8px;
                   border-radius: 4px;">
@@ -296,51 +296,51 @@ async actualizar() {
       </div>
     `).join('');
 
-    await this.alerts.open({
-      type: 'warning',
-      title: '¡Faltan campos obligatorios!',
-      message: `
+      await this.alerts.open({
+        type: 'warning',
+        title: '¡Faltan campos obligatorios!',
+        message: `
         <p style="text-align: center; font-size: 15px; margin-bottom: 16px; color: white">
           Los siguientes <strong>campos obligatorios</strong> están vacíos.<br>
           Por favor complétalos antes de continuar:
         </p>
         <div style="max-height: 350px; overflow-y: auto;">${lista}</div>
       `,
-      confirmText: 'Entendido',
-      backdropClose: false,
-    });
-    return;
-  }
-
-  const raw = this.vehiculosForm.getRawValue();
-  const payload = { ...raw, ano: Number(raw.ano) };
-
-  this.vehiService.actualizarVehiculo(this.idVehiculo, payload).subscribe(
-    () => {
-      this.submitButton = 'Actualizar';
-      this.loading = false;
-      this.alerts.open({
-        type: 'success',
-        title: '¡Operación Exitosa!',
-        message: 'Los datos del vehículo se actualizaron correctamente.',
-        confirmText: 'Confirmar',
+        confirmText: 'Entendido',
         backdropClose: false,
       });
-      this.regresar();
-    },
-    () => {
-      this.submitButton = 'Actualizar';
-      this.loading = false;
-      this.alerts.open({
-        type: 'error',
-        title: '¡Ops!',
-        message: 'Ocurrió un error al actualizar el vehículo.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
+      return;
     }
-  );
-}
+
+    const raw = this.vehiculosForm.getRawValue();
+    const payload = { ...raw, ano: Number(raw.ano) };
+
+    this.vehiService.actualizarVehiculo(this.idVehiculo, payload).subscribe(
+      () => {
+        this.submitButton = 'Actualizar';
+        this.loading = false;
+        this.alerts.open({
+          type: 'success',
+          title: '¡Operación Exitosa!',
+          message: 'Los datos del vehículo se actualizaron correctamente.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+        this.regresar();
+      },
+      () => {
+        this.submitButton = 'Actualizar';
+        this.loading = false;
+        this.alerts.open({
+          type: 'error',
+          title: '¡Ops!',
+          message: 'Ocurrió un error al actualizar el vehículo.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+      }
+    );
+  }
 
 
   regresar() {
@@ -348,17 +348,17 @@ async actualizar() {
   }
 
   // 1) HAZ PUBLICO MAX_MB (o al menos legible desde el template)
-readonly MAX_MB = 3; // <- quita 'private'
+  readonly MAX_MB = 3; // <- quita 'private'
 
-// 2) Asegura que la preview de foto sea string (no ArrayBuffer)
-fotoPreviewUrl: string | null = null;  // antes: string | ArrayBuffer | null
+  // 2) Asegura que la preview de foto sea string (no ArrayBuffer)
+  fotoPreviewUrl: string | null = null;  // antes: string | ArrayBuffer | null
 
-private loadImagePreview(file: File, setter: (url: string | null) => void) {
-  if (!this.isImage(file)) { setter(null); return; }
-  const reader = new FileReader();
-  reader.onload = () => setter(reader.result as string); // casteo en TS, no en el template
-  reader.readAsDataURL(file);
-}
+  private loadImagePreview(file: File, setter: (url: string | null) => void) {
+    if (!this.isImage(file)) { setter(null); return; }
+    const reader = new FileReader();
+    reader.onload = () => setter(reader.result as string); // casteo en TS, no en el template
+    reader.readAsDataURL(file);
+  }
 
 
   @ViewChild('tcFileInput') tcFileInput!: ElementRef<HTMLInputElement>;
@@ -399,33 +399,33 @@ private loadImagePreview(file: File, setter: (url: string | null) => void) {
     this.vehiculosForm.patchValue({ tarjetaCirculacion: null });
     this.vehiculosForm.get('tarjetaCirculacion')?.setErrors({ required: true });
   }
-private handleTcFile(file: File) {
-  if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('tarjetaCirculacion')?.setErrors({ invalid: true }); return; }
-  this.tcFileName = file.name;
-  this.vehiculosForm.patchValue({ tarjetaCirculacion: file });
-  this.vehiculosForm.get('tarjetaCirculacion')?.setErrors(null);
-  this.uploadTarjeta(file);
-}
-private uploadTarjeta(file: File): void {
-  if (this.uploadingTc) return;
-  this.uploadingTc = true;
-  const fd = new FormData();
-  fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
+  private handleTcFile(file: File) {
+    if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('tarjetaCirculacion')?.setErrors({ invalid: true }); return; }
+    this.tcFileName = file.name;
+    this.vehiculosForm.patchValue({ tarjetaCirculacion: file });
+    this.vehiculosForm.get('tarjetaCirculacion')?.setErrors(null);
+    this.uploadTarjeta(file);
+  }
+  private uploadTarjeta(file: File): void {
+    if (this.uploadingTc) return;
+    this.uploadingTc = true;
+    const fd = new FormData();
+    fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
 
-  this.usuaService.uploadFile(fd).pipe(
-    finalize(() => this.uploadingTc = false)   // <-- siempre apaga
-  ).subscribe({
-    next: (res: any) => {
-      const url = this.extractFileUrl(res);
-      if (url) {
-        this.vehiculosForm.patchValue({ tarjetaCirculacion: url });
-        this.tcPreviewUrl = null;
-        this.tcFileName = file.name;
-      }
-    },
-    error: (err) => console.error('[UPLOAD][tarjetaCirculacion]', err)
-  });
-}
+    this.usuaService.uploadFile(fd).pipe(
+      finalize(() => this.uploadingTc = false)   // <-- siempre apaga
+    ).subscribe({
+      next: (res: any) => {
+        const url = this.extractFileUrl(res);
+        if (url) {
+          this.vehiculosForm.patchValue({ tarjetaCirculacion: url });
+          this.tcPreviewUrl = null;
+          this.tcFileName = file.name;
+        }
+      },
+      error: (err) => console.error('[UPLOAD][tarjetaCirculacion]', err)
+    });
+  }
 
 
   // póliza seguro
@@ -442,33 +442,33 @@ private uploadTarjeta(file: File): void {
     this.vehiculosForm.patchValue({ polizaSeguro: null });
     this.vehiculosForm.get('polizaSeguro')?.setErrors({ required: true });
   }
-private handlePolizaFile(file: File) {
-  if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('polizaSeguro')?.setErrors({ invalid: true }); return; }
-  this.polizaFileName = file.name;
-  this.vehiculosForm.patchValue({ polizaSeguro: file });
-  this.vehiculosForm.get('polizaSeguro')?.setErrors(null);
-  this.uploadPoliza(file);
-}
-private uploadPoliza(file: File): void {
-  if (this.uploadingPoliza) return;
-  this.uploadingPoliza = true;
-  const fd = new FormData();
-  fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
+  private handlePolizaFile(file: File) {
+    if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('polizaSeguro')?.setErrors({ invalid: true }); return; }
+    this.polizaFileName = file.name;
+    this.vehiculosForm.patchValue({ polizaSeguro: file });
+    this.vehiculosForm.get('polizaSeguro')?.setErrors(null);
+    this.uploadPoliza(file);
+  }
+  private uploadPoliza(file: File): void {
+    if (this.uploadingPoliza) return;
+    this.uploadingPoliza = true;
+    const fd = new FormData();
+    fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
 
-  this.usuaService.uploadFile(fd).pipe(
-    finalize(() => this.uploadingPoliza = false)
-  ).subscribe({
-    next: (res: any) => {
-      const url = this.extractFileUrl(res);
-      if (url) {
-        this.vehiculosForm.patchValue({ polizaSeguro: url });
-        this.polizaPreviewUrl = null;
-        this.polizaFileName = file.name;
-      }
-    },
-    error: (err) => console.error('[UPLOAD][polizaSeguro]', err)
-  });
-}
+    this.usuaService.uploadFile(fd).pipe(
+      finalize(() => this.uploadingPoliza = false)
+    ).subscribe({
+      next: (res: any) => {
+        const url = this.extractFileUrl(res);
+        if (url) {
+          this.vehiculosForm.patchValue({ polizaSeguro: url });
+          this.polizaPreviewUrl = null;
+          this.polizaFileName = file.name;
+        }
+      },
+      error: (err) => console.error('[UPLOAD][polizaSeguro]', err)
+    });
+  }
 
 
   // permiso concesión
@@ -485,33 +485,33 @@ private uploadPoliza(file: File): void {
     this.vehiculosForm.patchValue({ permisoConcesion: null });
     this.vehiculosForm.get('permisoConcesion')?.setErrors({ required: true });
   }
-private handlePermisoFile(file: File) {
-  if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('permisoConcesion')?.setErrors({ invalid: true }); return; }
-  this.permisoFileName = file.name;
-  this.vehiculosForm.patchValue({ permisoConcesion: file });
-  this.vehiculosForm.get('permisoConcesion')?.setErrors(null);
-  this.uploadPermiso(file);
-}
-private uploadPermiso(file: File): void {
-  if (this.uploadingPermiso) return;
-  this.uploadingPermiso = true;
-  const fd = new FormData();
-  fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
+  private handlePermisoFile(file: File) {
+    if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('permisoConcesion')?.setErrors({ invalid: true }); return; }
+    this.permisoFileName = file.name;
+    this.vehiculosForm.patchValue({ permisoConcesion: file });
+    this.vehiculosForm.get('permisoConcesion')?.setErrors(null);
+    this.uploadPermiso(file);
+  }
+  private uploadPermiso(file: File): void {
+    if (this.uploadingPermiso) return;
+    this.uploadingPermiso = true;
+    const fd = new FormData();
+    fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
 
-  this.usuaService.uploadFile(fd).pipe(
-    finalize(() => this.uploadingPermiso = false)
-  ).subscribe({
-    next: (res: any) => {
-      const url = this.extractFileUrl(res);
-      if (url) {
-        this.vehiculosForm.patchValue({ permisoConcesion: url });
-        this.permisoPreviewUrl = null;
-        this.permisoFileName = file.name;
-      }
-    },
-    error: (err) => console.error('[UPLOAD][permisoConcesion]', err)
-  });
-}
+    this.usuaService.uploadFile(fd).pipe(
+      finalize(() => this.uploadingPermiso = false)
+    ).subscribe({
+      next: (res: any) => {
+        const url = this.extractFileUrl(res);
+        if (url) {
+          this.vehiculosForm.patchValue({ permisoConcesion: url });
+          this.permisoPreviewUrl = null;
+          this.permisoFileName = file.name;
+        }
+      },
+      error: (err) => console.error('[UPLOAD][permisoConcesion]', err)
+    });
+  }
 
 
   // inspección mecánica
@@ -528,38 +528,38 @@ private uploadPermiso(file: File): void {
     this.vehiculosForm.patchValue({ inspeccionMecanica: null });
     this.vehiculosForm.get('inspeccionMecanica')?.setErrors({ required: true });
   }
-private handleInspeccionFile(file: File) {
-  if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('inspeccionMecanica')?.setErrors({ invalid: true }); return; }
-  this.inspeccionFileName = file.name;
-  this.vehiculosForm.patchValue({ inspeccionMecanica: file });
-  this.vehiculosForm.get('inspeccionMecanica')?.setErrors(null);
-  this.uploadInspeccion(file);
-}
-private uploadInspeccion(file: File): void {
-  if (this.uploadingInspeccion) return;
-  this.uploadingInspeccion = true;
-  const fd = new FormData();
-  fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
+  private handleInspeccionFile(file: File) {
+    if (!this.isAllowedPdf(file)) { this.vehiculosForm.get('inspeccionMecanica')?.setErrors({ invalid: true }); return; }
+    this.inspeccionFileName = file.name;
+    this.vehiculosForm.patchValue({ inspeccionMecanica: file });
+    this.vehiculosForm.get('inspeccionMecanica')?.setErrors(null);
+    this.uploadInspeccion(file);
+  }
+  private uploadInspeccion(file: File): void {
+    if (this.uploadingInspeccion) return;
+    this.uploadingInspeccion = true;
+    const fd = new FormData();
+    fd.append('file', file, file.name); fd.append('folder', 'vehiculos'); fd.append('idModule', '10');
 
-  this.usuaService.uploadFile(fd).pipe(
-    finalize(() => this.uploadingInspeccion = false)
-  ).subscribe({
-    next: (res: any) => {
-      const url = this.extractFileUrl(res);
-      if (url) {
-        this.vehiculosForm.patchValue({ inspeccionMecanica: url });
-        this.inspeccionPreviewUrl = null;
-        this.inspeccionFileName = file.name;
-      }
-    },
-    error: (err) => console.error('[UPLOAD][inspeccionMecanica]', err)
-  });
-}
+    this.usuaService.uploadFile(fd).pipe(
+      finalize(() => this.uploadingInspeccion = false)
+    ).subscribe({
+      next: (res: any) => {
+        const url = this.extractFileUrl(res);
+        if (url) {
+          this.vehiculosForm.patchValue({ inspeccionMecanica: url });
+          this.inspeccionPreviewUrl = null;
+          this.inspeccionFileName = file.name;
+        }
+      },
+      error: (err) => console.error('[UPLOAD][inspeccionMecanica]', err)
+    });
+  }
 
   // 1) util: solo PDF (máx MB)
-private isAllowedPdf(file: File) {
-  return file.type === 'application/pdf' && file.size <= this.MAX_MB * 1024 * 1024;
-}
+  private isAllowedPdf(file: File) {
+    return file.type === 'application/pdf' && file.size <= this.MAX_MB * 1024 * 1024;
+  }
 
 
 

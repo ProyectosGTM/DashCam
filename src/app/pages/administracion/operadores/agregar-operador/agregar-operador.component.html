@@ -1,10 +1,8 @@
 <vex-page-layout @fadeInRight>
     <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
         [class.px-6]="layoutCtrl.value === 'fullwidth'">
-
         <div class="card mt-4">
             <div class="container-fluid p-4">
-                <!-- Breadcrumb -->
                 <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
                     <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
                         <a routerLink="/administracion" class="crumb-link">
@@ -17,8 +15,6 @@
                         <span class="crumb-current" aria-current="page">Agregar Operador</span>
                     </nav>
                 </div>
-
-                <!-- Formulario -->
                 <section class="mt-4">
                     <form [formGroup]="operadorForm" class="form-skin-lite">
                         <div class="row g-3">
@@ -28,7 +24,6 @@
                                 </div>
                                 <div class="section-bar"></div>
                             </div>
-
                             <div class="col-12 col-md-6 col-lg-4">
                                 <label class="form-label"><i class="fa fa-id-card"></i><span>Número de
                                         Licencia</span></label>
@@ -36,7 +31,6 @@
                                     <input matInput placeholder="Número de Licencia" formControlName="numeroLicencia" />
                                 </mat-form-field>
                             </div>
-
                             <div class="col-12 col-md-6 col-lg-4">
                                 <label class="form-label"><i class="fa fa-calendar-day"></i><span>Fecha de
                                         Nacimiento</span></label>
@@ -45,16 +39,21 @@
                                         formControlName="fechaNacimiento" />
                                 </mat-form-field>
                             </div>
-
                             <div class="col-12 col-md-6 col-lg-4">
-                                <label class="form-label"><i class="fa fa-user"></i><span>Usuario</span></label>
+                                <label class="form-label">
+                                    <i class="fa fa-user"></i><span>Usuario</span>
+                                </label>
                                 <mat-form-field appearance="fill" class="w-100">
-                                    <input matInput placeholder="Usuario" formControlName="idUsuario" />
+                                    <mat-select placeholder="Usuario" formControlName="idUsuario">
+                                    <mat-option *ngFor="let u of listaUsuarios" [value]="u.id">
+                                        {{ u.userName || (u.nombre + ' ' + (u.apellidoPaterno || '') + ' ' + (u.apellidoMaterno || '')) }}
+                                    </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="operadorForm.get('idUsuario')?.hasError('required')">
+                                    Selecciona un usuario.
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
-
-                            <!-- ====== Subida de documentos ====== -->
-                            <!-- ===== Documentación (solo PDF) ===== -->
                             <div class="row g-3 uploads-skin mt-2 form-skin-lite">
                                 <div class="col-12">
                                     <div class="section-head">
@@ -62,8 +61,46 @@
                                     </div>
                                     <div class="section-bar"></div>
                                 </div>
+                                <!-- Licencia de Conducir -->
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <label class="form-label">
+                                        <i class="fa fa-id-badge"></i><span>Licencia de Conducir</span>
+                                    </label>
 
-                                <!-- Identificación (PDF) -->
+                                    <div class="dropzone" [class.dragging]="licDragging" (click)="openLicFilePicker()"
+                                        (dragover)="onLicDragOver($event)" (dragleave)="onLicDragLeave($event)"
+                                        (drop)="onLicDrop($event)">
+
+                                        <div class="dz-body" *ngIf="!licFileName">
+                                            <mat-icon class="dz-icon">description</mat-icon>
+                                            <div class="dz-title">Arrastra y suelta o haz clic</div>
+                                        </div>
+
+                                        <div class="dz-file" *ngIf="licFileName">
+                                            <mat-icon>insert_drive_file</mat-icon>
+                                            <span class="ms-1">{{ licFileName }}</span>
+                                        </div>
+
+                                        <button mat-stroked-button type="button" class="dz-action"
+                                            (click)="openLicFilePicker()">
+                                            <mat-icon>upload</mat-icon> Seleccionar
+                                        </button>
+                                        <button mat-stroked-button color="warn" type="button" class="dz-clear"
+                                            *ngIf="licFileName" (click)="clearLicFile($event)">
+                                            <mat-icon>close</mat-icon> Quitar
+                                        </button>
+
+                                        <mat-progress-bar *ngIf="uploadingLic" mode="indeterminate"></mat-progress-bar>
+
+                                        <input #licFileInput type="file" class="d-none" accept="application/pdf"
+                                            (change)="onLicFileSelected($event)">
+                                    </div>
+
+                                    <mat-error *ngIf="operadorForm.get('licencia')?.hasError('invalid')">
+                                        Archivo no permitido (solo PDF).
+                                    </mat-error>
+                                </div>
+
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <label class="form-label">
                                         <i class="fa fa-address-card"></i><span>Identificación</span>
@@ -104,7 +141,6 @@
                                     </mat-error>
                                 </div>
 
-                                <!-- Comprobante de domicilio (PDF) -->
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <label class="form-label">
                                         <i class="fa fa-house-chimney"></i><span>Comprobante de Domicilio</span>
@@ -144,7 +180,6 @@
                                     </mat-error>
                                 </div>
 
-                                <!-- Antecedentes no penales (PDF) -->
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <label class="form-label">
                                         <i class="fa fa-file-shield"></i><span>Antecedentes No Penales</span>
@@ -184,10 +219,8 @@
                                     </mat-error>
                                 </div>
                             </div>
-
-
                             <div class="col-12 d-flex justify-content-end gap-2 pt-2">
-                                <button mat-raised-button color="primary" type="submit">
+                                <button mat-raised-button color="primary" (click)="submit()">
                                     <mat-icon>save</mat-icon> Guardar
                                 </button>
                                 <button mat-raised-button color="warn" type="button" (click)="regresar()">

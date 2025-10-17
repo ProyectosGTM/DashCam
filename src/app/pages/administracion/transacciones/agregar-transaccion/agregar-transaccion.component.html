@@ -1,9 +1,10 @@
 <vex-page-layout @fadeInRight>
-
     <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
         [class.px-6]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+
         <div class="card mt-4">
             <div class="dashboard-lite p-4">
+                <!-- Breadcrumb -->
                 <div class="bg-app-bar appbar px-6 h-16 border-b sticky top-0 left-0 flex items-center z-10">
                     <nav class="breadcrumb-simple" aria-label="Ruta de navegación">
                         <a routerLink="/administracion" class="crumb-link">
@@ -17,83 +18,97 @@
                     </nav>
                 </div>
 
-                <section class="mt-5 table-shell">
-                    <form [formGroup]="usuarioForm">
-                        <div class="fm-grid">
-                            <div class="fm-divider fm-span-3">Datos Generales</div>
-
-                            <div class="fm-group">
-                                <label id="lbl-nombre">
-                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-                                    Transacción
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Nombre" formControlName="apellidoPaterno"
-                                        [attr.aria-labelledby]="'lbl-nombre'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-apellido-paterno">
-                                    <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
-                                    Monto
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Apellido Paterno" formControlName="apellidoMaterno"
-                                        [attr.aria-labelledby]="'lbl-apellido-paterno'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-apellido-materno">
-                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
-                                    Fecha de Registro
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput placeholder="Apellido Materno" formControlName="nombre"
-                                        [attr.aria-labelledby]="'lbl-apellido-materno'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-telefono">
-                                    <i class="fa fa-phone doc-icon" aria-hidden="true"></i>
-                                    Número de Monedero
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="tel" placeholder="Teléfono" formControlName="userName"
-                                        [attr.aria-labelledby]="'lbl-telefono'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-group">
-                                <label id="lbl-correo">
-                                    <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
-                                    Número de Serie de Validador
-                                </label>
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="email" placeholder="Correo Electrónico"
-                                        formControlName="userName" [attr.aria-labelledby]="'lbl-correo'">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="fm-span-3 fm-actions">
-                                <div class="fm-actions-right">
-                                    <button mat-raised-button color="primary" type="button">
-                                        <mat-icon>save</mat-icon>
-                                        Guardar
-                                    </button>
-                                    <button mat-raised-button (click)="regresar()" color="warn" type="button">
-                                        <mat-icon>close</mat-icon>
-                                        Cancelar
-                                    </button>
+                <!-- Formulario (misma estructura anterior) -->
+                <section class="mt-5">
+                    <form [formGroup]="transaccionForm" class="form-skin-lite">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="section-head">
+                                    <h5 class="mb-1">Datos Generales</h5>
                                 </div>
+                                <div class="section-bar"></div>
+                            </div>
+
+                            <!-- Tipo de Transacción -->
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label" id="lbl-transaccion">
+                                    <i class="fa fa-user doc-icon" aria-hidden="true"></i>
+                                    <span>Transacción</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-select placeholder="Tipo de Transacción" formControlName="tipoTransaccion"
+                                        [attr.aria-labelledby]="'lbl-transaccion'">
+                                        <mat-option [value]="'RECARGA'">Recarga</mat-option>
+                                        <mat-option [value]="'DEBITO'">Débito</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Monto -->
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label" id="lbl-monto">
+                                    <i class="fa fa-user-pen doc-icon" aria-hidden="true"></i>
+                                    <span>Monto</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <input matInput placeholder="Monto" formControlName="monto"
+                                        [attr.aria-labelledby]="'lbl-monto'" inputmode="decimal"
+                                        (keydown)="moneyKeydown($event)" (input)="moneyInput($event)"
+                                        (paste)="moneyPaste($event)" (blur)="moneyBlur($event)">
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Número de Monedero -->
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label" id="lbl-monedero">
+                                    <i class="fa fa-phone doc-icon" aria-hidden="true"></i>
+                                    <span>Número de Monedero</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-select placeholder="Número de Monedero" formControlName="numeroSerieMonedero"
+                                        [attr.aria-labelledby]="'lbl-monedero'">
+                                        <mat-option *ngFor="let m of listaMonederos"
+                                            [value]="m?.numeroSerie || m?.NumeroSerie || m?.numSerie">
+                                            {{ m?.numeroSerie || m?.NumeroSerie || m?.numSerie }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Número de Serie de Validador -->
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="form-label" id="lbl-validador">
+                                    <i class="fa fa-envelope doc-icon" aria-hidden="true"></i>
+                                    <span>Número de Serie de Validador</span>
+                                </label>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-select placeholder="Número de Serie de Validador"
+                                        formControlName="numeroSerieValidador"
+                                        [attr.aria-labelledby]="'lbl-validador'">
+                                        <mat-option *ngFor="let d of listaDispositivos" [value]="d.numeroSerie">
+                                            {{ d.numeroSerie }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </div>
+
+                            <!-- Acciones -->
+                            <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                                <button mat-raised-button color="primary" type="button" (click)="submit()">
+                                    <mat-icon>save</mat-icon>
+                                    Guardar
+                                </button>
+                                <button mat-raised-button color="warn" type="button" (click)="regresar()">
+                                    <mat-icon>close</mat-icon>
+                                    Cancelar
+                                </button>
                             </div>
                         </div>
-
                     </form>
                 </section>
             </div>
         </div>
+
     </vex-page-layout-content>
 </vex-page-layout>

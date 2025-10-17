@@ -68,7 +68,7 @@ export class ListaRolesComponent implements OnInit {
   }
 
   actualizarRol(idRol: Number) {
-    this.router.navigateByUrl('/roles/editar-rol/' + idRol);
+    this.router.navigateByUrl('/administracion/roles/editar-rol/' + idRol);
   }
 
   async activar(rowData: any) {

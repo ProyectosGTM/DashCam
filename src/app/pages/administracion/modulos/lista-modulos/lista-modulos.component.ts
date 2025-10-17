@@ -63,7 +63,7 @@ export class ListaModulosComponent implements OnInit {
   }
 
   actualizarModulo(idModulo: Number) {
-    this.route.navigateByUrl('/modulos/editar-modulo/' + idModulo);
+    this.route.navigateByUrl('/administracion/modulos/editar-modulo/' + idModulo);
   }
 
   async activar(rowData: any) {

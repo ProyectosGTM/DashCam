@@ -566,7 +566,7 @@ export class AltaClienteComponent {
     const fd = new FormData();
     fd.append('file', file, file.name);
     fd.append('folder', 'clientes');
-    fd.append('idModule', '50'); // ajusta si tu backend usa otro id
+    fd.append('idModule', '1'); // ajusta si tu backend usa otro id
 
     this.usuaService.uploadFile(fd).pipe(
       finalize(() => this.uploadingLogo = false)
@@ -625,7 +625,7 @@ export class AltaClienteComponent {
     const fd = new FormData();
     fd.append('file', file, file.name);
     fd.append('folder', 'clientes');
-    fd.append('idModule', '50');
+    fd.append('idModule', '1');
 
     this.usuaService.uploadFile(fd).pipe(
       finalize(() => this.uploadingCsf = false)
@@ -682,7 +682,7 @@ export class AltaClienteComponent {
     const fd = new FormData();
     fd.append('file', file, file.name);
     fd.append('folder', 'clientes');
-    fd.append('idModule', '50');
+    fd.append('idModule', '1');
 
     this.usuaService.uploadFile(fd).pipe(
       finalize(() => this.uploadingCompDom = false)
@@ -739,7 +739,7 @@ export class AltaClienteComponent {
     const fd = new FormData();
     fd.append('file', file, file.name);
     fd.append('folder', 'clientes');
-    fd.append('idModule', '50');
+    fd.append('idModule', '1');
 
     this.usuaService.uploadFile(fd).pipe(
       finalize(() => this.uploadingActa = false)

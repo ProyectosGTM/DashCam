@@ -168,16 +168,12 @@ export class ListaDispositivosComponent {
     e.component.refresh();
   }
 
-  showInfo(id: any): void {
-    console.log('Mostrar información del dispositivo con ID:', id);
-  }
-
   agregarDispositivo() {
-    this.route.navigateByUrl('/dispositivos/agregar-dispositivo')
+    this.route.navigateByUrl('/administracion/validadores/agregar-validador')
   }
 
-  actualizarDispositivo(idDispositivo: number) {
-    this.route.navigateByUrl('/dispositivos/editar-dispositivo/' + idDispositivo);
+  actualizarDispositivo(idValidador: number) {
+    this.route.navigateByUrl('/administracion/validadores/editar-validador/' + idValidador);
   };
 
   async eliminarDispositivo(dispositivo: any) {
@@ -195,7 +191,6 @@ export class ListaDispositivosComponent {
 
     this.disService.eliminarDispositivo(dispositivo.Id).subscribe(
       () => {
-        // Igual que en tu código con Swal: mostramos alerta y seguimos (no esperamos a que la cierre)
         this.alerts.open({
           type: 'success',
           title: '¡Eliminado!',
@@ -222,7 +217,7 @@ export class ListaDispositivosComponent {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Activar!',
-      message: `¿Está seguro que requiere activar el dispositivo: <strong>${rowData.marca}</strong>?`,
+      message: `¿Está seguro que requiere activar el validador: <strong>${rowData.marca}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
@@ -236,7 +231,7 @@ export class ListaDispositivosComponent {
         this.alerts.open({
           type: 'success',
           title: '¡Confirmación Realizada!',
-          message: 'El dispositivo ha sido activado.',
+          message: 'El validador ha sido activado.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -259,7 +254,7 @@ export class ListaDispositivosComponent {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Desactivar!',
-      message: `¿Está seguro que requiere desactivar el dispositivo: <strong>${rowData.marca}</strong>?`,
+      message: `¿Está seguro que requiere desactivar el validador: <strong>${rowData.marca}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
@@ -273,7 +268,7 @@ export class ListaDispositivosComponent {
         this.alerts.open({
           type: 'success',
           title: '¡Confirmación Realizada!',
-          message: 'El dispositivo ha sido desactivado.',
+          message: 'El validador ha sido desactivado.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -291,7 +286,6 @@ export class ListaDispositivosComponent {
       }
     );
   }
-
 
   limpiarCampos() {
     const today = new Date();
@@ -316,7 +310,6 @@ export class ListaDispositivosComponent {
       this.dataGrid.instance.refresh();
     }
   }
-
 
   agregarValidador() {
     this.route.navigateByUrl('/administracion/validadores/agregar-validador')

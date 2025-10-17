@@ -55,7 +55,7 @@
             <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
             <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
             <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-            <dxi-column caption="Acciones" cellTemplate="Acciones" alignment="center" [width]="200"></dxi-column>
+            <dxi-column caption="Acciones" cellTemplate="Acciones" alignment="center" [width]="250"></dxi-column>
             <dxi-column dataField="numeroSerie" caption="NumeroSerie" alignment="center"></dxi-column>
             <dxi-column dataField="fechaActivacion" caption="Fecha Activación" alignment="center"
               cellTemplate="fecActi">
@@ -76,12 +76,12 @@
                                     </button>
                                 </div> -->
               <div>
-                <button class="btn-success" (click)="abrirModal('recarga', monedero.data)">
+                <button class="btn-active" (click)="abrirModal('recarga', monedero.data)">
                   + Recarga
                 </button>
               </div>
               <div style="margin-left: 5px;">
-                <button class="btn-danger" (click)="abrirModal('debito', monedero.data)">
+                <button class="btn-desactive" (click)="abrirModal('debito', monedero.data)">
                   - Debito
                 </button>
               </div>
@@ -128,7 +128,7 @@
         </div>
         <div class="am-item">
           <div class="am-label">Monto</div>
-          <input type="number" class="am-input" placeholder="Ingrese el monto" formControlName="Monto" />
+          <input type="number" class="am-input" placeholder="Ingrese el monto" formControlName="monto" />
         </div>
         <div class="am-actions">
           <button class="am-btn am-btn--primary" type="submit" [disabled]="loading">

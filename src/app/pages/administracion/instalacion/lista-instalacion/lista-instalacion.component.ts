@@ -69,7 +69,7 @@ export class ListaInstalacionComponent implements OnInit {
   }
 
   actualizarInstalacion(idInstalacion: number) {
-    this.router.navigateByUrl('/instalaciones/editar-instalacion/' + idInstalacion);
+    this.router.navigateByUrl('/administracion/instalaciones/editar-instalacion/' + idInstalacion);
   }
 
   async activar(rowData: any) {
@@ -85,7 +85,7 @@ export class ListaInstalacionComponent implements OnInit {
 
     if (res !== 'confirm') return;
 
-    this.insService.updateEstatus(rowData.idInstalacion, 1).subscribe(
+    this.insService.updateEstatus(rowData.id, 1).subscribe(
       () => {
         this.alerts.open({
           type: 'success',
@@ -122,7 +122,7 @@ export class ListaInstalacionComponent implements OnInit {
 
     if (res !== 'confirm') return;
 
-    this.insService.updateEstatus(rowData.idInstalacion, 0).subscribe(
+    this.insService.updateEstatus(rowData.id, 0).subscribe(
       () => {
         this.alerts.open({
           type: 'success',

@@ -29,7 +29,7 @@
                 <div class="section-bar"></div>
               </div>
 
-              <div class="col-12 col-md-6 col-lg-4">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label">
                   <i class="fa fa-barcode"></i>
                   <span>Número de Serie</span>
@@ -39,7 +39,7 @@
                 </mat-form-field>
               </div>
 
-              <div class="col-12 col-md-6 col-lg-4">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label">
                   <i class="fa fa-industry"></i>
                   <span>Marca</span>
@@ -49,7 +49,7 @@
                 </mat-form-field>
               </div>
 
-              <div class="col-12 col-md-6 col-lg-4">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label">
                   <i class="fa fa-cogs"></i>
                   <span>Modelo</span>
@@ -59,13 +59,21 @@
                 </mat-form-field>
               </div>
 
-              <div class="col-12 col-md-6 col-lg-4">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label">
                   <i class="fa fa-user-tie"></i>
                   <span>Cliente</span>
                 </label>
                 <mat-form-field appearance="fill" class="w-100">
-                  <input matInput placeholder="Cliente" formControlName="idCliente" />
+                  <mat-select
+                    placeholder="Cliente"
+                    formControlName="idCliente"
+                    [disabled]="!isAdmin">
+                    <mat-option [value]="null">— Seleccione —</mat-option>
+                    <mat-option *ngFor="let c of listaClientes" [value]="c.id">
+                      {{ c.nombre }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 

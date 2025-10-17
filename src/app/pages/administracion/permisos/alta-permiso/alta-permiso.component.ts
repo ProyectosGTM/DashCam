@@ -36,8 +36,8 @@ export class AltaPermisoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.obtenerModulo();
     this.initForm();
+    this.obtenerModulo();
     this.activatedRouted.params.subscribe((params) => {
       this.idPermiso = params['idPermiso'];
       if (this.idPermiso) {
@@ -57,7 +57,6 @@ export class AltaPermisoComponent implements OnInit {
     });
   }
 
-
   obtenerPermiso() {
     this.permiService.obtenerPermiso(this.idPermiso).subscribe((response: any) => {
       const idModuloNum =
@@ -74,8 +73,7 @@ export class AltaPermisoComponent implements OnInit {
       });
     });
   }
-
-
+  
   initForm() {
     this.permisoForm = this.fb.group({
       idModulo: [null, Validators.required],

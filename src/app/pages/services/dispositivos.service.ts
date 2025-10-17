@@ -11,34 +11,34 @@ export class DispositivosService {
   constructor(private http: HttpClient) { }
 
   obtenerDispositivosData(page: number, pageSize: number): Observable<any> {
-    return this.http.get(`${environment.API_SECURITY}/dispositivos/${page}/${pageSize}`);
+    return this.http.get(`${environment.API_SECURITY}/validadores/${page}/${pageSize}`);
   }
 
   obtenerDispositivos(): Observable<any> {
-    return this.http.get(`${environment.API_SECURITY}/dispositivos/list`);
+    return this.http.get(`${environment.API_SECURITY}/validadores/list`);
   }
 
   obtenerDispositivosByCliente(idCliente: any): Observable<any> {
-    return this.http.get(`${environment.API_SECURITY}/dispositivos/clientes/${idCliente}`);
+    return this.http.get(`${environment.API_SECURITY}/validadores/clientes/${idCliente}`);
   }
 
   agregarDispositivo(data: FormData) {
-    return this.http.post(environment.API_SECURITY + '/dispositivos', data);
+    return this.http.post(environment.API_SECURITY + '/validadores', data);
   }
 
   eliminarDispositivo(idDispositivo: Number) {
-    return this.http.delete(environment.API_SECURITY + '/dispositivos/' + idDispositivo);
+    return this.http.delete(environment.API_SECURITY + '/validadores/' + idDispositivo);
   }
 
   obtenerDispositivo(idDispositivo: number): Observable<any> {
-    return this.http.get<any>(environment.API_SECURITY + '/dispositivos/' + idDispositivo);
+    return this.http.get<any>(environment.API_SECURITY + '/validadores/' + idDispositivo);
   }
 
   actualizarDispositivo(idDispositivo: number, saveForm: any): Observable<any> {
-    return this.http.put(`${environment.API_SECURITY}/dispositivos/` + idDispositivo, saveForm);
+    return this.http.put(`${environment.API_SECURITY}/validadores/` + idDispositivo, saveForm);
   }
 
-  private apiUrl = `${environment.API_SECURITY}/dispositivos`;
+  private apiUrl = `${environment.API_SECURITY}/validadores`;
   updateEstatus(id: number, estatus: number): Observable<string> {
     const url = `${this.apiUrl}/estatus/${id}`;
     const body = { estatus };

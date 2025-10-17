@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { DxDataGridComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
@@ -40,7 +40,8 @@ export class ListaClientesComponent implements OnInit {
 
   constructor(private cliService: ClientesService,
     private alerts: AlertsService,
-    private route: Router,) {
+    private router: Router,         // para navegar
+    private route: ActivatedRoute,) {
     this.showFilterRow = true;
     this.showHeaderFilter = true;
   }
@@ -49,8 +50,15 @@ export class ListaClientesComponent implements OnInit {
     this.setupDataSource()
   }
 
+  irAVerDocumento(url: string, titulo: string, fila: any) {
+    this.router.navigate(['ver-documento'], {
+      relativeTo: this.route,
+      queryParams: { url, titulo }
+    });
+  }
+
   agregarCliente() {
-    this.route.navigateByUrl('/administracion/clientes/agregar-cliente')
+    this.router.navigateByUrl('/administracion/clientes/agregar-cliente')
   }
 
   // hasPermission(permission: string): boolean {
@@ -197,14 +205,14 @@ export class ListaClientesComponent implements OnInit {
   }
 
   actualizarCliente(idCliente: number) {
-    this.route.navigateByUrl('/administracion/clientes/editar-cliente/' + idCliente);
+    this.router.navigateByUrl('/administracion/clientes/editar-cliente/' + idCliente);
   };
 
   async activar(rowData: any) {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Activar!',
-      message: `¿Está seguro que requiere activar el cliente: <strong>${rowData.nombre}</strong>?`,
+      message: `¿Está seguro que requiere activar el cliente: <br> <strong>${rowData.nombre}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
@@ -240,7 +248,7 @@ export class ListaClientesComponent implements OnInit {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Desactivar!',
-      message: `¿Está seguro que requiere desactivar el cliente: <strong>${rowData.nombre}</strong>?`,
+      message: `¿Está seguro que requiere desactivar el cliente: <br> <strong>${rowData.nombre}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',

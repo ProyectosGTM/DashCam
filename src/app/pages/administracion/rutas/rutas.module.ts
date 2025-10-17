@@ -21,6 +21,8 @@ import { MatInputModule } from '@angular/material/input';
 import { DxDataGridModule } from 'devextreme-angular';
 import { ListaRutasComponent } from './lista-rutas/lista-rutas.component';
 import { AgregarRutaComponent } from './agregar-ruta/agregar-ruta.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -48,7 +50,9 @@ import { AgregarRutaComponent } from './agregar-ruta/agregar-ruta.component';
     FormsModule,
     MatDialogModule,
     MatInputModule,
-    DxDataGridModule
+    DxDataGridModule,
+    MatFormFieldModule,
+    MatSelectModule
   ]
 })
 export class RutasModule { }

@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 import { DxDataGridComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
@@ -40,7 +40,7 @@ export class ListaOperadoresComponent implements OnInit {
 
   constructor(
     private opService: OperadoresService,
-    private route: Router,
+    private router: Router, private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private alerts: AlertsService,
   ) {
@@ -57,7 +57,18 @@ export class ListaOperadoresComponent implements OnInit {
   // }
 
   agregarOperador() {
-    this.route.navigateByUrl('/administracion/operadores/agregar-operador')
+    this.router.navigateByUrl('/administracion/operadores/agregar-operador')
+  }
+
+  getAntecedentesUrl(row: any): string | null {
+    return row?.antecedentesNoPenales || row?.antecedentesPenales || null;
+  }
+
+  irAVerDocumento(url: string, titulo: string, fila: any) {
+    this.router.navigate(['ver-documento'], {
+      relativeTo: this.route,                  // estando dentro de /administracion/lo-que-sea
+      queryParams: { url, titulo }             // tu visor leerá estos params
+    });
   }
 
   obtenerOperadores() {
@@ -229,14 +240,14 @@ export class ListaOperadoresComponent implements OnInit {
   }
 
   actualizarOperador(idOperador: number) {
-    this.route.navigateByUrl('/operadores/editar-operador/' + idOperador);
+    this.router.navigateByUrl('/administracion/operadores/editar-operador/' + idOperador);
   };
 
   async activar(rowData: any) {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Activar!',
-      message: `¿Está seguro que requiere activar el operador: <br> <strong>${rowData.idUsuario2.nombre} ${rowData.idUsuario2.apellidoPaterno}</strong>?`,
+      message: `¿Está seguro que requiere activar el operador: <br> <strong>${rowData.nombreUsuario} ${rowData.apellidoPaternoUsuario || ' '} ${rowData.apellidoMaternoUsuario || ' '}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
@@ -273,7 +284,7 @@ export class ListaOperadoresComponent implements OnInit {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Desactivar!',
-      message: `¿Está seguro que requiere desactivar el operador: <br> <strong>${rowData.idUsuario2.nombre} ${rowData.idUsuario2.apellidoPaterno}</strong>?`,
+      message: `¿Está seguro que requiere desactivar el operador: <br> <strong>${rowData.nombreUsuario} ${rowData.apellidoPaternoUsuario || ' '} ${rowData.apellidoPaternoUsuario || ' '}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',

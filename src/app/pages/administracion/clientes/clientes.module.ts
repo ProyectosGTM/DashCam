@@ -29,12 +29,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // <-- FALTA
 import { DxDataGridModule } from 'devextreme-angular';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { VerDocumentoClienteComponent } from './ver-documento-cliente/ver-documento-cliente.component';
 
 
 @NgModule({
   declarations: [
     ListaClientesComponent,
-    AltaClienteComponent
+    AltaClienteComponent,
+    VerDocumentoClienteComponent
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,5 @@
 <vex-page-layout @fadeInRight>
-  <vex-page-layout-content
-    [class.container]="layoutCtrl.value === 'boxed'"
+  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
     [class.px-6]="layoutCtrl.value === 'fullwidth'">
 
     <div class="card mt-4">
@@ -34,23 +33,44 @@
               <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-sitemap"></i><span>Id Padre</span></label>
                 <mat-form-field appearance="fill" class="w-100">
-                  <input matInput placeholder="Id Padre" formControlName="idPadre" />
+                  <mat-select formControlName="idPadre" placeholder="Selecciona cliente padre">
+                    <!-- opcional: quita esta opción si el campo es obligatorio -->
+                    <mat-option [value]="null">Sin padre</mat-option>
+
+                    <mat-option *ngFor="let c of listaClientes" [value]="c.id">
+                      {{ c.nombre }}
+                    </mat-option>
+                  </mat-select>
+
+                  <mat-error *ngIf="clienteForm.get('idPadre')?.hasError('required')">
+                    Selecciona un cliente padre.
+                  </mat-error>
                 </mat-form-field>
               </div>
+
 
               <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-id-card"></i><span>RFC</span></label>
                 <mat-form-field appearance="fill" class="w-100">
-                  <input matInput placeholder="RFC" formControlName="rfc" />
+                  <input matInput placeholder="RFC" formControlName="rfc" maxlength="13"
+                    (input)="sanitizeInput($event)" />
                 </mat-form-field>
               </div>
 
               <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-user-tag"></i><span>Tipo Persona</span></label>
                 <mat-form-field appearance="fill" class="w-100">
-                  <input matInput placeholder="Física / Moral" formControlName="tipoPersona" />
+                  <mat-select formControlName="tipoPersona" placeholder="Selecciona tipo de persona"
+                    (change)="onTipoPersonaChange($event)">
+                    <mat-option [value]="1">Física</mat-option>
+                    <mat-option [value]="2">Moral</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="clienteForm.get('tipoPersona')?.hasError('required')">
+                    Selecciona el tipo de persona.
+                  </mat-error>
                 </mat-form-field>
               </div>
+
 
               <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-user"></i><span>Nombre</span></label>
@@ -76,7 +96,8 @@
               <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-phone"></i><span>Teléfono</span></label>
                 <mat-form-field appearance="fill" class="w-100">
-                  <input matInput placeholder="Teléfono" formControlName="telefono" />
+                  <input matInput placeholder="Teléfono" formControlName="telefono" maxlength="10"
+                    (keypress)="allowOnlyNumbers($event)" />
                 </mat-form-field>
               </div>
 
@@ -125,28 +146,29 @@
                 </mat-form-field>
               </div>
 
-              <div class="col-12 col-md-6 col-lg-4">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-arrows-left-right"></i><span>Entre Calles</span></label>
                 <mat-form-field appearance="fill" class="w-100">
                   <input matInput placeholder="Entre Calles" formControlName="entreCalles" />
                 </mat-form-field>
               </div>
 
-              <div class="col-6 col-md-4 col-lg-2">
+              <div class="col-6 col-md-4 col-lg-3">
                 <label class="form-label"><i class="fa fa-sort-numeric-desc"></i><span>Código Postal</span></label>
                 <mat-form-field appearance="fill" class="w-100">
-                  <input matInput placeholder="CP" formControlName="cp" />
+                  <input matInput placeholder="CP" formControlName="cp" maxlength="5"
+                    (keypress)="allowOnlyNumbers($event)" />
                 </mat-form-field>
               </div>
 
-              <div class="col-6 col-md-4 col-lg-2">
+              <div class="col-6 col-md-4 col-lg-3">
                 <label class="form-label"><i class="fa fa-door-open"></i><span>Núm. Exterior</span></label>
                 <mat-form-field appearance="fill" class="w-100">
                   <input matInput placeholder="Ext." formControlName="numeroExterior" />
                 </mat-form-field>
               </div>
 
-              <div class="col-6 col-md-4 col-lg-2">
+              <div class="col-6 col-md-4 col-lg-3">
                 <label class="form-label"><i class="fa fa-door-closed"></i><span>Núm. Interior</span></label>
                 <mat-form-field appearance="fill" class="w-100">
                   <input matInput placeholder="Int." formControlName="numeroInterior" />
@@ -192,7 +214,6 @@
               </div>
             </div>
 
-            <!-- ===== Documentación ===== -->
             <div class="row g-3 uploads-skin mt-4">
               <div class="col-12">
                 <div class="section-head">
@@ -204,12 +225,8 @@
               <!-- Logotipo (imagen) -->
               <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-image"></i><span>Logotipo</span></label>
-                <div class="dropzone"
-                     [class.dragging]="logoDragging"
-                     (click)="openLogoFilePicker()"
-                     (dragover)="onLogoDragOver($event)"
-                     (dragleave)="onLogoDragLeave($event)"
-                     (drop)="onLogoDrop($event)">
+                <div class="dropzone" [class.dragging]="logoDragging" (click)="openLogoFilePicker()"
+                  (dragover)="onLogoDragOver($event)" (dragleave)="onLogoDragLeave($event)" (drop)="onLogoDrop($event)">
 
                   <div class="dz-body" *ngIf="!logoPreviewUrl">
                     <mat-icon class="dz-icon">image</mat-icon>
@@ -221,12 +238,11 @@
                   </div>
 
                   <button mat-stroked-button type="button" class="dz-action"
-                          (click)="openLogoFilePicker(); $event.stopPropagation()">
+                    (click)="openLogoFilePicker(); $event.stopPropagation()">
                     <mat-icon>upload</mat-icon> Seleccionar
                   </button>
                   <button mat-stroked-button color="warn" type="button" class="dz-clear"
-                          *ngIf="logoPreviewUrl || logoFileName"
-                          (click)="clearLogoFile($event); $event.stopPropagation()">
+                    *ngIf="logoPreviewUrl || logoFileName" (click)="clearLogoFile($event); $event.stopPropagation()">
                     <mat-icon>close</mat-icon> Quitar
                   </button>
 
@@ -234,9 +250,8 @@
 
                   <div class="dz-filename" *ngIf="logoFileName">{{ logoFileName }}</div>
 
-                  <input #logoFileInput type="file" class="d-none"
-                         accept="image/png,image/jpeg,image/webp"
-                         (change)="onLogoFileSelected($event)">
+                  <input #logoFileInput type="file" class="d-none" accept="image/png,image/jpeg,image/webp"
+                    (change)="onLogoFileSelected($event)">
                 </div>
 
                 <mat-error *ngIf="clienteForm.get('logotipo')?.hasError('invalid')">
@@ -246,13 +261,10 @@
 
               <!-- Constancia de Situación Fiscal (PDF) -->
               <div class="col-12 col-md-6 col-lg-3">
-                <label class="form-label"><i class="fa fa-file-lines"></i><span>Constancia de Situación Fiscal</span></label>
-                <div class="dropzone"
-                     [class.dragging]="csfDragging"
-                     (click)="openCsfFilePicker()"
-                     (dragover)="onCsfDragOver($event)"
-                     (dragleave)="onCsfDragLeave($event)"
-                     (drop)="onCsfDrop($event)">
+                <label class="form-label"><i class="fa fa-file-lines"></i><span>Constancia de Situación
+                    Fiscal</span></label>
+                <div class="dropzone" [class.dragging]="csfDragging" (click)="openCsfFilePicker()"
+                  (dragover)="onCsfDragOver($event)" (dragleave)="onCsfDragLeave($event)" (drop)="onCsfDrop($event)">
 
                   <div class="dz-body" *ngIf="!csfFileName">
                     <mat-icon class="dz-icon">description</mat-icon>
@@ -265,20 +277,18 @@
                   </div>
 
                   <button mat-stroked-button type="button" class="dz-action"
-                          (click)="openCsfFilePicker(); $event.stopPropagation()">
+                    (click)="openCsfFilePicker(); $event.stopPropagation()">
                     <mat-icon>upload</mat-icon> Seleccionar
                   </button>
-                  <button mat-stroked-button color="warn" type="button" class="dz-clear"
-                          *ngIf="csfFileName"
-                          (click)="clearCsfFile($event); $event.stopPropagation()">
+                  <button mat-stroked-button color="warn" type="button" class="dz-clear" *ngIf="csfFileName"
+                    (click)="clearCsfFile($event); $event.stopPropagation()">
                     <mat-icon>close</mat-icon> Quitar
                   </button>
 
                   <mat-progress-bar *ngIf="uploadingCsf" mode="indeterminate"></mat-progress-bar>
 
-                  <input #csfFileInput type="file" class="d-none"
-                         accept="application/pdf"
-                         (change)="onCsfFileSelected($event)">
+                  <input #csfFileInput type="file" class="d-none" accept="application/pdf"
+                    (change)="onCsfFileSelected($event)">
                 </div>
 
                 <mat-error *ngIf="clienteForm.get('constanciaSituacionFiscal')?.hasError('invalid')">
@@ -288,13 +298,11 @@
 
               <!-- Comprobante de Domicilio (PDF) -->
               <div class="col-12 col-md-6 col-lg-3">
-                <label class="form-label"><i class="fa fa-house-chimney"></i><span>Comprobante de Domicilio</span></label>
-                <div class="dropzone"
-                     [class.dragging]="compDomDragging"
-                     (click)="openCompDomFilePicker()"
-                     (dragover)="onCompDomDragOver($event)"
-                     (dragleave)="onCompDomDragLeave($event)"
-                     (drop)="onCompDomDrop($event)">
+                <label class="form-label"><i class="fa fa-house-chimney"></i><span>Comprobante de
+                    Domicilio</span></label>
+                <div class="dropzone" [class.dragging]="compDomDragging" (click)="openCompDomFilePicker()"
+                  (dragover)="onCompDomDragOver($event)" (dragleave)="onCompDomDragLeave($event)"
+                  (drop)="onCompDomDrop($event)">
 
                   <div class="dz-body" *ngIf="!compDomFileName">
                     <mat-icon class="dz-icon">description</mat-icon>
@@ -307,20 +315,18 @@
                   </div>
 
                   <button mat-stroked-button type="button" class="dz-action"
-                          (click)="openCompDomFilePicker(); $event.stopPropagation()">
+                    (click)="openCompDomFilePicker(); $event.stopPropagation()">
                     <mat-icon>upload</mat-icon> Seleccionar
                   </button>
-                  <button mat-stroked-button color="warn" type="button" class="dz-clear"
-                          *ngIf="compDomFileName"
-                          (click)="clearCompDomFile($event); $event.stopPropagation()">
+                  <button mat-stroked-button color="warn" type="button" class="dz-clear" *ngIf="compDomFileName"
+                    (click)="clearCompDomFile($event); $event.stopPropagation()">
                     <mat-icon>close</mat-icon> Quitar
                   </button>
 
                   <mat-progress-bar *ngIf="uploadingCompDom" mode="indeterminate"></mat-progress-bar>
 
-                  <input #compDomFileInput type="file" class="d-none"
-                         accept="application/pdf"
-                         (change)="onCompDomFileSelected($event)">
+                  <input #compDomFileInput type="file" class="d-none" accept="application/pdf"
+                    (change)="onCompDomFileSelected($event)">
                 </div>
 
                 <mat-error *ngIf="clienteForm.get('comprobanteDomicilio')?.hasError('invalid')">
@@ -331,12 +337,8 @@
               <!-- Acta Constitutiva (PDF) -->
               <div class="col-12 col-md-6 col-lg-3">
                 <label class="form-label"><i class="fa fa-file-contract"></i><span>Acta Constitutiva</span></label>
-                <div class="dropzone"
-                     [class.dragging]="actaDragging"
-                     (click)="openActaFilePicker()"
-                     (dragover)="onActaDragOver($event)"
-                     (dragleave)="onActaDragLeave($event)"
-                     (drop)="onActaDrop($event)">
+                <div class="dropzone" [class.dragging]="actaDragging" (click)="openActaFilePicker()"
+                  (dragover)="onActaDragOver($event)" (dragleave)="onActaDragLeave($event)" (drop)="onActaDrop($event)">
 
                   <div class="dz-body" *ngIf="!actaFileName">
                     <mat-icon class="dz-icon">description</mat-icon>
@@ -349,20 +351,18 @@
                   </div>
 
                   <button mat-stroked-button type="button" class="dz-action"
-                          (click)="openActaFilePicker(); $event.stopPropagation()">
+                    (click)="openActaFilePicker(); $event.stopPropagation()">
                     <mat-icon>upload</mat-icon> Seleccionar
                   </button>
-                  <button mat-stroked-button color="warn" type="button" class="dz-clear"
-                          *ngIf="actaFileName"
-                          (click)="clearActaFile($event); $event.stopPropagation()">
+                  <button mat-stroked-button color="warn" type="button" class="dz-clear" *ngIf="actaFileName"
+                    (click)="clearActaFile($event); $event.stopPropagation()">
                     <mat-icon>close</mat-icon> Quitar
                   </button>
 
                   <mat-progress-bar *ngIf="uploadingActa" mode="indeterminate"></mat-progress-bar>
 
-                  <input #actaFileInput type="file" class="d-none"
-                         accept="application/pdf"
-                         (change)="onActaFileSelected($event)">
+                  <input #actaFileInput type="file" class="d-none" accept="application/pdf"
+                    (change)="onActaFileSelected($event)">
                 </div>
 
                 <mat-error *ngIf="clienteForm.get('actaConstitutiva')?.hasError('invalid')">
@@ -370,8 +370,6 @@
                 </mat-error>
               </div>
             </div>
-
-            <!-- Acciones -->
             <div class="row g-3 mt-3">
               <div class="col-12 d-flex justify-content-end gap-2 pt-2">
                 <button mat-raised-button color="primary" type="button" (click)="submit()">

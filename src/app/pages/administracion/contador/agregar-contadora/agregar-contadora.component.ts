@@ -20,7 +20,7 @@ export class AgregarContadoraComponent {
   public submitButton: string = 'Guardar';
   public loading: boolean = false;
   public dispositivoForm!: FormGroup;
-  public idDispositivo!: number;
+  public idContadora!: number;
   public title = 'Agregar Contadora';
   public listaClientes: any;
   selectedFileName: string = '';
@@ -50,8 +50,8 @@ export class AgregarContadoraComponent {
     this.obtenerClientes();
     this.initForm();
     this.activatedRouted.params.subscribe((params) => {
-      this.idDispositivo = params['idBluevox'];
-      if (this.idDispositivo) {
+      this.idContadora = params['idContadora'];
+      if (this.idContadora) {
         this.title = 'Actualizar Contadora';
         this.obtenerDispositivoID();
       }
@@ -72,7 +72,7 @@ export class AgregarContadoraComponent {
   }
 
   obtenerDispositivoID() {
-    this.dispoBlueService.obtenerDispositivoBlue(this.idDispositivo).subscribe((response: any) => {
+    this.dispoBlueService.obtenerDispositivoBlue(this.idContadora).subscribe((response: any) => {
       const raw = Array.isArray(response) ? response[0]
         : Array.isArray(response?.data) ? response.data[0]
           : response?.dispositivo ?? response?.data ?? response ?? {};
@@ -117,7 +117,7 @@ export class AgregarContadoraComponent {
   submit() {
     this.submitButton = 'Cargando...';
     this.loading = true;
-    if (this.idDispositivo) {
+    if (this.idContadora) {
       this.actualizar();
     } else {
       this.agregar();
@@ -147,7 +147,6 @@ export class AgregarContadoraComponent {
         }
       });
 
-      // === MISMO BLOQUE VISUAL QUE EN DISPOSITIVOS: WARNING + CONTEO EN NEGRITAS ===
       const lista = camposFaltantes.map((campo, index) => `
       <div style="padding: 8px 12px; border-left: 4px solid #d9534f;
                   background: #caa8a8; text-align: center; margin-bottom: 8px;
@@ -182,7 +181,7 @@ export class AgregarContadoraComponent {
         this.alerts.open({
           type: 'success',
           title: '¡Operación Exitosa!',
-          message: 'Se agregó un nuevo bluevox de manera exitosa.',
+          message: 'Se agregó una nueva contadora de manera exitosa.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -196,7 +195,7 @@ export class AgregarContadoraComponent {
         this.alerts.open({
           type: 'error',
           title: '¡Ops!',
-          message: 'Ocurrió un error al agregar el bluevox.',
+          message: 'Ocurrió un error al agregar la contadora.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -253,7 +252,7 @@ export class AgregarContadoraComponent {
 
     const { estatus, ...payload } = this.dispositivoForm.getRawValue();
 
-    this.dispoBlueService.actualizarDispositivoBlue(this.idDispositivo, payload).subscribe(
+    this.dispoBlueService.actualizarDispositivoBlue(this.idContadora, payload).subscribe(
       () => {
         this.submitButton = 'Actualizar';
         this.loading = false;
@@ -261,7 +260,7 @@ export class AgregarContadoraComponent {
         this.alerts.open({
           type: 'success',
           title: '¡Operación Exitosa!',
-          message: 'Los datos del bluevox se actualizaron correctamente.',
+          message: 'Los datos de la contadora se actualizaron correctamente.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -275,7 +274,7 @@ export class AgregarContadoraComponent {
         this.alerts.open({
           type: 'error',
           title: '¡Ops!',
-          message: 'Ocurrió un error al actualizar el bluevox.',
+          message: 'Ocurrió un error al actualizar la contadora.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });

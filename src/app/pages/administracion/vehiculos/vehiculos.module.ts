@@ -28,9 +28,10 @@ import { DxDataGridModule } from 'devextreme-angular';
 import { ListaVehiculosComponent } from './lista-vehiculos/lista-vehiculos.component';
 import { AgregarVehiculoComponent } from './agregar-vehiculo/agregar-vehiculo.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { VerDocumentoVehiculoComponent } from './ver-documento-vehiculo/ver-documento-vehiculo.component';
 
 @NgModule({
-  declarations: [ListaVehiculosComponent, AgregarVehiculoComponent],
+  declarations: [ListaVehiculosComponent, AgregarVehiculoComponent, VerDocumentoVehiculoComponent],
   imports: [
     CommonModule,
     VehiculosRoutingModule,

@@ -22,7 +22,7 @@ export class MonederosServices {
     return this.http.post(environment.API_SECURITY + '/monederos', data);
   }
 
-  crearTransaccion (data: FormData) {
+  crearTransaccion (data: any) {
     return this.http.post(environment.API_SECURITY + '/transacciones', data);
   }
 

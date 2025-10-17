@@ -61,82 +61,82 @@ export class ListaZonasComponent implements OnInit {
   }
 
   actualizarZona(idZona: number) {
-    this.route.navigateByUrl('/administracion/zonas/editar-region/' + idZona);
+    this.route.navigateByUrl('/administracion/zonas/editar-zona/' + idZona);
   }
 
-async activar(rowData: any) {
-  const res = await this.alerts.open({
-    type: 'warning',
-    title: '¡Activar!',
-    message: '¿Está seguro que requiere activar esta zona?',
-    showCancel: true,
-    confirmText: 'Confirmar',
-    cancelText: 'Cancelar',
-    backdropClose: false,
-  });
+  async activar(rowData: any) {
+    const res = await this.alerts.open({
+      type: 'warning',
+      title: '¡Activar!',
+      message: '¿Está seguro que requiere activar esta zona?',
+      showCancel: true,
+      confirmText: 'Confirmar',
+      cancelText: 'Cancelar',
+      backdropClose: false,
+    });
 
-  if (res !== 'confirm') return;
+    if (res !== 'confirm') return;
 
-  this.zonService.updateEstatus(rowData.idRegion, 1).subscribe(
-    () => {
-      this.alerts.open({
-        type: 'success',
-        title: '¡Confirmación Realizada!',
-        message: 'La zona ha sido activada.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
-      this.setupDataSource();
-      this.dataGrid.instance.refresh();
-    },
-    (error) => {
-      this.alerts.open({
-        type: 'error',
-        title: '¡Ops!',
-        message: String(error),
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
-    }
-  );
-}
+    this.zonService.updateEstatus(rowData.id, 1).subscribe(
+      () => {
+        this.alerts.open({
+          type: 'success',
+          title: '¡Confirmación Realizada!',
+          message: 'La zona ha sido activada.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+        this.setupDataSource();
+        this.dataGrid.instance.refresh();
+      },
+      (error) => {
+        this.alerts.open({
+          type: 'error',
+          title: '¡Ops!',
+          message: String(error),
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+      }
+    );
+  }
 
-async desactivar(rowData: any) {
-  const res = await this.alerts.open({
-    type: 'warning',
-    title: '¡Desactivar!',
-    message: '¿Está seguro que requiere desactivar esta zona?',
-    showCancel: true,
-    confirmText: 'Confirmar',
-    cancelText: 'Cancelar',
-    backdropClose: false,
-  });
+  async desactivar(rowData: any) {
+    const res = await this.alerts.open({
+      type: 'warning',
+      title: '¡Desactivar!',
+      message: '¿Está seguro que requiere desactivar esta zona?',
+      showCancel: true,
+      confirmText: 'Confirmar',
+      cancelText: 'Cancelar',
+      backdropClose: false,
+    });
 
-  if (res !== 'confirm') return;
+    if (res !== 'confirm') return;
 
-  this.zonService.updateEstatus(rowData.idRegion, 0).subscribe(
-    () => {
-      this.alerts.open({
-        type: 'success',
-        title: '¡Confirmación Realizada!',
-        message: 'La zona ha sido desactivada.',
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
-      this.setupDataSource();
-      this.dataGrid.instance.refresh();
-    },
-    (error) => {
-      this.alerts.open({
-        type: 'error',
-        title: '¡Ops!',
-        message: String(error),
-        confirmText: 'Confirmar',
-        backdropClose: false,
-      });
-    }
-  );
-}
+    this.zonService.updateEstatus(rowData.id, 0).subscribe(
+      () => {
+        this.alerts.open({
+          type: 'success',
+          title: '¡Confirmación Realizada!',
+          message: 'La zona ha sido desactivada.',
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+        this.setupDataSource();
+        this.dataGrid.instance.refresh();
+      },
+      (error) => {
+        this.alerts.open({
+          type: 'error',
+          title: '¡Ops!',
+          message: String(error),
+          confirmText: 'Confirmar',
+          backdropClose: false,
+        });
+      }
+    );
+  }
 
 
   onPageIndexChanged(e: any) {
@@ -227,30 +227,30 @@ async desactivar(rowData: any) {
   }
 
   limpiarCampos() {
-      const today = new Date();
-      this.dataGrid.instance.clearGrouping();
-      this.isGrouped = false;
-      this.setupDataSource();
+    const today = new Date();
+    this.dataGrid.instance.clearGrouping();
+    this.isGrouped = false;
+    this.setupDataSource();
+    this.dataGrid.instance.refresh();
+  }
+
+  toggleExpandGroups() {
+    const groupedColumns = this.dataGrid.instance.getVisibleColumns()
+      .filter(col => (col.groupIndex ?? -1) >= 0);
+    if (groupedColumns.length === 0) {
+      this.alerts.open({
+        type: 'info',
+        title: '¡Ops!',
+        message: 'Debes arrastar un encabezado de una columna para expandir o contraer grupos.',
+        backdropClose: false
+      });
+    } else {
+      this.autoExpandAllGroups = !this.autoExpandAllGroups;
       this.dataGrid.instance.refresh();
     }
-  
-    toggleExpandGroups() {
-      const groupedColumns = this.dataGrid.instance.getVisibleColumns()
-        .filter(col => (col.groupIndex ?? -1) >= 0);
-      if (groupedColumns.length === 0) {
-        this.alerts.open({
-          type: 'info',
-          title: '¡Ops!',
-          message: 'Debes arrastar un encabezado de una columna para expandir o contraer grupos.',
-          backdropClose: false
-        });
-      } else {
-        this.autoExpandAllGroups = !this.autoExpandAllGroups;
-        this.dataGrid.instance.refresh();
-      }
-    }
-  
-  agregarVehiculo(){
+  }
+
+  agregarVehiculo() {
     this.route.navigateByUrl('/administracion/vehiculos/agregar-vehiculo')
   }
 

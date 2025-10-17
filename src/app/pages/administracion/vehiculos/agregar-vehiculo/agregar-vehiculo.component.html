@@ -64,14 +64,22 @@
               </div>
 
               <div class="col-12 col-md-6 col-lg-4">
-                <label class="form-label"><i class="fa fa-user"></i><span>Cliente</span></label>
+                <label class="form-label">
+                  <i class="fa fa-user-tie"></i>
+                  <span>Cliente</span>
+                </label>
                 <mat-form-field appearance="fill" class="w-100">
-                  <input matInput placeholder="Cliente" formControlName="idCliente" />
+                  <mat-select
+                    placeholder="Cliente"
+                    formControlName="idCliente">
+                    <mat-option [value]="null">— Seleccione —</mat-option>
+                    <mat-option *ngFor="let c of listaClientes" [value]="c.id">
+                      {{ c.nombre }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
-
-              <!-- ===== Archivos / Imágenes ===== -->
               <div class="row g-3 uploads-skin mt-2">
                 <div class="col-12">
                   <div class="section-head">

@@ -95,6 +95,16 @@
     pointer-events: none;
   }
 }
+.trx-map-empty {
+  height: 320px;              /* mismo alto que tu mapa */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f3f6f9;
+  color: #6b7280;
+  font-weight: 500;
+}
 
 .custom-modal-content {
   background: #fff;
@@ -127,6 +137,9 @@
   }
 
   .custom-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
     border: 0;
     color: #fff;
@@ -261,4 +274,26 @@
       block-size: 2.25rem;
     }
   }
+}
+
+
+.estatus {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 80px;
+  text-align: center;
+  color: #fff;
+}
+
+.estatus-activo {
+  background: #28a745;
+  color: #d4f5dc;
+}
+
+.estatus-inactivo {
+  background: #dc3545;
+  color: #f5d4d4;
 }

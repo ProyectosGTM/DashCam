@@ -15,7 +15,6 @@ import { UsuariosService } from 'src/app/pages/services/usuarios.service';
 })
 export class AgregarOperadorComponent implements OnInit {
 
-
   layoutCtrl = new UntypedFormControl('fullwidth');
   public submitButton: string = 'Guardar';
   public loading: boolean = false;
@@ -69,6 +68,7 @@ export class AgregarOperadorComponent implements OnInit {
       const identificacion = get(raw, ['identificacion', 'Identificacion']);
       const comprobanteDomicilio = get(raw, ['comprobanteDomicilio', 'ComprobanteDomicilio']);
       const antecedentesNoPenales = get(raw, ['antecedentesNoPenales', 'AntecedentesNoPenales']);
+      const licencia = get(raw, ['licencia', 'Licencia']);
 
       const fechaNacimiento = fechaNacimientoRaw
         ? fechaNacimientoRaw.split('T')[0]
@@ -82,6 +82,7 @@ export class AgregarOperadorComponent implements OnInit {
         identificacion: identificacion ?? null,
         comprobanteDomicilio: comprobanteDomicilio ?? null,
         antecedentesNoPenales: antecedentesNoPenales ?? null,
+        licencia: licencia ?? null,
       });
     });
   }
@@ -110,6 +111,7 @@ export class AgregarOperadorComponent implements OnInit {
       comprobanteDomicilio: ['', Validators.required],
       antecedentesNoPenales: ['', Validators.required],
       estatus: [1, Validators.required],
+      licencia: ['', Validators.required],
       idUsuario: [null, Validators.required]
     });
   }
@@ -135,6 +137,7 @@ export class AgregarOperadorComponent implements OnInit {
       const etiquetas: any = {
         numeroLicencia: 'Número de Licencia',
         fechaNacimiento: 'Fecha de Nacimiento',
+        licencia: 'Licencia de Conducir',
         identificacion: 'Identificación',
         comprobanteDomicilio: 'Comprobante de Domicilio',
         antecedentesNoPenales: 'Antecedentes No Penales',
@@ -213,6 +216,7 @@ export class AgregarOperadorComponent implements OnInit {
       const etiquetas: any = {
         numeroLicencia: 'Número de Licencia',
         fechaNacimiento: 'Fecha de Nacimiento',
+        licencia: 'Licencia de Conducir',
         identificacion: 'Identificación',
         comprobanteDomicilio: 'Comprobante de Domicilio',
         antecedentesNoPenales: 'Antecedentes No Penales',
@@ -254,8 +258,6 @@ export class AgregarOperadorComponent implements OnInit {
 
     // clona y elimina idUsuario antes de enviar (como en tu versión)
     const payload = { ...this.operadorForm.value };
-    delete payload.idUsuario;
-
     this.operService.actualizarOperador(this.idOperador, payload).subscribe(
       () => {
         this.submitButton = 'Actualizar';
@@ -317,6 +319,7 @@ export class AgregarOperadorComponent implements OnInit {
     ident: false,
     dom: false,
     ant: false,
+    lic: false,
   };
 
   // Límite MB visible desde template (no private)
@@ -333,7 +336,7 @@ export class AgregarOperadorComponent implements OnInit {
   }
 
   // ====== Guards para .click() (evita doble invocación por bubbling) ======
-  private guardOpen(kind: 'ident' | 'dom' | 'ant', fn: () => void) {
+  private guardOpen(kind: 'ident' | 'dom' | 'ant' | 'lic', fn: () => void) {
     if (this.openGuard[kind]) return;
     this.openGuard[kind] = true;
     try { fn(); } finally {
@@ -384,7 +387,7 @@ export class AgregarOperadorComponent implements OnInit {
     const fd = new FormData();
     fd.append('file', file, file.name);
     fd.append('folder', 'operadores');
-    fd.append('idModule', '20');
+    fd.append('idModule', '9');
 
     this.usuaService.uploadFile(fd).pipe(
       finalize(() => {
@@ -445,7 +448,7 @@ export class AgregarOperadorComponent implements OnInit {
     const fd = new FormData();
     fd.append('file', file, file.name);
     fd.append('folder', 'operadores');
-    fd.append('idModule', '20');
+    fd.append('idModule', '9');
 
     this.usuaService.uploadFile(fd).pipe(
       finalize(() => {
@@ -506,7 +509,7 @@ export class AgregarOperadorComponent implements OnInit {
     const fd = new FormData();
     fd.append('file', file, file.name);
     fd.append('folder', 'operadores');
-    fd.append('idModule', '20');
+    fd.append('idModule', '9');
 
     this.usuaService.uploadFile(fd).pipe(
       finalize(() => {
@@ -523,5 +526,81 @@ export class AgregarOperadorComponent implements OnInit {
       error: (err: any) => console.error('[UPLOAD][antecedentesNoPenales]', err),
     });
   }
+
+  // Drag & drop
+  licDragging = false;
+
+  // Archivo
+  licFileName: string | null = null;
+
+  // Loading / processing
+  uploadingLic = false;
+
+  // Evita manejar doble evento
+  private processingLic = false;
+
+  // ====== Licencia de conducir ======
+  openLicFilePicker(): void {
+    this.guardOpen('lic', () => this.licFileInput?.nativeElement.click());
+  }
+  onLicDragOver(e: DragEvent) { e.preventDefault(); this.licDragging = true; }
+  onLicDragLeave(_e: DragEvent) { this.licDragging = false; }
+  onLicDrop(e: DragEvent) {
+    e.preventDefault(); this.licDragging = false;
+    const f = e.dataTransfer?.files?.[0]; if (f) this.handleLicFile(f);
+  }
+  onLicFileSelected(e: Event) {
+    const f = (e.target as HTMLInputElement)?.files?.[0]; if (f) this.handleLicFile(f);
+  }
+  clearLicFile(e: Event) {
+    e.stopPropagation();
+    this.licFileName = null;
+    if (this.licFileInput) this.licFileInput.nativeElement.value = '';
+    this.operadorForm.patchValue({ licencia: null });
+    this.operadorForm.get('licencia')?.setErrors({ required: true });
+  }
+  private handleLicFile(file: File) {
+    if (this.processingLic) return;
+    this.processingLic = true;
+
+    if (!this.isAllowedPdf(file)) {
+      this.operadorForm.get('licencia')?.setErrors({ invalid: true });
+      this.processingLic = false;
+      return;
+    }
+
+    this.licFileName = file.name;
+    this.operadorForm.patchValue({ licencia: file });
+    this.operadorForm.get('licencia')?.setErrors(null);
+    this.uploadLic(file);
+  }
+  private uploadLic(file: File): void {
+    if (this.uploadingLic) { this.processingLic = false; return; }
+    this.uploadingLic = true;
+
+    const fd = new FormData();
+    fd.append('file', file, file.name);
+    fd.append('folder', 'operadores');
+    fd.append('idModule', '9');
+
+    this.usuaService.uploadFile(fd).pipe(
+      finalize(() => {
+        this.uploadingLic = false;
+        this.processingLic = false;
+      })
+    ).subscribe({
+      next: (res: any) => {
+        const url = this.extractFileUrl(res);
+        if (url) {
+          // Enviar tal cual "licencia"
+          this.operadorForm.patchValue({ licencia: url });
+        }
+      },
+      error: (err: any) => console.error('[UPLOAD][licencia]', err),
+    });
+  }
+  @ViewChild('licFileInput') licFileInput!: ElementRef<HTMLInputElement>;
+
+
 
 }

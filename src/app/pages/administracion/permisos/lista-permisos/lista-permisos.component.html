@@ -61,8 +61,7 @@
             <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
             <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
             <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
-            <dxi-column *appHasPermission="['15', '16']" caption="Acciones" cellTemplate="acciones" alignment="center"
-              [width]="150"></dxi-column>
+            <dxi-column caption="Acciones" cellTemplate="Acciones" alignment="center" [width]="180"></dxi-column>
             <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
             <dxi-column dataField="nombre" caption="Nombre" alignment="center" dataType="string"
               [allowSearch]="true"></dxi-column>
@@ -72,30 +71,26 @@
               [allowSearch]="true">
               <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
             </dxi-column>
-            <dxi-column dataField="estatus" caption="Estatus" alignment="center" cellTemplate="est" dataType="string">
+            <dxi-column dataField="estatus" caption="Estatus" alignment="center" cellTemplate="est">
               <div *dxTemplate="let f of 'est'">
-                <span *ngIf="f.data.estatus === 1" class="estatus estatus-activo">
-                  Activo
-                </span>
-                <span *ngIf="f.data.estatus !== 1" class="estatus estatus-inactivo">
-                  Inactivo
+                <span [ngClass]="f.data.estatus === 1 ? 'badge-status activo' : 'badge-status inactivo'">
+                  {{ f.data.estatus === 1 ? 'Activo' : 'Inactivo' }}
                 </span>
               </div>
             </dxi-column>
-            <div *dxTemplate="let row of 'acciones'" class="d-flex gap-3 justify-content-center">
-              <div *appHasPermission="'15'">
-                <button valueExpr="id" id="actualizarButton" class="btnAcciones"
-                  (click)="actualizarPermiso(row.data.id)">
-                  <i class="fa fa-edit"></i>
+            <div *dxTemplate="let row of 'Acciones'" class="d-flex gap-3 justify-content-center">
+              <div>
+                <button class="btn-edit" (click)="actualizarPermiso(row.data.id)">
+                  <mat-icon class="btn__icon">edit</mat-icon>
                 </button>
               </div>
-              <div *appHasPermission="'16'">
-                <button *ngIf="row.data.estatus === 0" id="pinButton" class="btnAcciones" (click)="activar(row.data)">
-                  <i class="fa fa-arrow-up"></i>
+              <div>
+                <button *ngIf="row.data.estatus === 0" class="btn-active" (click)="activar(row.data)">
+                  <mat-icon class="btn__icon">check_circle</mat-icon>
                 </button>
-                <button *ngIf="row.data.estatus === 1" id="deleteButton" class="btnAcciones"
-                  (click)="desactivar(row.data)">
-                  <i class="fa fa-arrow-down"></i>
+
+                <button *ngIf="row.data.estatus === 1" class="btn-desactive" (click)="desactivar(row.data)">
+                  <mat-icon class="btn__icon">block</mat-icon>
                 </button>
               </div>
             </div>

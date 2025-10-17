@@ -20,8 +20,8 @@ export class AgregarDispositivoComponent implements OnInit {
   public submitButton: string = 'Guardar';
   public loading: boolean = false;
   public dispositivoForm!: FormGroup;
-  public idDispositivo!: number;
-  public title = 'Agregar Dispositivo';
+  public idValidador!: number;
+  public title = 'Agregar Validador';
   public listaClientes: any;
   selectedFileName: string = '';
   previewUrl: string | ArrayBuffer | null = null;
@@ -50,9 +50,9 @@ export class AgregarDispositivoComponent implements OnInit {
     this.initForm()
     this.activatedRouted.params.subscribe(
       (params) => {
-        this.idDispositivo = params['idDispositivo'];
-        if (this.idDispositivo) {
-          this.title = 'Actualizar Dispositivo';
+        this.idValidador = params['idValidador'];
+        if (this.idValidador) {
+          this.title = 'Actualizar Validador';
           this.obtenerDispositivoID();
         }
       }
@@ -87,7 +87,7 @@ export class AgregarDispositivoComponent implements OnInit {
   }
 
   obtenerDispositivoID() {
-    this.dispoService.obtenerDispositivo(this.idDispositivo).subscribe((response: any) => {
+    this.dispoService.obtenerDispositivo(this.idValidador).subscribe((response: any) => {
       const raw = Array.isArray(response?.data) ? response.data[0] :
         response?.dispositivo ?? response?.data ?? response ?? {};
 
@@ -117,7 +117,7 @@ export class AgregarDispositivoComponent implements OnInit {
   submit() {
     this.submitButton = 'Cargando...';
     this.loading = true;
-    if (this.idDispositivo) {
+    if (this.idValidador) {
       this.actualizar();
     } else {
       this.agregar();
@@ -179,7 +179,7 @@ export class AgregarDispositivoComponent implements OnInit {
         this.alerts.open({
           type: 'success',
           title: '¡Operación Exitosa!',
-          message: 'Se agregó un nuevo dispositivo de manera exitosa.',
+          message: 'Se agregó un nuevo validador de manera exitosa.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -193,7 +193,7 @@ export class AgregarDispositivoComponent implements OnInit {
         this.alerts.open({
           type: 'error',
           title: '¡Ops!',
-          message: 'Ocurrió un error al agregar el dispositivo.',
+          message: 'Ocurrió un error al agregar el validador.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -247,7 +247,7 @@ export class AgregarDispositivoComponent implements OnInit {
 
     const payload = this.dispositivoForm.getRawValue();
 
-    this.dispoService.actualizarDispositivo(this.idDispositivo, payload).subscribe(
+    this.dispoService.actualizarDispositivo(this.idValidador, payload).subscribe(
       () => {
         this.submitButton = 'Actualizar';
         this.loading = false;
@@ -255,7 +255,7 @@ export class AgregarDispositivoComponent implements OnInit {
         this.alerts.open({
           type: 'success',
           title: '¡Operación Exitosa!',
-          message: 'Los datos del dispositivo se actualizaron correctamente.',
+          message: 'Los datos del validador se actualizaron correctamente.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });
@@ -269,7 +269,7 @@ export class AgregarDispositivoComponent implements OnInit {
         this.alerts.open({
           type: 'error',
           title: '¡Ops!',
-          message: 'Ocurrió un error al actualizar el dispositivo.',
+          message: 'Ocurrió un error al actualizar el validador.',
           confirmText: 'Confirmar',
           backdropClose: false,
         });

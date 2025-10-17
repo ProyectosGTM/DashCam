@@ -18,7 +18,7 @@
         </div>
 
         <section class="mt-5 table-shell">
-          <form [formGroup]="usuarioForm">
+          <form [formGroup]="pasajeroForm">
             <div class="fm-grid">
               <div class="fm-divider fm-span-3">Datos Generales</div>
 
@@ -28,7 +28,7 @@
                   Nombre
                 </label>
                 <mat-form-field appearance="fill">
-                  <input matInput placeholder="Nombre" formControlName="apellidoPaterno"
+                  <input matInput placeholder="Nombre" formControlName="nombre"
                     [attr.aria-labelledby]="'lbl-nombre'">
                 </mat-form-field>
               </div>
@@ -39,7 +39,7 @@
                   Apellido Paterno
                 </label>
                 <mat-form-field appearance="fill">
-                  <input matInput placeholder="Apellido Paterno" formControlName="apellidoMaterno"
+                  <input matInput placeholder="Apellido Paterno" formControlName="apellidoPaterno"
                     [attr.aria-labelledby]="'lbl-apellido-paterno'">
                 </mat-form-field>
               </div>
@@ -50,7 +50,7 @@
                   Apellido Materno
                 </label>
                 <mat-form-field appearance="fill">
-                  <input matInput placeholder="Apellido Materno" formControlName="nombre"
+                  <input matInput placeholder="Apellido Materno" formControlName="apellidoMaterno"
                     [attr.aria-labelledby]="'lbl-apellido-materno'">
                 </mat-form-field>
               </div>
@@ -61,8 +61,8 @@
                   Teléfono
                 </label>
                 <mat-form-field appearance="fill">
-                  <input matInput type="tel" placeholder="Teléfono" formControlName="userName"
-                    [attr.aria-labelledby]="'lbl-telefono'">
+                  <input matInput type="tel" placeholder="Teléfono" formControlName="telefono"
+                    [attr.aria-labelledby]="'lbl-telefono'" maxlength="10" (keypress)="allowOnlyNumbers($event)">
                 </mat-form-field>
               </div>
 
@@ -72,7 +72,7 @@
                   Correo Electrónico
                 </label>
                 <mat-form-field appearance="fill">
-                  <input matInput type="email" placeholder="Correo Electrónico" formControlName="userName"
+                  <input matInput type="email" placeholder="Correo Electrónico" formControlName="correo"
                     [attr.aria-labelledby]="'lbl-correo'">
                 </mat-form-field>
               </div>
@@ -83,14 +83,14 @@
                   Fecha de Nacimiento
                 </label>
                 <mat-form-field appearance="fill">
-                  <input matInput type="date" placeholder="Fecha de Nacimiento" formControlName="userName"
+                  <input matInput type="date" placeholder="Fecha de Nacimiento" formControlName="fechaNacimiento"
                     [attr.aria-labelledby]="'lbl-fecha-nacimiento'">
                 </mat-form-field>
               </div>
 
               <div class="fm-span-3 fm-actions">
                 <div class="fm-actions-right">
-                  <button mat-raised-button color="primary" type="button">
+                  <button mat-raised-button color="primary" type="button" (click)="submit()">
                     <mat-icon>save</mat-icon>
                     Guardar
                   </button>

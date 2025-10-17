@@ -41,6 +41,16 @@ export class ListaRutasComponent implements OnInit {
   isGrouped: boolean = false;
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid!: DxDataGridComponent;
 
+
+  modalAnim: 'in' | 'out' = 'in';
+  modalOpen = false;
+  modalClosing = false;
+  modalErrorOpen = false;
+  modalErrorClosing = false;
+  selectedTransaccion: any = null;
+  private readonly MAP_ID = 'DEMO_MAP_ID';
+  hasCoords = false;
+
   constructor(
     private rutaSe: RutasService,
     private zone: NgZone,
@@ -61,10 +71,6 @@ export class ListaRutasComponent implements OnInit {
 
   agregarRuta() {
     this.route.navigateByUrl('/administracion/rutas/agregar-ruta');
-  }
-
-  cerrarModal(modal: any) {
-    modal.close('Modal cerrado por nuevo método');
   }
 
   onPageIndexChanged(e: any) {
@@ -201,7 +207,7 @@ export class ListaRutasComponent implements OnInit {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Activar!',
-      message: `¿Está seguro que requiere activar la ruta: <strong>${rowData.nombre}</strong>?`,
+      message: `¿Está seguro que requiere activar la ruta: <br> <strong>${rowData.nombre}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
@@ -238,7 +244,7 @@ export class ListaRutasComponent implements OnInit {
     const res = await this.alerts.open({
       type: 'warning',
       title: '¡Desactivar!',
-      message: `¿Está seguro que requiere desactivar la ruta: <strong>${rowData.nombre}</strong>?`,
+      message: `¿Está seguro que requiere desactivar la ruta: <br> <strong>${rowData.nombre}</strong>?`,
       showCancel: true,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
@@ -330,5 +336,299 @@ export class ListaRutasComponent implements OnInit {
       this.autoExpandAllGroups = !this.autoExpandAllGroups;
       this.dataGrid.instance.refresh();
     }
+  }
+
+  onBackdropError() { this.closeErrorModal(); }
+  closeErrorModal() {
+    this.modalErrorClosing = true;
+    setTimeout(() => {
+      this.modalErrorOpen = false;
+      this.modalErrorClosing = false;
+    }, 200);
+  }
+
+  onBackdrop() { this.closeModal(); }
+  closeModal() {
+    this.modalClosing = true;
+    setTimeout(() => {
+      this.modalOpen = false;
+      this.modalClosing = false;
+    }, 600);
+  }
+
+  cerrarModal() {
+    this.modalAnim = 'out';
+    setTimeout(() => {
+      this.modalOpen = false;
+      this.selectedTransaccion = null;
+    }, 220);
+  }
+
+  cerrarModalPorBackdrop(_event: MouseEvent) { this.cerrarModal(); }
+  accionPrincipal() { this.cerrarModal(); }
+
+  async abrirModal(raw: any) {
+    const nombre = (raw?.nombre ?? raw?.Nombre ?? '').toString();
+    const inicio = this.readLatLng(raw?.puntoInicio);
+    const fin = this.readLatLng(raw?.puntoFin);
+
+    this.selectedRuta = { nombre, inicio: inicio ?? undefined, fin: fin ?? undefined };
+    this.hasCoords = Boolean(inicio && fin);
+
+    this.inicioDireccion = this.hasCoords ? 'Obteniendo dirección…' : null;
+    this.finDireccion = this.hasCoords ? 'Obteniendo dirección…' : null;
+
+    this.modalOpen = true;
+    this.modalAnim = 'in';
+    this.modalClosing = false;
+
+    if (this.hasCoords) {
+      try {
+        await this.waitForGoogleMaps();
+        setTimeout(() => this.initializeMapRuta(inicio!, fin!), 120);
+        const [dirIni, dirFin] = await Promise.all([
+          this.reverseGeocode(inicio!.lat, inicio!.lng).catch(() => 'Dirección no disponible'),
+          this.reverseGeocode(fin!.lat, fin!.lng).catch(() => 'Dirección no disponible')
+        ]);
+        this.inicioDireccion = dirIni;
+        this.finDireccion = dirFin;
+      } catch {
+        this.hasCoords = false;
+        this.inicioDireccion = null;
+        this.finDireccion = null;
+      }
+    }
+  }
+
+  private readLatLng(obj: any): { lat: number; lng: number } | null {
+    if (!obj || typeof obj !== 'object') return null;
+    const lat = Number(obj.lat);
+    const lng = Number(obj.lng);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng };
+    return null;
+  }
+
+  private waitForGoogleMaps(): Promise<void> {
+    if ((window as any).google?.maps) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const start = Date.now();
+      const tick = () => {
+        if ((window as any).google?.maps) return resolve();
+        if (Date.now() - start > 8000) return reject('Google Maps no cargó');
+        requestAnimationFrame(tick);
+      };
+      tick();
+    });
+  }
+
+  public inicioDireccion: string | null = null;
+  public finDireccion: string | null = null;
+  private geocoder!: google.maps.Geocoder;
+  private initializeMapRuta(inicio: { lat: number; lng: number }, fin: { lat: number; lng: number }) {
+    const el = document.getElementById('map');
+    if (!el) return;
+    el.innerHTML = '';
+
+    const center = { lat: (inicio.lat + fin.lat) / 2, lng: (inicio.lng + fin.lng) / 2 };
+    const options: any = { center, zoom: 14 };
+    if (this.MAP_ID) options.mapId = this.MAP_ID;
+
+    const map = new google.maps.Map(el, options);
+
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(inicio);
+    bounds.extend(fin);
+    map.fitBounds(bounds);
+
+    const Advanced = (google.maps as any)?.marker?.AdvancedMarkerElement;
+    const Pin = (google.maps as any)?.marker?.PinElement;
+    const canAdvanced = Boolean(this.MAP_ID) && Advanced && Pin;
+
+    // ======= NUEVO: preferir AdvancedMarker con Font Awesome =======
+    const canAdvancedFa = Boolean(this.MAP_ID) && Advanced; // no requiere PinElement
+    if (canAdvancedFa) {
+      // helper local para crear el icono FA
+      const createFaMarker = (iconClass: string, color: string, sizePx = 38): HTMLElement => {
+        const wrap = document.createElement('div');
+        wrap.style.display = 'flex';
+        wrap.style.alignItems = 'center';
+        wrap.style.justifyContent = 'center';
+        wrap.style.transform = 'translateY(-6px)';
+        const i = document.createElement('i');
+        i.className = iconClass; // 'fa-solid fa-location-dot'
+        i.style.fontSize = `${sizePx}px`;
+        i.style.color = color;
+        i.style.filter = 'drop-shadow(0 1px 2px rgba(0,0,0,.35))';
+        wrap.appendChild(i);
+        return wrap;
+      };
+
+      const inicioEl = createFaMarker('fa-solid fa-location-dot', '#16a34a', 38);
+      const finEl = createFaMarker('fa-solid fa-location-dot', '#ef4444', 38);
+
+      new Advanced({ map, position: inicio, title: 'Inicio', content: inicioEl });
+      new Advanced({ map, position: fin, title: 'Fin', content: finEl });
+      return; // usamos FA; no seguimos a los otros caminos
+    }
+    // ======= FIN NUEVO =======
+
+    if (canAdvanced) {
+      // SIN línea: borderColor = background
+      const pinInicio = new Pin({
+        background: '#16a34a',
+        borderColor: '#16a34a',
+        glyph: this.makeWhiteDot()
+      });
+      const pinFin = new Pin({
+        background: '#ef4444',
+        borderColor: '#ef4444',
+        glyph: this.makeWhiteDot()
+      });
+
+      new Advanced({ map, position: inicio, title: 'Inicio', content: pinInicio.element });
+      new Advanced({ map, position: fin, title: 'Fin', content: pinFin.element });
+    } else {
+      const svgPinUrl = (color: string) => {
+        const svg =
+          `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
+           <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7z" fill="${color}"/>
+           <circle cx="12" cy="9" r="3" fill="#ffffff"/>
+         </svg>`;
+        return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+      };
+
+      new google.maps.Marker({
+        map,
+        position: inicio,
+        title: 'Inicio',
+        icon: {
+          url: svgPinUrl('#16a34a'),
+          scaledSize: new google.maps.Size(40, 40),
+          anchor: new google.maps.Point(20, 38)
+        }
+      });
+
+      new google.maps.Marker({
+        map,
+        position: fin,
+        title: 'Fin',
+        icon: {
+          url: svgPinUrl('#ef4444'),
+          scaledSize: new google.maps.Size(40, 40),
+          anchor: new google.maps.Point(20, 38)
+        }
+      });
+    }
+  }
+
+  private makeWhiteDot(): HTMLElement {
+    const el = document.createElement('div');
+    el.style.width = '10px';
+    el.style.height = '10px';
+    el.style.borderRadius = '9999px';
+    el.style.background = '#fff';
+    el.style.boxShadow = 'none';
+    return el;
+  }
+
+  private initializeMapTransaccion(lat: number, lng: number) {
+    const el = document.getElementById('map');
+    if (!el) return;
+    el.innerHTML = '';
+
+    const position = { lat, lng };
+    const options: any = { center: position, zoom: 15 };
+    if (this.MAP_ID) options.mapId = this.MAP_ID;
+
+    const map = new google.maps.Map(el, options);
+    this.putDotMarker(map, position, { title: `Transacción ${this.selectedTransaccion?.id ?? ''}`, color: '#3b82f6' });
+  }
+
+  private putDotMarker(
+    map: any,
+    position: any,
+    opts: { title?: string; color: string }
+  ) {
+    const Advanced = google.maps?.marker?.AdvancedMarkerElement;
+    const Pin = google.maps?.marker?.PinElement;
+    const canAdvanced = Boolean(this.MAP_ID) && Advanced && Pin;
+
+    if (canAdvanced) {
+      const dot = document.createElement('div');
+      dot.style.width = '10px';
+      dot.style.height = '10px';
+      dot.style.borderRadius = '9999px';
+      dot.style.background = '#fff';
+      dot.style.boxShadow = '0 0 0 2px rgba(255,255,255,.5)';
+
+      const pin = new Pin({
+        background: opts.color,
+        borderColor: this.darken(opts.color, 0.3),
+        glyph: dot
+      });
+
+      new Advanced({
+        map,
+        position,
+        title: opts.title ?? '',
+        content: pin.element
+      });
+      return;
+    }
+
+    const icon = {
+      url: this.svgPinUrl(opts.color),
+      scaledSize: new google.maps.Size(40, 40),
+      anchor: new google.maps.Point(20, 38)
+    };
+
+    new google.maps.Marker({
+      map,
+      position,
+      title: opts.title ?? '',
+      icon
+    });
+  }
+
+  private svgPinUrl(color: string) {
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
+      <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7z" fill="${color}"/>
+      <circle cx="12" cy="9" r="3" fill="#ffffff"/>
+    </svg>`;
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+  }
+
+  private darken(hex: string, amount: number) {
+    const n = (x: string) => parseInt(x, 16);
+    const r = Math.max(0, Math.min(255, Math.floor(n(hex.slice(1, 3)) * (1 - amount))));
+    const g = Math.max(0, Math.min(255, Math.floor(n(hex.slice(3, 5)) * (1 - amount))));
+    const b = Math.max(0, Math.min(255, Math.floor(n(hex.slice(5, 7)) * (1 - amount))));
+    const toHex = (v: number) => v.toString(16).padStart(2, '0');
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+
+  selectedRuta?: { nombre: string; inicio?: { lat: any, lng: any }; fin?: { lat: any, lng: any } };
+  private createFaMarker(iconClass: string, color: string, sizePx = 36): HTMLElement {
+    const wrap = document.createElement('div');
+    wrap.style.display = 'flex';
+    wrap.style.alignItems = 'center';
+    wrap.style.justifyContent = 'center';
+    wrap.style.transform = 'translateY(-6px)';
+
+    const i = document.createElement('i');
+    i.className = iconClass;
+    i.style.fontSize = `${sizePx}px`;
+    i.style.color = color;
+    i.style.filter = 'drop-shadow(0 1px 2px rgba(0,0,0,.35))';
+    wrap.appendChild(i);
+
+    return wrap;
+  }
+
+  private async reverseGeocode(lat: number, lng: number): Promise<string> {
+    if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
+    const { results } = await this.geocoder.geocode({ location: { lat, lng } });
+    return results?.[0]?.formatted_address ?? 'Dirección no disponible';
   }
 }

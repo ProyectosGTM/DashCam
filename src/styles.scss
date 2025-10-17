@@ -4,35 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 @import "leaflet/dist/leaflet.css";
-
-// Vex Core
 @import "./@vex/styles/core";
-
-/*
-  You can override any CSS Variable or style here
-  Example:
-
-  :root {
-   --vex-sidenav-background: #333333;
-  }
-
-  All possible variables can be found in @vex/styles/core or by simply inspecting the element you want to change
-  in Chrome/Firefox DevTools
-*/
-
-/**
-  Uncomment the below code and adjust the values to fit your colors, the application will automatically adjust
- */
-html {
-  // --vex-color-primary: blue;
-  // --vex-color-primary-contrast: white;
-
-  // --vex-color-accent: yellow;
-  // --vex-color-accent-contrast: black;
-
-  // --vex-color-warn: yellow;
-  // --vex-color-warn-contrast: black;
-}
 
 .swal2-popup .swal2-actions {
   display: flex !important;
@@ -242,10 +214,6 @@ html {
 
 
 
-
-
-//Modal Rojo
-:host {  }
 
 .overlay-danger {
   position: fixed;
@@ -651,12 +619,11 @@ html {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.4rem;
+  padding: 0.4rem 0.9rem;
   background-color: #1F5AA8;
   color: #fff;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -682,23 +649,22 @@ html {
     opacity: 0.8;
   }
 
-  .btn-icon {
-    font-size: 1rem;
+  .btn__icon {
+    font-size: 22px;
     display: inline-flex;
     align-items: center;
   }
 }
 
 .btn-active {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.4rem;
+  padding: 0.4rem 0.9rem;
   background-color: #11b61f;
   color: #fff;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -724,8 +690,8 @@ html {
     opacity: 0.8;
   }
 
-  .btn-icon {
-    font-size: 1rem;
+  .btn__icon {
+    font-size: 22px;
     display: inline-flex;
     align-items: center;
   }
@@ -735,12 +701,11 @@ html {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.4rem;
+  padding: 0.4rem 0.9rem;
   background-color: #ef4444;
   color: #fff;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -766,12 +731,105 @@ html {
     opacity: 0.8;
   }
 
-  .btn-icon {
-    font-size: 1rem;
+  .btn__icon {
+    font-size: 22px;
     display: inline-flex;
     align-items: center;
   }
 }
+
+/* Violeta */
+.btn-violet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.9rem;
+  background-color: #6C2BD9;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.6rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover { background-color: #4E1CA0; }
+  &:active { transform: scale(0.97); background-color: #4E1CA0; }
+  &:focus { outline: none; box-shadow: 0 0 0 3px #4E1CA0; }
+  &:disabled { background-color: #9A7BE7; cursor: not-allowed; opacity: 0.8; }
+
+  .btn__icon { font-size: 22px; display: inline-flex; align-items: center; }
+}
+
+/* Magenta */
+.btn-magenta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.9rem;
+  background-color: #C2185B;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.6rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover { background-color: #8F1244; }
+  &:active { transform: scale(0.97); background-color: #8F1244; }
+  &:focus { outline: none; box-shadow: 0 0 0 3px #8F1244; }
+  &:disabled { background-color: #D86A93; cursor: not-allowed; opacity: 0.8; }
+
+  .btn__icon { font-size: 22px; display: inline-flex; align-items: center; }
+}
+
+/* Naranja profundo (diferente al amarillo) */
+.btn-orange {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.9rem;
+  background-color: #FF6A00;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.6rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover { background-color: #CC5400; }
+  &:active { transform: scale(0.97); background-color: #CC5400; }
+  &:focus { outline: none; box-shadow: 0 0 0 3px #CC5400; }
+  &:disabled { background-color: #FFA366; cursor: not-allowed; opacity: 0.8; }
+
+  .btn__icon { font-size: 22px; display: inline-flex; align-items: center; }
+}
+
+/* Grafito (neutro elegante, no se confunde con disabled) */
+.btn-graphite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.9rem;
+  background-color: #495057;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.6rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover { background-color: #343A40; }
+  &:active { transform: scale(0.97); background-color: #343A40; }
+  &:focus { outline: none; box-shadow: 0 0 0 3px #343A40; }
+  &:disabled { background-color: #8A939B; cursor: not-allowed; opacity: 0.8; }
+
+  .btn__icon { font-size: 22px; display: inline-flex; align-items: center; }
+}
+
 
 $fm-bg: #0d1220;
 $fm-grad-a: #1b75ff;
@@ -1172,4 +1230,24 @@ $fm-shadow: 0 18px 40px rgba(15, 80, 233, 0.25);
   .row.g-3 > [class*="col-"] {
     margin-bottom: .25rem;
   }
+}
+
+
+
+.badge-status {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.badge-status.activo {
+  background: #198754;
+}
+
+.badge-status.inactivo {
+  background: #dc3545;
 }

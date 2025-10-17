@@ -69,30 +69,30 @@
             <dxi-column dataField="tipoTransaccion" caption="Tipo Transacción" alignment="center" cellTemplate="est">
               <div *dxTemplate="let f of 'est'">
                 <span *ngIf="f.data.tipoTransaccion === 'RECARGA' " class="estatus estatus-activo">
-                  <i class="fa fa-arrow-up"></i> Recarga
+                  Recarga
                 </span>
                 <span *ngIf="f.data.tipoTransaccion === 'DEBITO' " class="estatus estatus-inactivo">
-                  <i class="fa fa-arrow-down"></i> Débito
+                  Débito
                 </span>
               </div>
             </dxi-column>
             <dxi-column dataField="numeroSerieMonedero" caption="N° Serie de Monedero" alignment="center"></dxi-column>
-            <dxi-column dataField="numeroSerieDispositivo" caption="N° Serie Dispositivo" alignment="center"
+            <dxi-column dataField="numeroSerieValidador" caption="N° Serie Validador" alignment="center"
               cellTemplate="numDisposi">
               <div *dxTemplate="let f of 'numDisposi'">
-                <span *ngIf="f.data.numeroSerieDispositivo === null ">
-                  Sin recarga
+                <span *ngIf="f.data.numeroSerieValidador === null ">
+                  Sin información
                 </span>
-                <span *ngIf="f.data.numeroSerieDispositivo">
-                  {{f.data.numeroSerieDispositivo}}
+                <span *ngIf="f.data.numeroSerieValidador">
+                  {{f.data.numeroSerieValidador}}
                 </span>
               </div>
             </dxi-column>
             <div *dxTemplate="let transaccion of 'Acciones'" class="d-flex gap-3 justify-content-center">
               <div>
-                <button type="button" class="btn btn-secondary" (click)="abrirModal(transaccion.data)"
+                <button class="btn-edit" (click)="abrirModal(transaccion.data)"
                   style="border-radius: 5px;">
-                  <i class="uil uil-map-pin ml-2"></i> Ubicar
+                  <i class="fa fa-map-pin ml-2"></i>&nbsp;&nbsp;Ubicar
                 </button>
               </div>
             </div>
@@ -151,7 +151,12 @@
           </div>
         </div>
       </div>
-      <div id="map" class="trx-map"></div>
+      <div *ngIf="hasCoords; else noMapTpl" id="map" class="trx-map"></div>
+      <ng-template #noMapTpl>
+        <div class="trx-map-empty">
+          No hay ubicación de esta transacción.
+        </div>
+      </ng-template>
       <div style="display: flex; justify-content: center; align-items: center;">
         <button class="btn-success" (click)="accionPrincipal()">
           Confirmar

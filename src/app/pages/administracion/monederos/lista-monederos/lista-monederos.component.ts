@@ -17,7 +17,6 @@ import { lastValueFrom } from 'rxjs';
 })
 export class ListaMonederosComponent implements OnInit {
 
-
   layoutCtrl = new UntypedFormControl('fullwidth');
   isLoading: boolean = false;
   listaMonederos: any;
@@ -42,7 +41,6 @@ export class ListaMonederosComponent implements OnInit {
   montoIngresado: number | null = null;
   submitButton = 'Confirmar';
   loading = false;
-
   public paginaActual: number = 1;
   public totalRegistros: number = 0;
   public pageSize: number = 20;
@@ -55,12 +53,10 @@ export class ListaMonederosComponent implements OnInit {
     this.showHeaderFilter = true;
   }
 
-
   ngOnInit(): void {
     this.initForm()
     this.obtenerMonederos();
   }
-
 
   obtenerMonederos() {
     this.loading = true;
@@ -233,28 +229,46 @@ export class ListaMonederosComponent implements OnInit {
 
   initForm() {
     this.recargaForm = this.fb.group({
-      IdMonedero: [null],
-      Monto: [null, [Validators.required]],
-      TipoTransaccion: ['Recarga'],
-      Latitud: [19.4326],
-      Longitud: [-99.1332]
+      tipoTransaccion: ['Recarga'],
+      monto: [null, [Validators.required]],
+      latitud: [null],
+      longitud: [null],
+      fechaHora: [null],
+      numeroSerieMonedero: [null],
+      numeroSerieDispositivo: [null],
     });
 
     this.debitoForm = this.fb.group({
-      IdMonedero: [null],
-      Monto: [null, [Validators.required]],
-      TipoTransaccion: ['Debito'],
-      Latitud: [19.4326],
-      Longitud: [-99.1332]
+      tipoTransaccion: ['Recarga'],
+      monto: [null, [Validators.required]],
+      latitud: [null],
+      longitud: [null],
+      fechaHora: [null],
+      numeroSerieMonedero: [null],
+      numeroSerieDispositivo: [null],
     });
   }
 
   abrirModal(tipo: 'recarga' | 'debito', raw: any) {
     this.tipoOperacion = tipo;
+
     const id = raw?.Id ?? raw?.id ?? null;
     const saldo = raw?.Saldo ?? raw?.saldo ?? 0;
-    const numSerie = raw?.NumeroSerie ?? raw?.numeroSerie ?? raw?.numSerie ?? '';
-    this.selectedTransaccion = { id, saldo, numSerie };
+    const numeroSerie = raw?.numeroSerie ?? raw?.NumeroSerie ?? raw?.numSerie ?? null;
+
+    this.selectedTransaccion = { id, saldo, numSerie: numeroSerie };
+
+    const form = tipo === 'recarga' ? this.recargaForm : this.debitoForm;
+    form.reset({
+      tipoTransaccion: (tipo === 'recarga') ? 'RECARGA' : 'DEBITO',
+      monto: null,
+      latitud: null,
+      longitud: null,
+      fechaHora: this.nowWithOffset(),
+      numeroSerieMonedero: numeroSerie,
+      numeroSerieDispositivo: null,
+    });
+
     this.modalOpen = true;
     this.modalAnim = 'in';
     this.modalClosing = false;
@@ -282,12 +296,8 @@ export class ListaMonederosComponent implements OnInit {
     const opNombre = this.tipoOperacion === 'recarga' ? 'Recarga' : 'Débito';
     const opVerbo = this.tipoOperacion === 'recarga' ? 'recargar' : 'debitar';
 
-    form.patchValue({
-      IdMonedero: this.selectedTransaccion?.id ?? form.value.IdMonedero,
-      TipoTransaccion: this.tipoOperacion === 'recarga' ? 'Recarga' : 'Debito'
-    });
-
-    if (form.invalid || (form.value.Monto ?? 0) <= 0) {
+    const montoVal = Number(form.get('monto')?.value);
+    if (!montoVal || isNaN(montoVal) || montoVal <= 0) {
       setTimeout(() => {
         this.alerts.open({
           type: 'warning',
@@ -295,37 +305,39 @@ export class ListaMonederosComponent implements OnInit {
           message: `Ingresa un monto mayor a 0 para ${opVerbo}.`,
           confirmText: 'Aceptar'
         });
-      }, 500);
+      }, 200);
       return;
     }
 
+    const payload = {
+      tipoTransaccion: form.get('tipoTransaccion')?.value,
+      monto: montoVal,
+      latitud: null,
+      longitud: null,
+      fechaHora: form.get('fechaHora')?.value || this.nowWithOffset(),
+      numeroSerieMonedero: this.selectedTransaccion?.numSerie
+        ?? form.get('numeroSerieMonedero')?.value
+        ?? null,
+      numeroSerieDispositivo: null,
+    };
+
     this.loading = true;
     this.submitButton = 'Cargando...';
-    this.moneService.crearTransaccion(form.value).subscribe({
-      next: (response: any) => {
+
+    this.moneService.crearTransaccion(payload).subscribe({
+      next: () => {
         this.loading = false;
         this.submitButton = 'Confirmar';
         this.ngOnInit();
-        if (response) {
-          this.cerrarModal();
-          setTimeout(() => {
-            this.alerts.open({
-              type: 'success',
-              title: '¡Operación Exitosa!',
-              message: `La ${opNombre} se realizó de manera correcta.`,
-              confirmText: 'Confirmar'
-            });
-          }, 500);
-        } else {
-          setTimeout(() => {
-            this.alerts.open({
-              type: 'warning',
-              title: `${opNombre} no confirmada`,
-              message: 'El servicio respondió de forma inesperada.',
-              confirmText: 'Entendido'
-            });
-          }, 500);
-        }
+        this.cerrarModal();
+        setTimeout(() => {
+          this.alerts.open({
+            type: 'success',
+            title: '¡Operación Exitosa!',
+            message: `La ${opNombre} se realizó de manera correcta.`,
+            confirmText: 'Confirmar'
+          });
+        }, 200);
       },
       error: (err: any) => {
         this.loading = false;
@@ -337,9 +349,19 @@ export class ListaMonederosComponent implements OnInit {
             message: (err?.message || err?.error?.message) ?? `Ocurrió un error al ${opVerbo}.`,
             confirmText: 'Aceptar'
           });
-        }, 500);
+        }, 200);
       }
     });
   }
 
+  private nowWithOffset(): string {
+    const d = new Date();
+    const tz = d.getTimezoneOffset();
+    const sign = tz > 0 ? '-' : '+';
+    const local = new Date(d.getTime() - tz * 60000);
+    const iso = local.toISOString().slice(0, 19);
+    const hh = String(Math.floor(Math.abs(tz) / 60)).padStart(2, '0');
+    const mm = String(Math.abs(tz) % 60).padStart(2, '0');
+    return `${iso}${sign}${hh}:${mm}`;
+  }
 }

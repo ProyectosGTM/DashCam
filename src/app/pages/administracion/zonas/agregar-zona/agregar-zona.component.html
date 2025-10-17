@@ -49,15 +49,21 @@
                                 </mat-form-field>
                             </div>
 
-                            <!-- Bluevox -->
                             <div class="col-12 col-md-6 col-lg-4">
                                 <label class="form-label">
                                     <i class="fa fa-bluetooth-b"></i><span>Cliente</span>
                                 </label>
                                 <mat-form-field appearance="fill" class="w-100">
-                                    <input matInput placeholder="Cliente" formControlName="idCliente" />
+                                    <mat-select placeholder="Cliente" formControlName="idCliente" [disabled]="!isAdmin">
+                                        <mat-option [value]="null">— Seleccione —</mat-option>
+                                        <mat-option *ngFor="let c of listaClientes" [value]="c.id">
+                                            {{ c.nombreCliente || c.nombre }} {{ c.apellidoPaterno || '' }} {{
+                                            c.apellidoMaterno || '' }}
+                                        </mat-option>
+                                    </mat-select>
                                 </mat-form-field>
                             </div>
+
 
                             <!-- Acciones -->
                             <div class="col-12 d-flex justify-content-end gap-2 pt-2">

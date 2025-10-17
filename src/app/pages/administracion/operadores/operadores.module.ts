@@ -28,10 +28,11 @@ import { DxDataGridModule } from 'devextreme-angular';
 import { ListaOperadoresComponent } from './lista-operadores/lista-operadores.component';
 import { AgregarOperadorComponent } from './agregar-operador/agregar-operador.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { VerDocumentoOperadorComponent } from './ver-documento-operador/ver-documento-operador.component';
 
 
 @NgModule({
-  declarations: [ListaOperadoresComponent, AgregarOperadorComponent],
+  declarations: [ListaOperadoresComponent, AgregarOperadorComponent, VerDocumentoOperadorComponent],
   imports: [
     CommonModule,
     OperadoresRoutingModule,

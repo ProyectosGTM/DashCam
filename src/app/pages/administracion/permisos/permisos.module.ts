@@ -20,6 +20,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { DxDataGridModule } from 'devextreme-angular';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -44,10 +47,13 @@ import { DxDataGridModule } from 'devextreme-angular';
     MatSortModule,
     MatCheckboxModule,
     MatPaginatorModule,
+    MatSelectModule,
     FormsModule,
     MatDialogModule,
     MatInputModule,
-    DxDataGridModule
+    DxDataGridModule,
+    MatOptionModule,
+    MatFormFieldModule,
   ]
 })
 export class PermisosModule { }

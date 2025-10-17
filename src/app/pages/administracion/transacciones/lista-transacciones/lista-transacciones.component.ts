@@ -38,7 +38,7 @@ export class ListaTransaccionesComponent implements OnInit {
   modalErrorClosing = false;
   selectedTransaccion: any = null;
   private readonly MAP_ID = 'DEMO_MAP_ID';
-
+  hasCoords = false;
   public paginaActual: number = 1;
   public totalRegistros: number = 0;
   public pageSize: number = 20;
@@ -62,7 +62,7 @@ export class ListaTransaccionesComponent implements OnInit {
   agregarTransaccion() {
     this.route.navigateByUrl('/administracion/transacciones/agregar-transaccion')
   }
-  
+
   limpiarCampos() {
     this.dataGrid.instance.clearGrouping();
     this.isGrouped = false;
@@ -122,26 +122,40 @@ export class ListaTransaccionesComponent implements OnInit {
       this.modalOpen = false;
     }
   }
-
   async abrirModal(raw: any) {
-    const id = raw?.Id ?? raw?.id ?? null;
-    const latStr = String(raw?.Latitud ?? raw?.latitud ?? '');
-    const lngStr = String(raw?.Longitud ?? raw?.longitud ?? '');
-    const tipo = raw?.TipoTransaccion ?? raw?.tipo ?? null;
-    const fecha = raw?.FechaHora ? new Date(raw.FechaHora) : null;
-    const montoNum = typeof raw?.Monto === 'number'
-      ? raw.Monto
-      : Number((raw?.Monto ?? '0').toString().replace(/[^0-9.-]/g, '')) || 0;
+    const id = raw?.id ?? raw?.Id ?? null;
 
-    console.log('ID de la transacción:', id);
+    const latStr = raw?.latitud != null ? String(raw.latitud) : (raw?.Latitud != null ? String(raw.Latitud) : '');
+    const lngStr = raw?.longitud != null ? String(raw.longitud) : (raw?.Longitud != null ? String(raw.Longitud) : '');
 
-    this.selectedTransaccion = { id, fecha, tipo, monto: montoNum, lat: latStr, lng: lngStr };
+    const tipoRaw = (raw?.tipoTransaccion ?? raw?.tipo ?? '').toString();
+    const tipoUI = tipoRaw === 'RECARGA' ? 'Recarga' : tipoRaw === 'DEBITO' ? 'Débito' : (tipoRaw || null);
+
+    const fechaISO = raw?.fechaHora ?? raw?.FechaHora ?? null;
+    const fecha = fechaISO ? new Date(fechaISO) : null;
+
+    const montoNum =
+      typeof raw?.monto === 'number' ? raw.monto
+        : (raw?.monto != null ? Number(raw.monto)
+          : (typeof raw?.Monto === 'number' ? raw.Monto
+            : Number((raw?.Monto ?? '0').toString().replace(/[^0-9.-]/g, '')) || 0));
+
+    this.selectedTransaccion = { id, fecha, tipo: tipoUI, monto: montoNum, lat: latStr, lng: lngStr };
+
+    // calcula si hay coordenadas válidas
+    const latNum = parseFloat(latStr as string);
+    const lngNum = parseFloat(lngStr as string);
+    this.hasCoords = Number.isFinite(latNum) && Number.isFinite(lngNum);
 
     this.modalOpen = true;
     this.modalAnim = 'in';
+    this.modalClosing = false;
 
-    await this.waitForGoogleMaps();
-    setTimeout(() => this.initializeMap(latStr, lngStr), 120);
+    // sólo intenta cargar mapa si hay coordenadas
+    if (this.hasCoords) {
+      await this.waitForGoogleMaps();
+      setTimeout(() => this.initializeMap(latStr, lngStr), 120);
+    }
   }
 
   private waitForGoogleMaps(): Promise<void> {
@@ -158,6 +172,8 @@ export class ListaTransaccionesComponent implements OnInit {
   }
 
   private initializeMap(lat: string, lng: string): void {
+    if (!this.hasCoords) return;
+
     const el = document.getElementById('map');
     if (!el) return;
 
@@ -167,32 +183,19 @@ export class ListaTransaccionesComponent implements OnInit {
       lat: Number.parseFloat(lat || '0'),
       lng: Number.parseFloat(lng || '0')
     };
-    if (Number.isNaN(position.lat) || Number.isNaN(position.lng)) return;
+    if (!Number.isFinite(position.lat) || !Number.isFinite(position.lng)) return;
 
-    const options: any = {
-      center: position,
-      zoom: 15
-    };
+    const options: any = { center: position, zoom: 15 };
     if (this.MAP_ID) options.mapId = this.MAP_ID;
 
     const map = new google.maps.Map(el, options);
-
     const Advanced = google.maps?.marker?.AdvancedMarkerElement;
-
     const canUseAdvanced = Boolean(this.MAP_ID) && Boolean(Advanced);
 
     if (canUseAdvanced) {
-      new Advanced({
-        map,
-        position,
-        title: `Transacción ${this.selectedTransaccion?.id ?? ''}`
-      });
+      new Advanced({ map, position, title: `Transacción ${this.selectedTransaccion?.id ?? ''}` });
     } else {
-      new google.maps.Marker({
-        map,
-        position,
-        title: `Transacción ${this.selectedTransaccion?.id ?? ''}`
-      });
+      new google.maps.Marker({ map, position, title: `Transacción ${this.selectedTransaccion?.id ?? ''}` });
     }
   }
 

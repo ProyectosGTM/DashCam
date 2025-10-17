@@ -11,34 +11,34 @@ export class DispositivoBluevoxService {
   constructor(private http: HttpClient) { }
 
   obtenerDispositivosBlueData(page: number, pageSize: number): Observable<any> {
-    return this.http.get(`${environment.API_SECURITY}/bluevox/${page}/${pageSize}`);
+    return this.http.get(`${environment.API_SECURITY}/contadores/${page}/${pageSize}`);
   }
 
   obtenerDispositivosBlue(): Observable<any> {
-    return this.http.get(`${environment.API_SECURITY}/bluevox/list`);
+    return this.http.get(`${environment.API_SECURITY}/contadores/list`);
   }
 
   obtenerDispositivosBlueByCliente(idCliente: any): Observable<any> {
-    return this.http.get(`${environment.API_SECURITY}/bluevox/clientes/${idCliente}`);
+    return this.http.get(`${environment.API_SECURITY}/contadores/clientes/${idCliente}`);
   }
 
   agregarDispositivoBlue(data: FormData) {
-    return this.http.post(environment.API_SECURITY + '/bluevox', data);
+    return this.http.post(environment.API_SECURITY + '/contadores', data);
   }
 
   eliminarDispositivoBlue(idDispositivo: Number) {
-    return this.http.delete(environment.API_SECURITY + '/bluevox/' + idDispositivo);
+    return this.http.delete(environment.API_SECURITY + '/contadores/' + idDispositivo);
   }
 
   obtenerDispositivoBlue(idDispositivo: number): Observable<any> {
-    return this.http.get<any>(environment.API_SECURITY + '/bluevox/' + idDispositivo);
+    return this.http.get<any>(environment.API_SECURITY + '/contadores/' + idDispositivo);
   }
 
   actualizarDispositivoBlue(idDispositivo: number, saveForm: any): Observable<any> {
-    return this.http.put(`${environment.API_SECURITY}/bluevox/` + idDispositivo, saveForm);
+    return this.http.put(`${environment.API_SECURITY}/contadores/` + idDispositivo, saveForm);
   }
 
-  private apiUrl = `${environment.API_SECURITY}/bluevox`;
+  private apiUrl = `${environment.API_SECURITY}/contadores`;
   updateEstatus(id: number, estatus: number): Observable<string> {
     const url = `${this.apiUrl}/estatus/${id}`;
     const body = { estatus };

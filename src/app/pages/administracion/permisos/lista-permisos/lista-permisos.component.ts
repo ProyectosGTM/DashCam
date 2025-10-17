@@ -199,7 +199,7 @@ export class ListaPermisosComponent implements OnInit {
   }
 
   actualizarPermiso(idPermiso: number) {
-    this.route.navigateByUrl('/permisos/editar-permiso/' + idPermiso);
+    this.route.navigateByUrl('/administracion/permisos/editar-permiso/' + idPermiso);
   };
 
   async activar(rowData: any) {
