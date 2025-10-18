@@ -110,6 +110,12 @@ export class NavigationLoaderService {
           },
           {
             type: 'link',
+            label: 'Turnos',
+            route: '/administracion/turnos',
+            icon: 'mat:schedule',
+          },
+          {
+            type: 'link',
             label: 'Bitacora',
             route: '/administracion/bitacora',
             icon: 'mat:assignment',
@@ -184,7 +190,7 @@ export class NavigationLoaderService {
           {
             type: 'link',
             label: 'Recaud. por Val/Inst',
-            route: '/administracion/reportes/recaudacion-dispositivoInstalacion',
+            route: '/administracion/reportes/recaudacion-instalacionInstalacion',
             icon: 'mat:qr_code_2'
           },
           {
@@ -193,12 +199,12 @@ export class NavigationLoaderService {
             route: '/administracion/reportes/validaciones-detalladas',
             icon: 'mat:fact_check'
           },
-          {
-            type: 'link',
-            label: 'Conteo Pasajeros por Viaje',
-            route: '/administracion/reportes/conteo-pasajero-viaje',
-            icon: 'mat:groups'
-          }
+          // {
+          //   type: 'link',
+          //   label: 'Conteo Pasajeros por Viaje',
+          //   route: '/administracion/reportes/conteo-pasajero-viaje',
+          //   icon: 'mat:groups'
+          // }
         ]
       },
     ]);

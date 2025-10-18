@@ -148,14 +148,42 @@
 .doc-icon { margin-right: 8px; color: #0284C7; font-size: 14px; vertical-align: middle; }
 
 /* ===== LISTA de monederos (3 por línea) ===== */
+/* Scroll vertical en la lista de monederos */
 .recarga-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  /* altura máxima; ajusta a tu gusto */
+  max-height: min(52vh, 450px);
+  overflow-y: auto;
+
+  /* opcional: mantiene el ancho estable cuando aparece la barra */
+  @supports (scrollbar-gutter: stable) {
+    scrollbar-gutter: stable both-edges;
+  }
+
+  /* opcional: un poco de separación para que no tape contenidos */
+  padding-right: .25rem;
+
+  /* (opcional) alto mínimo para que el contenedor no se vea “enano” con pocos items */
+  min-height: 220px;
 }
+
+/* Opcional: estiliza la barra (WebKit) */
+.recarga-list::-webkit-scrollbar {
+  width: 8px;
+}
+.recarga-list::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: rgba(0, 0, 0, .25);
+}
+.recarga-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 
 .recarga-list-item {
   position: relative;

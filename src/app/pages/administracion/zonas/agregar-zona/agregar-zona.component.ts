@@ -78,7 +78,7 @@ export class AgregarZonaComponent implements OnInit {
         const data = Array.isArray(response?.data) ? response.data[0] : response?.data;
 
         if (!data) {
-          console.warn('No se recibió información de la región.');
+          // console.warn('No se recibió información de la región.');
           return;
         }
 
@@ -104,7 +104,7 @@ export class AgregarZonaComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al obtener región:', err);
+        // console.error('Error al obtener región:', err);
       },
     });
   }

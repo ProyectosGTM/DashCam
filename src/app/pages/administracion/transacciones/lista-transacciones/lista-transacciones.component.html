@@ -78,20 +78,19 @@
             </dxi-column>
             <dxi-column dataField="numeroSerieMonedero" caption="N° Serie de Monedero" alignment="center"></dxi-column>
             <dxi-column dataField="numeroSerieValidador" caption="N° Serie Validador" alignment="center"
-              cellTemplate="numDisposi">
-              <div *dxTemplate="let f of 'numDisposi'">
-                <span *ngIf="f.data.numeroSerieValidador === null ">
-                  Sin información
-                </span>
-                <span *ngIf="f.data.numeroSerieValidador">
-                  {{f.data.numeroSerieValidador}}
-                </span>
+              cellTemplate="numbSer">
+              <div *dxTemplate="let f of 'numbSer'">
+                <ng-container *ngIf="f.data?.numeroSerieValidador && f.data.numeroSerieValidador !== ''; else noVal">
+                  {{ f.data.numeroSerieValidador }}
+                </ng-container>
+                <ng-template #noVal>Sin registro</ng-template>
               </div>
             </dxi-column>
+
+
             <div *dxTemplate="let transaccion of 'Acciones'" class="d-flex gap-3 justify-content-center">
               <div>
-                <button class="btn-edit" (click)="abrirModal(transaccion.data)"
-                  style="border-radius: 5px;">
+                <button class="btn-edit" (click)="abrirModal(transaccion.data)" style="border-radius: 5px;">
                   <i class="fa fa-map-pin ml-2"></i>&nbsp;&nbsp;Ubicar
                 </button>
               </div>

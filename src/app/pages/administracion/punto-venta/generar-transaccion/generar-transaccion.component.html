@@ -58,38 +58,44 @@
 
                                             <!-- LISTA de monederos (3 por línea) -->
                                             <ul class="recarga-list" role="list">
-                                                <li class="recarga-list-item" *ngFor="let m of monederosPaginados"
+                                                <li class="recarga-list-item" *ngFor="let m of listaMonederosFiltrados"
                                                     [class.selected]="m.id===monederoSeleccionado?.id"
                                                     (click)="seleccionarMonedero(m)" tabindex="0"
                                                     (keyup.enter)="seleccionarMonedero(m)" role="listitem"
                                                     [attr.aria-pressed]="m.id===monederoSeleccionado?.id">
+
                                                     <div class="linea">
                                                         <i class="fa fa-id-card"></i>
-                                                        <span class="clave">Serie:</span><b>{{ m.numeroSerie }}</b>
+                                                        <span class="clave">Serie:</span>
+                                                        <b>{{ m.numeroSerie || m.serie }}</b>
                                                     </div>
+
                                                     <div class="linea">
                                                         <i class="fa fa-user"></i>
-                                                        <span class="clave">Pasajero:</span><b>{{ m.pasajero }}</b>
+                                                        <span class="clave">Pasajero:</span>
+                                                        <b>{{ m.nombreCompletoPasajero || ((m.pasajeroNombre || '') + '
+                                                            ' + (m.pasajeroApellidoPaterno || '') + ' ' +
+                                                            (m.pasajeroApellidoMaterno || '')) }}</b>
                                                     </div>
+
                                                     <div class="linea">
                                                         <i class="fa fa-user-tie"></i>
-                                                        <span class="clave">Cliente:</span><b>{{ m.cliente }}</b>
+                                                        <span class="clave">Cliente:</span>
+                                                        <b>{{ m.nombreCompletoCliente || m.clienteNombre }}</b>
                                                     </div>
+
                                                     <div class="linea saldo">
                                                         <i class="fa fa-coins"></i>
                                                         <span class="clave">Saldo:</span>
                                                         <b>{{ m.saldo | currency:'MXN':'symbol-narrow':'1.2-2' }}</b>
                                                     </div>
 
-                                                    <div class="check" *ngIf="m.id===monederoSeleccionado?.id">
-                                                        <mat-icon>check_circle</mat-icon>
-                                                    </div>
                                                 </li>
                                             </ul>
 
 
                                             <div class="recarga-actions mt-3">
-                                                <button mat-stroked-button color="primary"
+                                                <button mat-raised-button color="primary"
                                                     [disabled]="!monederoSeleccionado" (click)="irPaso(2)">
                                                     Continuar
                                                     <mat-icon>arrow_forward</mat-icon>
@@ -105,7 +111,7 @@
                                                     <h3>Monto a Recargar</h3>
                                                 </div>
                                                 <div class="right">
-                                                    <button mat-button color="primary" (click)="irPaso(1)">
+                                                    <button mat-raised-button color="accent" type="button" (click)="irPaso(1)">
                                                         <mat-icon>arrow_back</mat-icon> Cambiar monedero
                                                     </button>
                                                 </div>
@@ -159,17 +165,38 @@
                                                             <h4>Resumen</h4>
                                                         </div>
                                                         <div class="summary-row">
+                                                            <span>Saldo actual</span>
+                                                            <b class="monto">
+                                                                {{ monederoSeleccionado?.saldo | currency:'MXN':'symbol-narrow':'1.2-2' }}
+                                                            </b>
+                                                        </div>
+                                                        <div class="summary-row">
                                                             <span>Monedero</span>
-                                                            <b>#{{ monederoSeleccionado?.numeroSerie }}</b>
+                                                            <b>#{{ monederoSeleccionado?.numeroSerie ||
+                                                                monederoSeleccionado?.serie || '—' }}</b>
                                                         </div>
                                                         <div class="summary-row">
                                                             <span>Pasajero</span>
-                                                            <b>{{ monederoSeleccionado?.pasajero }}</b>
+                                                            <b>
+                                                                {{
+                                                                monederoSeleccionado?.nombreCompletoPasajero
+                                                                || (
+                                                                ((monederoSeleccionado?.pasajeroNombre || '') + ' ' +
+                                                                (monederoSeleccionado?.pasajeroApellidoPaterno || '') +
+                                                                ' ' +
+                                                                (monederoSeleccionado?.pasajeroApellidoMaterno || '')
+                                                                ).trim()
+                                                                )
+                                                                || '—'
+                                                                }}
+                                                            </b>
                                                         </div>
                                                         <div class="summary-row">
                                                             <span>Cliente</span>
-                                                            <b>{{ monederoSeleccionado?.cliente }}</b>
+                                                            <b>{{ monederoSeleccionado?.nombreCompletoCliente ||
+                                                                monederoSeleccionado?.clienteNombre || '—' }}</b>
                                                         </div>
+
                                                         <div class="summary-row">
                                                             <span>Monto</span>
                                                             <b class="monto">{{ monto |

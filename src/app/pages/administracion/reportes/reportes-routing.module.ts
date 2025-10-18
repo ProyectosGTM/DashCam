@@ -21,7 +21,7 @@ const routes: Routes = [
     component:RecaudacionVehiculoComponent
   },
   {
-    path: 'recaudacion-dispositivoInstalacion',
+    path: 'recaudacion-instalacionInstalacion',
     component:RecaudacionDispositivoInstalacionComponent
   },
   {

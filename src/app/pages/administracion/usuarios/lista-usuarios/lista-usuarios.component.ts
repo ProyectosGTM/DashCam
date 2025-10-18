@@ -178,7 +178,7 @@ export class ListaUsuariosComponent implements OnInit {
   }
 
   actualizarUsuario(idUsuario: number) {
-    this.route.navigateByUrl('/usuarios/editar-usuario/' + idUsuario);
+    this.route.navigateByUrl('/administracion/usuarios/editar-usuario/' + idUsuario);
   };
 
   async activar(rowData: any) {
