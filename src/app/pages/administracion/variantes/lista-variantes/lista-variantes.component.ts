@@ -436,7 +436,7 @@ private initializeMapDerrotero(
   new google.maps.Polyline({
     map,
     path,
-    strokeColor: '#0ea5e9',
+    strokeColor: '#1F5AA8',
     strokeOpacity: 0.95,
     strokeWeight: 4
   });

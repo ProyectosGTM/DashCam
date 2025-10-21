@@ -58,7 +58,6 @@ export class AltaClienteComponent {
   obtenerClienteID() {
     this.clieService.obtenerCliente(this.idCliente).subscribe((response: any) => {
       const d = response?.data ?? {};
-
       this.clienteForm.patchValue({
         idPadre: Number(d.idPadre ?? 0),
         rfc: d.rfc ?? '',
@@ -105,7 +104,6 @@ export class AltaClienteComponent {
     }
   }
 
-
   onTipoPersonaChange(_event: any) {
     const value: number | null = this.clienteForm.get('tipoPersona')!.value;
 
@@ -150,7 +148,7 @@ export class AltaClienteComponent {
 
   initForm() {
     this.clienteForm = this.fb.group({
-      idPadre: [null, Validators.required],
+      idPadre: [null],
       rfc: ['', Validators.required],
       tipoPersona: [null, Validators.required],
       estatus: [1, Validators.required],
@@ -211,7 +209,6 @@ export class AltaClienteComponent {
       this.loading = false;
 
       const etiquetas: Record<string, string> = {
-        idPadre: 'Id Padre',
         rfc: 'RFC',
         tipoPersona: 'Tipo de Persona',
         estatus: 'Estatus',

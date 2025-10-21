@@ -51,7 +51,7 @@
             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20]" [showInfo]="true"></dxo-pager>
             <dxi-column caption="Acciones" cellTemplate="acciones" [width]="160" alignment="center"></dxi-column>
             <dxi-column dataField="nombreRuta" caption="Nombre" alignment="center" [width]="200"></dxi-column>
-            <dxi-column dataField="puntoInicio.direccion" caption="Punto Inicio" [width]="350" alignment="center"
+            <dxi-column dataField="puntoInicio.direccion" caption="Punto Inicio" [width]="400" alignment="center"
               cellTemplate="cell">
               <div *dxTemplate="let data of 'cell'">
                 <div style="white-space: pre-wrap; word-break: break-word; text-align: center;">
@@ -62,7 +62,7 @@
                 </div>
               </div>
             </dxi-column>
-            <dxi-column dataField="puntoFin.direccion" caption="Punto Fin" [width]="350" alignment="center"
+            <dxi-column dataField="puntoFin.direccion" caption="Punto Fin" [width]="400" alignment="center"
               cellTemplate="agw">
               <div *dxTemplate="let data of 'agw'">
                 <div style="white-space: pre-wrap; word-break: break-word; text-align: center;">
@@ -73,12 +73,12 @@
                 </div>
               </div>
             </dxi-column>
-            <dxi-column dataField="fechaCreacionVariantes" caption="Fecha Creación" [width]="180" alignment="center" cellTemplate="regFechaCreacion">
+            <dxi-column dataField="fechaCreacionVariantes" caption="Fecha Creación" alignment="center" cellTemplate="regFechaCreacion">
               <div *dxTemplate="let s of 'regFechaCreacion' ">
                 {{s.data.fechaCreacionVariantes | date:'dd/MM/yyyy HH:mm' : '+0000'}}
               </div>
             </dxi-column>
-            <dxi-column dataField="nombreZonasInicio" caption="Nombre Zona" [width]="200" alignment="center"></dxi-column>
+            <dxi-column dataField="nombreZonasInicio" caption="Nombre Zona" alignment="center"></dxi-column>
             <dxo-export [enabled]="false" [allowExportSelectedData]="true"
               [texts]="{ exportAll: 'Exportar todos los datos a Excel', exportSelectedRows: 'Exportar filas seleccionadas a Excel' }">
             </dxo-export>

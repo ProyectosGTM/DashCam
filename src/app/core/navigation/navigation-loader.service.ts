@@ -106,6 +106,12 @@ export class NavigationLoaderService {
             type: 'link',
             label: 'Variantes',
             route: '/administracion/variantes',
+            icon: 'mat:money', // o 'mat:tune' / 'mat:widgets'
+          },
+          {
+            type: 'link',
+            label: 'Tarifas',
+            route: '/administracion/tarifas',
             icon: 'mat:category', // o 'mat:tune' / 'mat:widgets'
           },
           {

@@ -30,7 +30,7 @@
             </button>
 
             <button mat-raised-button color="warn" type="button" class="btn-soft textGenerico"
-              (click)="agregarUsuario()" matTooltip="Agregar usuario" [disabled]="true">
+              (click)="agregarUsuario()" matTooltip="Agregar usuario">
               <mat-icon>add</mat-icon>
               <span class="btn-text">Agregar</span>
             </button>
@@ -86,7 +86,7 @@
             </dxo-export>
             <div *dxTemplate="let row of 'Acciones'" class="d-flex gap-3 justify-content-center">
               <div>
-                <button [disabled]="true" class="btn-edit" (click)="actualizarUsuario(row.data.id)">
+                <button class="btn-edit" (click)="actualizarUsuario(row.data.id)">
                   <mat-icon class="btn__icon">edit</mat-icon>
                 </button>
               </div>

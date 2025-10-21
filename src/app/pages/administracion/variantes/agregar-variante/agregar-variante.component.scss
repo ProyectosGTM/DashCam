@@ -15,7 +15,7 @@
   overflow: hidden; border-radius: 18px;
 
   .card-header{
-    background: linear-gradient(180deg, color-mix(in srgb, var(--c-azul-medio) 14%, transparent), transparent);
+    background: #0A2E57;
     border-bottom: 1px solid color-mix(in srgb, var(--c-azul-medio) 35%, transparent);
     padding: 1rem 1.25rem; gap: .75rem;
 
@@ -29,7 +29,7 @@
     .titulo-card{
       font-style: italic; font-weight: 700; letter-spacing:.2px;
       background: linear-gradient(90deg, var(--c-azul-oscuro), var(--c-azul-medio));
-      -webkit-background-clip:text; background-clip:text; color: transparent;
+      -webkit-background-clip:text; background-clip:text; color: white;
       font-size: clamp(1.125rem, calc(1rem + 1vw), 1.5rem);
     }
     .input-search .input-group-text{ background:#fff; border-right:0; color: var(--c-azul-oscuro); }
@@ -122,7 +122,7 @@
   border-radius:18px; overflow:hidden; font-family:'Montserrat',sans-serif;
 
   .card-header{
-    background: linear-gradient(180deg, color-mix(in srgb, var(--c-azul-oscuro) 12%, transparent), transparent);
+    background: #0A2E57;
     border-bottom:1px solid color-mix(in srgb, var(--c-azul-oscuro) 30%, transparent);
     padding:1rem 1.25rem; gap:.75rem;
 
@@ -135,7 +135,7 @@
     .titulo-card{
       font-style:italic; font-weight:700;
       background:linear-gradient(90deg,var(--c-azul-oscuro),var(--c-azul-medio));
-      -webkit-background-clip:text; background-clip:text; color:transparent;
+      -webkit-background-clip:text; background-clip:text; color:white;
       font-size: clamp(1.125rem, calc(1rem + 1vw), 1.5rem);
     }
     .zona-pill{ color:var(--c-azul-medio); font-weight:600; }
@@ -234,7 +234,7 @@
 
 
   .card-header{
-    background: linear-gradient(180deg, color-mix(in srgb, var(--c-azul-oscuro) 12%, transparent), transparent);
+    background: #0A2E57;
     border-bottom:1px solid color-mix(in srgb, var(--c-azul-oscuro) 30%, transparent);
     padding:1rem 1.25rem; gap:.75rem;
 
@@ -247,7 +247,7 @@
     .titulo-card{
       font-style:italic; font-weight:700;
       background:linear-gradient(90deg,var(--c-azul-oscuro),var(--c-azul-medio));
-      -webkit-background-clip:text; background-clip:text; color:transparent;
+      -webkit-background-clip:text; background-clip:text; color:white;
       font-size: clamp(1.125rem, calc(1rem + 1vw), 1.5rem);
     }
     .zona-pill{ color:var(--c-azul-medio); font-weight:600; }
@@ -363,7 +363,7 @@
 
 /* Header/footer coherentes con tus cards anteriores */
 .tarifa-card .card-header{
-  background: linear-gradient(180deg, color-mix(in srgb, var(--c-azul-oscuro,#0A2E57) 12%, transparent), transparent);
+  background: #0A2E57;
   border-bottom: 1px solid color-mix(in srgb, var(--c-azul-oscuro,#0A2E57) 30%, transparent);
   padding: 1rem 1.25rem;
   .chip-step{
@@ -375,7 +375,7 @@
   .titulo-card{
     font-style: italic; font-weight: 700;
     background: linear-gradient(90deg, var(--c-azul-oscuro,#0A2E57), var(--c-azul-medio,#1F5AA8));
-    -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-background-clip:text; background-clip:text; color:white;
     font-size: clamp(1.125rem, calc(1rem + 1vw), 1.5rem);
   }
 }

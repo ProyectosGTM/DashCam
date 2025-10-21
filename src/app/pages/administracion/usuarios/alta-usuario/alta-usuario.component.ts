@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, UntypedFormControl, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +15,12 @@ import { UsuariosService } from 'src/app/pages/services/usuarios.service';
   selector: 'vex-alta-usuario',
   templateUrl: './alta-usuario.component.html',
   styleUrl: './alta-usuario.component.scss',
-  animations: [fadeInRight400ms],
+  animations: [fadeInRight400ms,
+    trigger('fadeIn', [
+      transition(':enter', [style({ opacity: 0 }), animate('160ms ease-out', style({ opacity: 1 }))]),
+      transition(':leave', [animate('100ms ease-in', style({ opacity: 0 }))]),
+    ]),
+  ],
 })
 export class AltaUsuarioComponent {
   layoutCtrl = new UntypedFormControl('fullwidth');
@@ -30,14 +36,49 @@ export class AltaUsuarioComponent {
   public listaClientes: any;
 
   type = 'password';
-  minCaracteres = false;
-  maxCaracteres = false;
-  hasNumber = false;
-  hasMinus = false;
-  hasMayus = false;
-  espCaracter = false;
   typeConfirm: string = 'password';
   public permisosIds: number[] = [];
+
+  hidePass = true;
+  showPwdHints = false;
+  pwdValue = '';
+  hideConfirm = true;
+  confirmName = 'cpwd_' + Math.random().toString(36).slice(2, 12);
+  confirmValue = '';
+  confirmHintVisible = false;
+  confirmMatch = false;
+  private confirmTimer: any;
+
+  private get hasMayus(): boolean { return /[A-Z]/.test(this.pwdValue); }
+  private get hasMinus(): boolean { return /[a-z]/.test(this.pwdValue); }
+  private get espCaracter(): boolean { return /[^A-Za-z0-9]/.test(this.pwdValue); }
+  private get hasNumber(): boolean { return /\d/.test(this.pwdValue); }
+  private get minCaracteres(): boolean { return this.pwdValue.length > 6; }
+  private get maxCaracteres(): boolean { return this.pwdValue.length < 16; }
+
+  get currentRuleKey(): 'case' | 'special' | 'number' | 'length' | 'ok' {
+    if (!(this.hasMayus && this.hasMinus)) return 'case';
+    if (!this.espCaracter) return 'special';
+    if (!this.hasNumber) return 'number';
+    if (!(this.minCaracteres && this.maxCaracteres)) return 'length';
+    return 'ok';
+  }
+
+  onPwdFocus() { this.showPwdHints = true; }
+  onPwdBlur() { this.showPwdHints = false; }
+  onPwdInput(e: Event) { this.pwdValue = (e.target as HTMLInputElement).value || ''; if (this.confirmHintVisible) this.validateConfirm(); }
+
+  onConfirmInput(e: Event) {
+    this.confirmValue = (e.target as HTMLInputElement).value || '';
+    clearTimeout(this.confirmTimer);
+    this.confirmTimer = setTimeout(() => { this.validateConfirm(); this.confirmHintVisible = this.confirmValue.length > 0; }, 400);
+  }
+  onConfirmBlur() {
+    clearTimeout(this.confirmTimer);
+    this.validateConfirm();
+    this.confirmHintVisible = this.confirmValue.length > 0;
+  }
+  private validateConfirm() { this.confirmMatch = this.confirmValue === this.pwdValue; }
 
   constructor(
     private fb: FormBuilder,
@@ -122,10 +163,55 @@ export class AltaUsuarioComponent {
   }
 
   obtenerRoles() {
-    this.rolService.obtenerRoles().subscribe((response) => {
-      this.listaRoles = (response as any)?.data ?? response;
+    this.rolService.obtenerRoles().subscribe((response: any) => {
+      const raw = response?.data ?? response ?? [];
+      this.listaRoles = (Array.isArray(raw) ? raw : []).map((r: any) => ({
+        id: Number(r?.id ?? r?.Id ?? r?.idRol ?? r?.rolId),
+        nombre: r?.nombre ?? r?.Nombre ?? r?.rolNombre ?? ''
+      }));
     });
   }
+
+  onRolChanged(value: any) {
+    const idRol = Number(value);
+    if (idRol === 1) this.selectAllPerms();
+  }
+
+  /** Marca todos los permisos de todos los módulos y sincroniza el formulario */
+  private selectAllPerms(): void {
+    const allIds: number[] = [];
+
+    (this.listaModulos || []).forEach((m: any, mi: number) => {
+      const permisos = m?.permisos || [];
+      permisos.forEach((p: any, pi: number) => {
+        const nid = this.getPermisoId(p);
+        if (Number.isFinite(nid)) {
+          allIds.push(nid as number);
+          // reflejar visualmente el switch en la UI
+          if (this.listaModulos[mi].permisos[pi]) {
+            this.listaModulos[mi].permisos[pi].estatus = 1;
+          }
+        }
+      });
+    });
+
+    // Únicos y ordenados (opcional)
+    this.permisosIds = Array.from(new Set(allIds));
+
+    // Actualiza el form y (si usas) otras vistas dependientes
+    this.usuarioForm.patchValue({ permisosIds: this.permisosIds });
+
+    // Si tienes esta utilidad, refresca los switches ligados a módulos
+    this.applyAssignedPermsToModules?.();
+  }
+
+
+  // Para que mat-select compare por valor numérico aunque venga como string
+  compareById = (a: any, b: any) => {
+    const na = Number(a); const nb = Number(b);
+    return Number.isFinite(na) && Number.isFinite(nb) && na === nb;
+  };
+
 
   obtenerClientes() {
     this.clienService.obtenerClientes().subscribe((response) => {
@@ -244,15 +330,15 @@ export class AltaUsuarioComponent {
     this.type = this.type === 'password' ? 'text' : 'password';
   }
 
-  onPasswordInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.minCaracteres = value.length >= 6;
-    this.maxCaracteres = value.length <= 16;
-    this.hasNumber = /\d/.test(value);
-    this.hasMinus = /[a-z]/.test(value);
-    this.hasMayus = /[A-Z]/.test(value);
-    this.espCaracter = /[^\w\d]/.test(value);
-  }
+  // onPasswordInput(event: Event): void {
+  //   const value = (event.target as HTMLInputElement).value;
+  //   this.minCaracteres = value.length >= 6;
+  //   this.maxCaracteres = value.length <= 16;
+  //   this.hasNumber = /\d/.test(value);
+  //   this.hasMinus = /[a-z]/.test(value);
+  //   this.hasMayus = /[A-Z]/.test(value);
+  //   this.espCaracter = /[^\w\d]/.test(value);
+  // }
 
   submit() {
     if (this.idUsuario) {
@@ -410,7 +496,6 @@ export class AltaUsuarioComponent {
       apellidoMaterno: 'Apellido Materno',
       idRol: 'Rol',
       estatus: 'Estatus',
-      idCliente: 'Cliente',
       permisosIds: 'Permisos',
     };
 
@@ -544,104 +629,104 @@ export class AltaUsuarioComponent {
   }
 
   regresar() {
-    this.route.navigateByUrl('/usuarios');
+    this.route.navigateByUrl('/administracion/usuarios');
   }
 
   // === Props / estado ===
-@ViewChild('fotoFileInput') fotoFileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('fotoFileInput') fotoFileInput!: ElementRef<HTMLInputElement>;
 
-fotoPreviewUrl: string | null = null;
-fotoFileName: string | null = null;
-fotoDragging = false;
-uploadingFoto = false;
+  fotoPreviewUrl: string | null = null;
+  fotoFileName: string | null = null;
+  fotoDragging = false;
+  uploadingFoto = false;
 
-// Límite MB visible desde template
-readonly MAX_MB = 3;
+  // Límite MB visible desde template
+  readonly MAX_MB = 3;
 
-// === Utils ===
-private isImage(file: File) {
-  return /^image\/(png|jpe?g|webp)$/i.test(file.type);
-}
-private isAllowedImage(file: File) {
-  return this.isImage(file) && file.size <= this.MAX_MB * 1024 * 1024;
-}
-private loadImagePreview(file: File, setter: (url: string | null) => void) {
-  if (!this.isImage(file)) { setter(null); return; }
-  const reader = new FileReader();
-  reader.onload = () => setter(reader.result as string);
-  reader.readAsDataURL(file);
-}
-private extractFileUrl(res: any): string {
-  return res?.url ?? res?.Location ?? res?.data?.url ?? res?.data?.Location
-    ?? res?.key ?? res?.Key ?? res?.path ?? res?.filePath ?? '';
-}
-
-// === UI Handlers ===
-openFotoFilePicker() { this.fotoFileInput?.nativeElement.click(); }
-onFotoDragOver(e: DragEvent) { e.preventDefault(); this.fotoDragging = true; }
-onFotoDragLeave(_e: DragEvent) { this.fotoDragging = false; }
-onFotoDrop(e: DragEvent) {
-  e.preventDefault();
-  this.fotoDragging = false;
-  const f = e.dataTransfer?.files?.[0];
-  if (f) this.handleFotoFile(f);
-}
-onFotoFileSelected(e: Event) {
-  const f = (e.target as HTMLInputElement)?.files?.[0];
-  if (f) this.handleFotoFile(f);
-}
-clearFotoFile(e: Event) {
-  e.stopPropagation();
-  this.fotoPreviewUrl = null;
-  this.fotoFileName = null;
-  if (this.fotoFileInput) this.fotoFileInput.nativeElement.value = '';
-  this.usuarioForm.patchValue({ fotoPerfil: null });
-  // Si quieres marcar requerido en otro lado, aquí solo quitamos valor
-}
-
-// === Core ===
-private handleFotoFile(file: File) {
-  if (!this.isAllowedImage(file)) {
-    this.usuarioForm.get('fotoPerfil')?.setErrors({ invalid: true });
-    return;
+  // === Utils ===
+  private isImage(file: File) {
+    return /^image\/(png|jpe?g|webp)$/i.test(file.type);
   }
-  this.fotoFileName = file.name;
-  this.loadImagePreview(file, (url) => this.fotoPreviewUrl = url);
-  // Guarda el File temporalmente por si quieres reintentar
-  this.usuarioForm.patchValue({ fotoPerfil: file });
-  this.usuarioForm.get('fotoPerfil')?.setErrors(null);
-  this.uploadFoto(file);
-}
+  private isAllowedImage(file: File) {
+    return this.isImage(file) && file.size <= this.MAX_MB * 1024 * 1024;
+  }
+  private loadImagePreview(file: File, setter: (url: string | null) => void) {
+    if (!this.isImage(file)) { setter(null); return; }
+    const reader = new FileReader();
+    reader.onload = () => setter(reader.result as string);
+    reader.readAsDataURL(file);
+  }
+  private extractFileUrl(res: any): string {
+    return res?.url ?? res?.Location ?? res?.data?.url ?? res?.data?.Location
+      ?? res?.key ?? res?.Key ?? res?.path ?? res?.filePath ?? '';
+  }
 
-private uploadFoto(file: File): void {
-  if (this.uploadingFoto) return;
-  this.uploadingFoto = true;
+  // === UI Handlers ===
+  openFotoFilePicker() { this.fotoFileInput?.nativeElement.click(); }
+  onFotoDragOver(e: DragEvent) { e.preventDefault(); this.fotoDragging = true; }
+  onFotoDragLeave(_e: DragEvent) { this.fotoDragging = false; }
+  onFotoDrop(e: DragEvent) {
+    e.preventDefault();
+    this.fotoDragging = false;
+    const f = e.dataTransfer?.files?.[0];
+    if (f) this.handleFotoFile(f);
+  }
+  onFotoFileSelected(e: Event) {
+    const f = (e.target as HTMLInputElement)?.files?.[0];
+    if (f) this.handleFotoFile(f);
+  }
+  clearFotoFile(e: Event) {
+    e.stopPropagation();
+    this.fotoPreviewUrl = null;
+    this.fotoFileName = null;
+    if (this.fotoFileInput) this.fotoFileInput.nativeElement.value = '';
+    this.usuarioForm.patchValue({ fotoPerfil: null });
+    // Si quieres marcar requerido en otro lado, aquí solo quitamos valor
+  }
 
-  const fd = new FormData();
-  fd.append('file', file, file.name);
-  fd.append('folder', 'usuarios');
-  fd.append('idModule', '30'); // ajusta si tu backend usa otro módulo
-
-  this.usuaService.uploadFile(fd).pipe(
-    finalize(() => this.uploadingFoto = false) // apaga barra sí o sí
-  ).subscribe({
-    next: (res: any) => {
-      const url = this.extractFileUrl(res);
-      if (url) {
-        // Guarda la URL final en el form
-        this.usuarioForm.patchValue({ fotoPerfil: url });
-        // Conserva la vista previa en UI
-        this.fotoFileName = file.name;
-      }
-    },
-    error: (err: any) => {
-      console.error('[UPLOAD][fotoPerfil]', err);
-      // Si quieres limpiar en error:
-      // this.usuarioForm.patchValue({ fotoPerfil: null });
-      // this.fotoPreviewUrl = null; this.fotoFileName = null;
+  // === Core ===
+  private handleFotoFile(file: File) {
+    if (!this.isAllowedImage(file)) {
+      this.usuarioForm.get('fotoPerfil')?.setErrors({ invalid: true });
+      return;
     }
-  });
-}
+    this.fotoFileName = file.name;
+    this.loadImagePreview(file, (url) => this.fotoPreviewUrl = url);
+    // Guarda el File temporalmente por si quieres reintentar
+    this.usuarioForm.patchValue({ fotoPerfil: file });
+    this.usuarioForm.get('fotoPerfil')?.setErrors(null);
+    this.uploadFoto(file);
+  }
+
+  private uploadFoto(file: File): void {
+    if (this.uploadingFoto) return;
+    this.uploadingFoto = true;
+
+    const fd = new FormData();
+    fd.append('file', file, file.name);
+    fd.append('folder', 'usuarios');
+    fd.append('idModule', '2'); // ajusta si tu backend usa otro módulo
+
+    this.usuaService.uploadFile(fd).pipe(
+      finalize(() => this.uploadingFoto = false) // apaga barra sí o sí
+    ).subscribe({
+      next: (res: any) => {
+        const url = this.extractFileUrl(res);
+        if (url) {
+          // Guarda la URL final en el form
+          this.usuarioForm.patchValue({ fotoPerfil: url });
+          // Conserva la vista previa en UI
+          this.fotoFileName = file.name;
+        }
+      },
+      error: (err: any) => {
+        console.error('[UPLOAD][fotoPerfil]', err);
+        // Si quieres limpiar en error:
+        // this.usuarioForm.patchValue({ fotoPerfil: null });
+        // this.fotoPreviewUrl = null; this.fotoFileName = null;
+      }
+    });
+  }
 
 
 }
