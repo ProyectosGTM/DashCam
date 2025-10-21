@@ -69,9 +69,8 @@
                                 {{ a.data.fechaActualizacion | date:'dd/MM/yyyy HH:mm' : '+0000' }}
                             </div>
                         </dxi-column>
-                        <dxi-column dataField="numeroSerieValidadores" caption="Validador"
-                            alignment="center"></dxi-column>
-                        <dxi-column dataField="numeroSerieContadores" caption="Contador" alignment="center"></dxi-column>
+                        <dxi-column dataField="numeroSerieValidador" caption="Validador" alignment="center"></dxi-column>
+                        <dxi-column dataField="numeroSerieContador" caption="Contador" alignment="center"></dxi-column>
                         <dxi-column dataField="placaVehiculo" caption="Vehículo" alignment="center"
                             cellTemplate="instalVehiculo">
                             <div *dxTemplate="let t of 'instalVehiculo' ">

@@ -66,8 +66,8 @@
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-select placeholder="Instalación" formControlName="idInstalacion">
                     <mat-option *ngFor="let u of listaInstalaciones" [value]="u.id">
-                      {{ u?.numeroSerieValidadores || ' ' }} -
-                      {{ u?.numeroSerieContadores || ' ' }} -
+                      {{ u?.numeroSerieValidador || ' ' }} -
+                      {{ u?.numeroSerieContador || ' ' }} -
                       {{ u?.placaVehiculo || ' ' }}
                     </mat-option>
                   </mat-select>
