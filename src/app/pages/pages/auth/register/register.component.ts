@@ -20,13 +20,14 @@ import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/auth.service';
 import { PasajerosService } from 'src/app/pages/services/pasajeros.service';
 import { AlertsService } from '../../modal/alerts.service';
+import { fadeInRight400ms } from '@vex/animations/fade-in-right.animation';
 
 @Component({
   selector: 'vex-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
   animations: [
-    fadeInUp400ms,
+    fadeInRight400ms,
     trigger('fadeOnChange', [
       transition('* => *', [
         style({ opacity: 0, transform: 'translateY(4px)' }),
@@ -65,12 +66,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   submitted = false;
   error = '';
   returnUrl!: string;
-  public passwordType: string = 'password'
+  public passwordType: string = 'password';
   public submitButton: string = 'Guardar';
   public loading: boolean = false;
 
   hide = true;
-  type = 'password'
+  type = 'password';
   pwFocused = false;
   hasMayus = false;
   hasMinus = false;
@@ -251,14 +252,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.alerts.open({
           type: 'success',
           title: '¡Operación Exitosa!',
-          message: 'Tu cuenta de pasajero fue creada. Revisa tu correo y abre el enlace de verificación para activarla y poder iniciar sesión.',
-          showCancel: false,
-          confirmText: 'Confirmar',
-          cancelText: 'Cancelar',
+          message: 'Te enviamos un código de <strong>4 dígitos</strong> a tu correo. Ingrésalo para activar tu cuenta.',
+          confirmText: 'Ingresar código',
           backdropClose: false
-        }).then((result: any) => {
+        }).then((res: any) => {
+          // Asegura compatibilidad: si el servicio retorna string ('confirm') o { result: 'confirm' }
+          const result = typeof res === 'string' ? res : res?.result;
           if (result === 'confirm') {
-            this.router.navigate(['/account', 'login']);
+            this.openOtpModal();
+            this.startResendCountdown();
           }
         });
       },
@@ -270,16 +272,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
           type: 'error',
           title: '¡Ops!',
           message: 'No pudimos completar tu afiliación. Revisa que tus datos estén correctos y vuelve a intentarlo. Si el problema continúa, contáctanos para ayudarte.',
-          showCancel: false,
           confirmText: 'Confirmar',
-          cancelText: 'Cancelar',
           backdropClose: false
         });
       }
     );
   }
 
-  // ===================== NUEVO: Lógica OTP y Reenvío =====================
+  // ===================== Lógica OTP y Reenvío =====================
 
   onOtpInput(e: Event, i: number) {
     const input = e.target as HTMLInputElement;
@@ -338,13 +338,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  // Click del botón "Verificar"
   onVerify() {
     const code = this.otp.join('');
     this.verifyForm.patchValue({ codigo: code }, { emitEvent: false });
     this.startResendCountdown();
 
-    // Validación del form de verificación
     this.verifyForm.markAllAsTouched();
     this.verifyForm.updateValueAndValidity();
     if (this.verifyForm.invalid) {
@@ -371,7 +369,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.Verify();
   }
 
-  // Click del botón "Reenviar código"
   onResend() {
     if (this.resendDisabled) return;
     const payload = this.afiliacionPasajero.value;
@@ -389,7 +386,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Lógica de verificación con alertas base
   Verify() {
     this.submitButton = 'Cargando...';
     this.loading = true;
@@ -406,9 +402,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
           message: 'Tu cuenta de pasajero quedó activada. Ahora puedes iniciar sesión y empezar a usar tu monedero.',
           confirmText: 'Ir a iniciar sesión',
           backdropClose: false
-        }).then(({ result }: any) => {
-          // tu AlertsService retorna 'confirm' normalmente
-          this.router.navigate(['/account', 'login']);
+        }).then((res: any) => {
+          const result = typeof res === 'string' ? res : res?.result;
+          if (result === 'confirm') {
+            this.router.navigate(['/login']);
+          }
         });
       },
       error: () => {
@@ -426,20 +424,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   openOtpModal(): void {
-  // abre el modal (aplica :target)
-  window.location.hash = 'otp-modal';
+    // Reinicia el hash para forzar :target incluso si ya estaba abierto
+    window.location.hash = '';
+    // Espera un tick y aplica el target
+    setTimeout(() => {
+      window.location.hash = 'otp-modal';
+      setTimeout(() => {
+        const first = document.querySelector('#otp-modal .otp-box') as HTMLInputElement | null;
+        first?.focus();
+        first?.select();
+      }, 0);
+    }, 0);
+  }
 
-  // enfocar primer input OTP después de que p inte el modal
-  setTimeout(() => {
-    const first = document.querySelector('#otp-modal .otp-box') as HTMLInputElement | null;
-    first?.focus();
-    first?.select();
-  }, 0);
-}
-
-closeOtpModal(): void {
-  // cierra el modal
-  window.location.hash = '';
-}
-
+  closeOtpModal(): void {
+    window.location.hash = '';
+  }
 }

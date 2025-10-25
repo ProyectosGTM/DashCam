@@ -1,6 +1,6 @@
 <!-- register.component.html -->
 <div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
-  <div @fadeInRight class="card overflow-hidden w-full max-w-xl md:max-w-2xl" style="background-color: white;">
+  <div @fadeInRight  class="card overflow-hidden w-full max-w-xl md:max-w-2xl" style="background-color: white;">
     <div class="p-6 pb-0 flex flex-col mt-4">
       <div class="fill-current text-center" style="display: flex; align-items: center; justify-content: center;">
         <img style="width: 50%;" src="/assets/img/logo/DashCamPay_trasparente_large.png" />
@@ -110,7 +110,6 @@
 
         <div class="login-link-wrap">
           <a class="login-link" [routerLink]="['/login']">Inicia Sesión</a>
-          <button type="button" class="btn-link" (click)="openOtpModal()">Verificar cuenta</button>
 
         </div>
       </form>
@@ -120,7 +119,7 @@
 
 <!-- Modal OTP -->
 <div id="otp-modal" class="modal-backdrop">
-  <div class="modal-card modal-xl" @fadeInOut>
+  <div class="modal-card modal-xl" @fadeInRight>
     <div class="modal-header otp-header">
       <h3 class="otp-title">Verificación de Cuenta</h3>
       <a class="close" href="#">×</a>

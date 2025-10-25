@@ -44,7 +44,7 @@ export class AlertsService {
       confirmText: opts.confirmText ?? 'Entendido',
       cancelText: opts.cancelText ?? 'Cancelar',
       showCancel: !!opts.showCancel,
-      backdropClose: opts.backdropClose ?? true,
+      backdropClose: opts.backdropClose ?? false, // ← default NO se cierra por backdrop
       navigateAfterClose: opts.navigateAfterClose,
       navigateDelayMs: opts.navigateDelayMs ?? 300,
       autoCloseMs: opts.autoCloseMs,
@@ -57,16 +57,13 @@ export class AlertsService {
     return p;
   }
 
-  /** Llamado por el componente al cerrar */
   _resolve(result: AlertResult): void {
     if (this.current?.resolver) this.current.resolver(result);
     this.current = null;
     this.stateSub.next(null);
-    // Siguiente en la cola
     setTimeout(() => this.pump(), 0);
   }
 
-  // ---- internos ----
   private pump() {
     if (!this.current && this.queue.length) {
       this.current = this.queue.shift() ?? null;

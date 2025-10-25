@@ -17,7 +17,7 @@
        (click)="$event.stopPropagation()"
        (animationend)="onAnimEnd($event)">
 
-    <div class="am-header">&nbsp;&nbsp;
+    <div class="am-header">
       <button class="am-close" aria-label="Cerrar" (click)="cancel()">&times;</button>
     </div>
 
@@ -35,7 +35,7 @@
     <div class="am-divider"></div>
 
     <div class="am-footer">
-      <button class="am-btn am-btn--primary" (click)="confirm()">{{ state?.confirmText }}</button>
+      <button #confirmBtn class="am-btn am-btn--primary" (click)="confirm()">{{ state?.confirmText }}</button>
       <button *ngIf="state?.showCancel" class="am-btn am-btn--ghost" (click)="cancel()">{{ state?.cancelText }}</button>
     </div>
   </div>
