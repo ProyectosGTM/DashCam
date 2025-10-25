@@ -24,6 +24,13 @@ export const appRoutes: VexRoutes = [
       )
   },
   {
+    path: 'signup',
+    loadComponent: () =>
+      import('./pages/pages/auth/signup/signup.component').then(
+        (m) => m.SignupComponent
+      )
+  },
+  {
     path: 'forgot-password',
     loadComponent: () =>
       import(

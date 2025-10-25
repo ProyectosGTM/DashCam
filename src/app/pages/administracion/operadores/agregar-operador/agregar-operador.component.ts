@@ -326,9 +326,19 @@ export class AgregarOperadorComponent implements OnInit {
   readonly MAX_MB = 3;
 
   // ================= Utilidades =================
-  private isAllowedPdf(file: File) {
-    return file?.type === 'application/pdf' && file.size <= this.MAX_MB * 1024 * 1024;
-  }
+  private isAllowedPdf(file: File): boolean {
+  const allowed = [
+    'application/pdf',
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'image/webp',
+    'image/gif',
+    'image/bmp'
+  ];
+  return allowed.includes(file.type);
+}
+
 
   private extractFileUrl(res: any): string {
     return res?.url ?? res?.Location ?? res?.data?.url ?? res?.data?.Location

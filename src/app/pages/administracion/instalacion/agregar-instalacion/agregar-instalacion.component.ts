@@ -11,6 +11,15 @@ import { DispositivosService } from 'src/app/pages/services/dispositivos.service
 import { InstalacionesService } from 'src/app/pages/services/instalaciones.service';
 import { VehiculosService } from 'src/app/pages/services/vehiculos.service';
 
+enum EstadoComponente {
+  INACTIVO = 0,
+  DISPONIBLE = 1,
+  ASIGNADO = 2,
+  EN_MANTENIMIENTO = 3,
+  DANADO = 4,
+  RETIRADO = 5,
+}
+
 @Component({
   selector: 'vex-agregar-instalacion',
   templateUrl: './agregar-instalacion.component.html',
@@ -20,18 +29,34 @@ import { VehiculosService } from 'src/app/pages/services/vehiculos.service';
 export class AgregarInstalacionComponent implements OnInit {
 
   layoutCtrl = new UntypedFormControl('fullwidth');
-  public submitButton: string = 'Guardar';
-  public loading: boolean = false;
-  public instalacionesForm!: FormGroup;
-  public idInstalacion!: number;
-  public title = 'Agregar Instalación';
+  submitButton = 'Guardar';
+  loading = false;
+  instalacionesForm!: FormGroup;
+  idInstalacion!: number;
+  title = 'Agregar Instalación';
+
   loadingDependientes = false;
   listaClientes: any[] = [];
   listaValidadores: any[] = [];
   listaContadores: any[] = [];
   listaVehiculos: any[] = [];
-  selectedFileName: string = '';
-  previewUrl: string | ArrayBuffer | null = null;
+
+  idClienteUser!: number;
+  idRolUser!: number;
+  get isAdmin(): boolean { return this.idRolUser === 1; }
+
+  private bootstrapping = false;
+  private lastLoadedCliente: number | null = null;
+
+  private pendingSelecciones: { idValidador?: any; idContadora?: any; idVehiculo?: any } = {};
+  private pendingLabels: { dispositivo?: string | null; bluevox?: string | null; vehiculo?: string | null } = {};
+
+  initialDispositivoId?: number | null;
+  initialBlueVoxId?: number | null;
+
+  estatusDispositivoAnterior?: number | null;
+  estatusBluevoxsAnterior?: number | null;
+  comentarios?: string | null;
 
   constructor(
     private fb: FormBuilder,
@@ -47,146 +72,358 @@ export class AgregarInstalacionComponent implements OnInit {
     private alerts: AlertsService,
   ) {
     const user = this.users.getUser();
+    this.idClienteUser = Number(user?.idCliente);
+    this.idRolUser = Number(user?.rol?.id);
   }
 
   ngOnInit(): void {
     this.initForm();
+    this.suscribirCambioCliente();
+    this.suscribirCambioEquipos();
     this.obtenerClientes();
-    this.obtenerValidadores()
-    this.obtenerContadores()
-    this.obtenerVehiculos()
 
     this.activatedRouted.params.subscribe((params) => {
-      this.idInstalacion = params['idInstalacion'];
+      this.idInstalacion = Number(params['idInstalacion']);
       if (this.idInstalacion) {
         this.title = 'Actualizar Instalación';
         this.obtenerInstalacion();
+        const opts = { emitEvent: false };
+        this.instalacionesForm.get('idCliente')?.disable(opts);
+        this.instalacionesForm.get('idVehiculo')?.disable(opts);
       }
     });
   }
 
-  obtenerClientes() {
-    this.clieService.obtenerClientes().subscribe((res: any) => {
-      const data = res?.data ?? [];
-      this.listaClientes = data.map(this.normalizeCliente);
-    });
+  private keepEditLocks(): void {
+    if (this.idInstalacion) {
+      const opts = { emitEvent: false };
+      this.instalacionesForm.get('idCliente')?.disable(opts);
+      this.instalacionesForm.get('idVehiculo')?.disable(opts);
+    }
   }
 
-  obtenerValidadores() {
-    this.dispoService.obtenerDispositivos().subscribe((res: any) => {
-      const data = res?.data ?? [];
-      this.listaValidadores = data.map(this.normalizeValidador);
-    });
-  }
-
-  obtenerContadores() {
-    this.blueVoService.obtenerDispositivosBlue().subscribe((res: any) => {
-      const data = res?.data ?? [];
-      this.listaContadores = data.map(this.normalizeContador);
-    });
-  }
-
-  obtenerVehiculos() {
-    this.vehiService.obtenerVehiculos().subscribe((res: any) => {
-      const data = res?.data ?? [];
-      this.listaVehiculos = data.map(this.normalizeVehiculo);
-    });
-  }
-
-  obtenerInstalacion() {
-    this.instService.obtenerInstalacion(this.idInstalacion).subscribe((response: any) => {
-      const d = Array.isArray(response?.data) ? response.data[0] : (response?.data ?? {});
-
-      const idCliente = this.num(d?.idCliente);
-      const idValidador = this.num(d?.idValidador ?? d?.idValidadores); // por si viene plural
-      const idContador = this.num(d?.idContador ?? d?.idContadores);
-      const idVehiculo = this.num(d?.idVehiculo);
-
-      // 1) Parchea el formulario
-      this.instalacionesForm.patchValue({
-        estatus: this.num(d?.estatus),
-        idCliente: idCliente,
-        idValidador: idValidador,
-        idContador: idContador,
-        idVehiculo: idVehiculo,
-      }, { emitEvent: false });
-
-      // 2) Asegura que exista la opción seleccionada en cada lista (si no vino en catálogos)
-      if (idValidador && !this.listaValidadores.some(x => +x.id === +idValidador)) {
-        this.listaValidadores.push(this.normalizeValidador({
-          idValidador,
-          id: idValidador,
-          numeroSerie: d?.numeroSerieValidadores ?? d?.numeroSerieValidador ?? '—',
-          marca: d?.marcaValidadores ?? d?.marcaValidador ?? '—',
-          modelo: d?.modeloValidadores ?? d?.modeloValidador ?? '—',
-        }));
-      }
-
-      if (idContador && !this.listaContadores.some(x => +x.id === +idContador)) {
-        this.listaContadores.push(this.normalizeContador({
-          idContador,
-          id: idContador,
-          numeroSerie: d?.numeroSerieContadores ?? d?.numeroSerieContador ?? '—',
-          marca: d?.marcaContadores ?? d?.marcaContador ?? '—',
-          modelo: d?.modeloContadores ?? d?.modeloContador ?? '—',
-        }));
-      }
-
-      if (idVehiculo && !this.listaVehiculos.some(x => +x.id === +idVehiculo)) {
-        this.listaVehiculos.push(this.normalizeVehiculo({
-          idVehiculo,
-          id: idVehiculo,
-          placa: d?.placaVehiculo ?? '—',
-          numeroEconomico: d?.numeroEconomicoVehiculo ?? '—',
-          marcaVehiculo: d?.marcaVehiculo,
-          modeloVehiculo: d?.modeloVehiculo,
-        }));
-      }
-
-      // (Cliente normalmente sí viene en catálogo; si no, puedes hacer lo mismo)
-      if (idCliente && !this.listaClientes.some(x => +x.id === +idCliente)) {
-        this.listaClientes.push(this.normalizeCliente({
-          idCliente,
-          id: idCliente,
-          nombreCliente: d?.nombreCliente ?? 'Cliente (actual)',
-        }));
-      }
-    });
-  }
-
-
-
-  private num = (v: any) => (v === null || v === undefined || v === '' ? null : +v);
-
-  // Normaliza y fuerza IDs a number
-  private normalizeCliente = (c: any) => ({
-    ...c,
-    id: this.num(c.idCliente ?? c.id),
-  });
-
-  private normalizeValidador = (d: any) => ({
-    ...d,
-    id: this.num(d.idValidador ?? d.id),
-  });
-
-  private normalizeContador = (b: any) => ({
-    ...b,
-    id: this.num(b.idContador ?? b.id),
-  });
-
-  private normalizeVehiculo = (v: any) => ({
-    ...v,
-    id: this.num(v.idVehiculo ?? v.id),
-  });
-
-
-  initForm() {
+  initForm(): void {
     this.instalacionesForm = this.fb.group({
       estatus: [1, Validators.required],
-      idCliente: [null, Validators.required],
-      idValidador: [null, Validators.required],
-      idContador: [null, Validators.required],
-      idVehiculo: [null, Validators.required],
+      idCliente: [this.isAdmin ? null : this.idClienteUser, Validators.required],
+      idValidador: [{ value: null, disabled: true }, Validators.required],
+      idContadora: [{ value: null, disabled: true }, Validators.required],
+      idVehiculo: [{ value: null, disabled: true }, Validators.required],
+    });
+
+    if (!this.isAdmin) this.instalacionesForm.get('idCliente')?.disable({ onlySelf: true });
+  }
+
+  private toNumOrNull(v: any): number | null {
+    return v === undefined || v === null || v === '' || Number.isNaN(Number(v)) ? null : Number(v);
+  }
+
+  private pickId(obj: any, keys: string[]): any {
+    for (const k of keys) if (obj?.[k] !== undefined && obj?.[k] !== null) return obj[k];
+    return null;
+  }
+
+  private ensureArray(maybe: any): any[] {
+    if (Array.isArray(maybe)) return maybe;
+    if (Array.isArray(maybe?.data)) return maybe.data;
+    if (maybe && typeof maybe === 'object') {
+      const vals = Object.values(maybe);
+      const firstArr = vals.find((v) => Array.isArray(v));
+      if (firstArr) return firstArr as any[];
+    }
+    return [];
+  }
+
+  private normalizeId<T>(arr: T[] = [], keys: string[] = ['id']): (T & { id: number })[] {
+    return (arr || []).map((x: any) => ({ ...x, id: Number(this.pickId(x, keys)) }));
+  }
+
+  private desactivarCamposDependientes(disabled: boolean) {
+    if (!this.instalacionesForm) return;
+    const opts = { emitEvent: false };
+    const idValidador = this.instalacionesForm.get('idValidador');
+    const idContadora = this.instalacionesForm.get('idContadora');
+    const idVehiculo = this.instalacionesForm.get('idVehiculo');
+
+    if (disabled) {
+      idValidador?.disable(opts);
+      idContadora?.disable(opts);
+      idVehiculo?.disable(opts);
+    } else {
+      idValidador?.enable(opts);
+      idContadora?.enable(opts);
+      idVehiculo?.enable(opts);
+      this.keepEditLocks();
+    }
+  }
+
+  private limpiarDependientes(): void {
+    const opts = { emitEvent: false };
+    this.instalacionesForm.patchValue({ idValidador: null, idContadora: null, idVehiculo: null }, opts);
+    this.listaValidadores = [];
+    this.listaContadores = [];
+    this.listaVehiculos = [];
+  }
+
+  private ensureSelectedOptionVisible(
+    list: any[],
+    selectedId: number | null | undefined,
+    displayLabel: string | null | undefined,
+    labelField: string
+  ): any[] {
+    const id = selectedId == null ? null : Number(selectedId);
+    if (id == null) return list;
+    const exists = list.some((x) => Number(x.id) === id);
+    if (!exists) list.unshift({ id, [labelField]: displayLabel || String(id) });
+    return list;
+  }
+
+  private suscribirCambioCliente(): void {
+    this.instalacionesForm
+      .get('idCliente')
+      ?.valueChanges.pipe(debounceTime(150), distinctUntilChanged())
+      .subscribe((idCliente: any) => {
+        if (this.bootstrapping) return;
+        if (!idCliente) {
+          this.limpiarDependientes();
+          this.desactivarCamposDependientes(true);
+          this.lastLoadedCliente = null;
+          return;
+        }
+        const id = Number(idCliente);
+        if (this.lastLoadedCliente === id) return;
+        this.cargarListasPorCliente(id, false);
+      });
+  }
+
+  private suscribirCambioEquipos(): void {
+    this.instalacionesForm.get('idValidador')?.valueChanges.subscribe(async (nuevo: any) => {
+      if (this.bootstrapping || !this.idInstalacion) return; // solo en edición
+      const prev = this.initialDispositivoId;
+      if (prev != null && Number(nuevo) !== Number(prev)) {
+        const r = await this.solicitarEstadoYComentarios('¿A qué estado deseas cambiar el dispositivo anterior?');
+        if (r) {
+          this.estatusDispositivoAnterior = r.estado ?? null;
+          this.comentarios = r.comentarios ?? this.comentarios ?? null; // puede ir null
+          this.initialDispositivoId = Number(nuevo);
+        }
+      }
+    });
+
+    this.instalacionesForm.get('idContadora')?.valueChanges.subscribe(async (nuevo: any) => {
+      if (this.bootstrapping || !this.idInstalacion) return; // solo en edición
+      const prev = this.initialBlueVoxId;
+      if (prev != null && Number(nuevo) !== Number(prev)) {
+        const r = await this.solicitarEstadoYComentarios('¿A qué estado deseas cambiar el BlueVox anterior?');
+        if (r) {
+          this.estatusBluevoxsAnterior = r.estado ?? null;
+          this.comentarios = r.comentarios ?? this.comentarios ?? null; // puede ir null
+          this.initialBlueVoxId = Number(nuevo);
+        }
+      }
+    });
+  }
+
+  private estadoInputOptions(): Record<string, string> {
+    return {
+      [EstadoComponente.INACTIVO]: 'INACTIVO',
+      [EstadoComponente.DISPONIBLE]: 'DISPONIBLE',
+      [EstadoComponente.ASIGNADO]: 'ASIGNADO',
+      [EstadoComponente.EN_MANTENIMIENTO]: 'EN_MANTENIMIENTO',
+      [EstadoComponente.DANADO]: 'DAÑADO',
+      [EstadoComponente.RETIRADO]: 'RETIRADO',
+    };
+  }
+
+private async solicitarEstadoYComentarios(titulo: string): Promise<{ estado: number; comentarios: string | null } | null> {
+  const html = `
+    <div style="text-align:left">
+      <label style="display:block;margin:12px 0 6px;font-size:12.5px;font-weight:600;color:#9fb0c3;">
+        Selecciona el estado
+      </label>
+      <select id="estado-select" style="width:100%;background:#0b121b;color:#e9eef5;border:1px solid #213041;border-radius:10px;padding:10px 12px;height:44px;transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;">
+        <option value="">-- Selecciona --</option>
+        ${Object.entries(this.estadoInputOptions()).map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}
+      </select>
+
+      <label style="display:block;margin:12px 0 6px;font-size:12.5px;font-weight:600;color:#9fb0c3;">
+        Comentarios (opcional)
+      </label>
+      <input id="comentarios-input" placeholder="Escribe comentarios"
+        style="width:72%;max-width:420px;min-width:240px;margin:0 auto;display:block;background:#0b121b;color:#e9eef5;border:1px solid #213041;border-radius:10px;padding:10px 12px;height:44px;transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;" />
+    </div>
+  `;
+
+  const res = await this.alerts.open({
+    type: 'info',
+    title: titulo,
+    message: html,
+    confirmText: 'Aceptar',
+    cancelText: 'Cancelar',
+    backdropClose: false
+  });
+
+  if (res !== 'confirm') return null;
+
+  const estadoEl = document.getElementById('estado-select') as HTMLSelectElement | null;
+  const comentariosEl = document.getElementById('comentarios-input') as HTMLInputElement | null;
+
+  const estadoStr = estadoEl?.value ?? '';
+  if (!estadoStr) {
+    await this.alerts.open({
+      type: 'error',
+      title: '¡Ops!',
+      message: 'Selecciona un estado',
+      confirmText: 'Entendido',
+      backdropClose: false
+    });
+    return null;
+  }
+
+  return {
+    estado: Number(estadoStr),
+    comentarios: (comentariosEl?.value ?? '').trim() || null
+  };
+}
+
+
+
+  private cargarListasPorCliente(idCliente: number, applyPending: boolean): void {
+    this.loadingDependientes = true;
+    this.limpiarDependientes();
+    this.desactivarCamposDependientes(true);
+
+    const n = (v: any) => (v == null ? null : Number(v));
+
+    forkJoin({
+      dispositivos: this.dispoService.obtenerDispositivosByCliente(idCliente),
+      bluevox: this.blueVoService.obtenerDispositivosBlueByCliente(idCliente),
+      vehiculos: this.vehiService.obtenerVehiculosByCliente(idCliente),
+    })
+      .pipe(finalize(() => (this.loadingDependientes = false)))
+      .subscribe({
+        next: (resp: any) => {
+          const devsRaw = this.ensureArray(resp?.dispositivos ?? resp?.data?.dispositivos ?? resp?.data);
+          const bvxRaw = this.ensureArray(resp?.bluevox ?? resp?.data?.bluevox ?? resp?.data);
+          const vehRaw = this.ensureArray(resp?.vehiculos ?? resp?.data?.vehiculos ?? resp?.data);
+
+          this.listaValidadores = this.normalizeId(devsRaw, ['id', 'idValidador', 'idValidador', 'idValidador']);
+          this.listaContadores = this.normalizeId(bvxRaw, ['id', 'idContadora', 'idContadora', 'idContadora']);
+          this.listaVehiculos = this.normalizeId(vehRaw, ['id', 'idVehiculo', 'IdVehiculo', 'IDVehiculo']);
+
+          if (!this.listaValidadores?.length) this.listaValidadores = [];
+          this.listaValidadores = this.ensureSelectedOptionVisible(
+            this.listaValidadores, this.pendingSelecciones?.idValidador, this.pendingLabels.dispositivo, 'numeroSerie'
+          );
+
+          if (!this.listaContadores?.length) this.listaContadores = [];
+          this.listaContadores = this.ensureSelectedOptionVisible(
+            this.listaContadores, this.pendingSelecciones?.idContadora, this.pendingLabels.bluevox, 'numeroSerieBlueVox'
+          );
+
+          if (!this.listaVehiculos?.length) this.listaVehiculos = [];
+          this.listaVehiculos = this.ensureSelectedOptionVisible(
+            this.listaVehiculos, this.pendingSelecciones?.idVehiculo, this.pendingLabels.vehiculo, 'placa'
+          );
+
+          this.desactivarCamposDependientes(false);
+
+          if (applyPending) {
+            const f = this.instalacionesForm;
+            f.get('idValidador')?.setValue(n(this.pendingSelecciones.idValidador), { emitEvent: false });
+            f.get('idContadora')?.setValue(n(this.pendingSelecciones.idContadora), { emitEvent: false });
+            f.get('idVehiculo')?.setValue(n(this.pendingSelecciones.idVehiculo), { emitEvent: false });
+            this.pendingSelecciones = {};
+          }
+
+          this.lastLoadedCliente = idCliente;
+          this.instalacionesForm.updateValueAndValidity({ emitEvent: false });
+          this.bootstrapping = false;
+          this.cdr.detectChanges();
+        },
+
+        error: (err) => {
+          console.error('[cargarListasPorCliente] error:', err);
+
+          this.listaValidadores = this.ensureSelectedOptionVisible(
+            [], this.pendingSelecciones?.idValidador, this.pendingLabels.dispositivo, 'numeroSerie'
+          );
+          this.listaContadores = this.ensureSelectedOptionVisible(
+            [], this.pendingSelecciones?.idContadora, this.pendingLabels.bluevox, 'numeroSerieBlueVox'
+          );
+          this.listaVehiculos = this.ensureSelectedOptionVisible(
+            [], this.pendingSelecciones?.idVehiculo, this.pendingLabels.vehiculo, 'placa'
+          );
+
+          const f = this.instalacionesForm;
+          const n = (v: any) => (v == null ? null : Number(v));
+          if (this.pendingSelecciones.idValidador != null) f.get('idValidador')?.setValue(n(this.pendingSelecciones.idValidador), { emitEvent: false });
+          if (this.pendingSelecciones.idContadora != null) f.get('idContadora')?.setValue(n(this.pendingSelecciones.idContadora), { emitEvent: false });
+          if (this.pendingSelecciones.idVehiculo != null) f.get('idVehiculo')?.setValue(n(this.pendingSelecciones.idVehiculo), { emitEvent: false });
+          this.pendingSelecciones = {};
+
+          this.desactivarCamposDependientes(false);
+          this.bootstrapping = false;
+          this.instalacionesForm.updateValueAndValidity({ emitEvent: false });
+          this.cdr.detectChanges();
+        },
+      });
+  }
+
+  obtenerInstalacion(): void {
+    this.bootstrapping = true;
+
+    this.instService.obtenerInstalacion(this.idInstalacion).subscribe((response: any) => {
+      const raw = Array.isArray(response?.data) ? response.data[0] : response?.data || {};
+      if (!raw) { this.bootstrapping = false; return; }
+
+      const idClienteSrv = this.toNumOrNull(raw.idCliente ?? raw?.idCliente2?.id);
+      const estatus = this.toNumOrNull(raw.estatus) ?? 1;
+      const idValidador = this.toNumOrNull(raw.idValidador ?? raw?.dispositivos?.id);
+      const idContadora = this.toNumOrNull(raw.idContadora ?? raw?.blueVoxs?.id);
+      const idVehiculo = this.toNumOrNull(raw.idVehiculo ?? raw?.vehiculos?.id);
+
+      this.initialDispositivoId = idValidador ?? null;
+      this.initialBlueVoxId = idContadora ?? null;
+
+      this.pendingLabels = {
+        dispositivo: raw?.numeroSerieDispositivo ?? raw?.numeroSerie ?? null,
+        bluevox: raw?.numeroSerieBlueVox ?? raw?.numeroSerie ?? null,
+        vehiculo: raw?.placaVehiculo ?? raw?.placa ?? raw?.numeroEconomicoVehiculo ?? null,
+      };
+
+      const idCliente = this.isAdmin ? idClienteSrv : this.idClienteUser;
+
+      this.instalacionesForm.patchValue({ idCliente, estatus }, { emitEvent: false });
+      this.pendingSelecciones = { idValidador, idContadora, idVehiculo };
+
+      if (idCliente) {
+        this.cargarListasPorCliente(idCliente, true);
+      } else {
+        this.listaValidadores = this.ensureSelectedOptionVisible([], idValidador, this.pendingLabels.dispositivo, 'numeroSerie');
+        this.listaContadores = this.ensureSelectedOptionVisible([], idContadora, this.pendingLabels.bluevox, 'numeroSerieBlueVox');
+        this.listaVehiculos = this.ensureSelectedOptionVisible([], idVehiculo, this.pendingLabels.vehiculo, 'placa');
+
+        const f = this.instalacionesForm; const opts = { emitEvent: false };
+        if (idValidador != null) f.get('idValidador')?.patchValue(idValidador, opts);
+        if (idContadora != null) f.get('idContadora')?.patchValue(idContadora, opts);
+        if (idVehiculo != null) f.get('idVehiculo')?.patchValue(idVehiculo, opts);
+
+        this.desactivarCamposDependientes(false);
+        f.updateValueAndValidity({ emitEvent: false });
+        this.bootstrapping = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  obtenerClientes(): void {
+    this.clieService.obtenerClientes().subscribe((response: any) => {
+      this.listaClientes = this.normalizeId(response?.data);
+      if (!this.idInstalacion && !this.isAdmin) {
+        this.instalacionesForm.get('idCliente')?.setValue(this.idClienteUser, { emitEvent: false });
+        this.cargarListasPorCliente(this.idClienteUser, false);
+      }
     });
   }
 
@@ -242,9 +479,8 @@ export class AgregarInstalacionComponent implements OnInit {
       });
       return;
     }
-    // === FIN VALIDACIÓN ===
-    const payload = this.instalacionesForm.getRawValue();
 
+    const payload = this.instalacionesForm.getRawValue();
     this.instService.agregarInstalacion(payload).subscribe(
       () => {
         this.submitButton = 'Guardar';
@@ -283,6 +519,16 @@ export class AgregarInstalacionComponent implements OnInit {
     };
     const requeridos = ['idValidador', 'idContador', 'idVehiculo', 'idCliente'];
     const raw = this.instalacionesForm.getRawValue();
+
+    // Construimos EXACTAMENTE el payload requerido
+    const payload = {
+      idValidador: this.toNumOrNull(raw.idValidador),                 // puede ir null
+      estatusDispositivoAnterior: this.estatusDispositivoAnterior ?? null, // puede ir null
+      idContadora: this.toNumOrNull(raw.idContadora),                         // número o null
+      estatusBluevoxsAnterior: this.estatusBluevoxsAnterior ?? null,      // número o null
+      idCliente: this.toNumOrNull(raw.idCliente) ?? this.idClienteUser,   // asegúrate de enviar cliente
+      comentarios: (this.comentarios ?? null)                             // string o null
+    };
     const camposFaltantes: string[] = requeridos.filter(k => !raw[k]).map(k => etiquetas[k] || k);
 
     if (camposFaltantes.length > 0) {
@@ -312,7 +558,6 @@ export class AgregarInstalacionComponent implements OnInit {
       });
       return;
     }
-    const payload = this.instalacionesForm.getRawValue();
 
     this.instService.actualizarInstalacion(this.idInstalacion, payload).subscribe(
       () => {
@@ -330,7 +575,6 @@ export class AgregarInstalacionComponent implements OnInit {
       () => {
         this.submitButton = 'Actualizar';
         this.loading = false;
-
         this.alerts.open({
           type: 'error',
           title: '¡Ops!',
@@ -342,7 +586,11 @@ export class AgregarInstalacionComponent implements OnInit {
     );
   }
 
-  regresar() {
+
+  compareId = (a: any, b: any) => a != null && b != null && Number(a) === Number(b);
+  trackId = (_: number, item: any) => Number(item?.id);
+
+  regresar(): void {
     this.route.navigateByUrl('/administracion/instalaciones');
   }
 }

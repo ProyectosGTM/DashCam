@@ -1,86 +1,182 @@
-<div class="profile-page">
-  <!-- Encabezado (cover) en rojos -->
-  <div class="cover">
-    <div class="cover-overlay"></div>
-  </div>
+<div class="perfil container-fluid px-3 px-md-4 py-4" style="margin-top: 50px;">
+  <div class="row g-4 align-items-stretch">
 
-  <div class="container">
-    <!-- Columna izquierda -->
-    <aside class="sidebar card">
-      <div class="avatar-wrap">
-        <div class="avatar">
-          <img src="https://i.pravatar.cc/120?img=12" alt="Spencer Robin" />
-          <!-- <span class="status-dot"></span> -->
-        </div>
-        <h2 class="name">Root</h2>
-        <p class="role">Super Administrador</p>
-
-        <div class="location">
-          <span class="loc-item">
-            <span class="dot">•</span>
-            Activo
-          </span>
+    <!-- Encabezado -->
+    <div class="col-12">
+      <div class="barra d-flex flex-wrap align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+          <div class="avatar">
+            <img [src]="showImage || 'assets/img/avatar-placeholder.png'" alt="Foto de perfil">
+          </div>
+          <div>
+            <div class="nombre">
+              {{ showNombre }} {{ showApellidoPaterno || ' ' }} {{ showApellidoMaterno || ' ' }}
+            </div>
+            <div class="mini d-flex align-items-center gap-2">
+              <span class="pill pill-rol">{{ showRol }}</span>
+              <span class="pill pill-ok">Activo</span>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- AHORA: Información de contacto en la izquierda -->
-      <div class="section">
-  <h4 class="section-title pink">Información de contacto :</h4>
-  <ul class="contact-list">
-    <li>
-      <span class="ci-icon email">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5L4 8V6l8 5 8-5v2Z"/></svg>
-      </span>
-      <span class="ci-text"><b>Correo :</b> spencer.robin22dexample.com</span>
-    </li>
-    <li>
-      <span class="ci-icon website">
-        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-2h2v2Zm0-4h-2V7h2v6Z"/></svg>
-      </span>
-      <span class="ci-text"><b>Sitio web :</b> www.yourwebsite.com</span>
-    </li>
-    <li>
-      <span class="ci-icon location">
-        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-      </span>
-      <span class="ci-text"><b>Ubicación :</b> Ciudad, País</span>
-    </li>
-    <li>
-      <span class="ci-icon phone">
-        <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.8 15.8 0 0 0 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 3c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1L6.6 10.8Z"/></svg>
-      </span>
-      <span class="ci-text"><b>Teléfono :</b> +1 (222) 111 – 57840</span>
-    </li>
-  </ul>
-</div>
+    <!-- INFO UNIFICADA -->
+    <div class="col-12">
+      <div class="tarjeta ficha info-unificada">
+        <div class="barra-titulo">
+      <div class="t-left">
+        <span class="t-dot">i</span>
+        <span class="t-text">Información del Usuario</span>
+      </div>
+      <div class="t-right">
+        <span class="chip chip-ok">Activo</span>
+        <span class="chip chip-role">{{ showRol }}</span>
+      </div>
+    </div>
 
-    </aside>
+        <div class="row g-3 iu-grid">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="iu-item">
+              <div class="iu-icon">
+                <i class="fa fa-calendar-check"></i>
+              </div>
+              <div class="iu-body">
+                <div class="iu-label">Miembro desde</div>
+                <div class="iu-value">{{ showCreacion || ' ' }}</div>
+              </div>
+            </div>
+          </div>
 
-    <!-- Contenido principal -->
-    <main class="content card">
-      <ul class="tabs">
-        <li class="active">Acerca de</li>
-        <li>Editar perfil</li>
-        <li>Cronología</li>
-        <li>Galería</li>
-        <li>Amigos</li>
-      </ul>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="iu-item">
+              <div class="iu-icon">
+                <i class="fa fa-clock"></i>
+              </div>
+              <div class="iu-body">
+                <div class="iu-label">Último acceso</div>
+                <div class="iu-value">{{ ultimoLogin || ' ' }}</div>
+              </div>
+            </div>
+          </div>
 
-      <div class="body">
-        <!-- Acerca de -->
-        <div class="block">
-          <h4 class="block-title">✨ Acerca de :</h4>
-          <p class="muted">
-            Hola, soy [Tu Nombre], un/a [Tu Profesión/Interés] con base en [Tu Ubicación].
-            Me apasiona [Tus Hobbies/Intereses] y disfruto profundizar en los matices de [Tu Industria/Campo].
-          </p>
-          <p class="muted">
-            Especializado/a en [Tu Especialidad/Área], busco imprimir innovación en cada proyecto que realizo.
-            Con un historial de [Logros Clave] y experiencias valiosas, estoy comprometido/a con el crecimiento
-            continuo y entusiasmado/a por las oportunidades que se presenten.
-          </p>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="iu-item">
+              <div class="iu-icon">
+                <i class="fa fa-envelope"></i>
+              </div>
+              <div class="iu-body">
+                <div class="iu-label">Correo</div>
+                <div class="iu-value">{{ showCorreo }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="iu-item">
+              <div class="iu-icon">
+                <i class="fa fa-phone"></i>
+              </div>
+              <div class="iu-body">
+                <div class="iu-label">Teléfono</div>
+                <div class="iu-value">{{ showTelefono }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="iu-item">
+              <div class="iu-icon">
+                <i class="fa fa-id-badge"></i>
+              </div>
+              <div class="iu-body">
+                <div class="iu-label">Rol</div>
+                <div class="iu-value">{{ showRol }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="iu-item">
+              <div class="iu-icon">
+                <i class="fa fa-shield-alt"></i>
+              </div>
+              <div class="iu-body">
+                <div class="iu-label">Seguridad</div>
+                <div class="iu-value">Alta</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="iu-footer">
+          <div class="chip chip-soft">Miembro</div>
+          <div class="chip chip-soft">Administrador</div>
         </div>
       </div>
-    </main>
+    </div>
+
+
+    <!-- CONTRASEÑA -->
+    <div class="col-12">
+      <div class="tarjeta pasos">
+        <div class="pasos-head">
+          <div class="step"><span>1</span> Actual</div>
+          <div class="divider"></div>
+          <div class="step"><span>2</span> Nueva</div>
+          <div class="divider"></div>
+          <div class="step"><span>3</span> Confirmar</div>
+        </div>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="actualizarContrasena()" novalidate>
+          <div class="row g-3 p-3 p-md-4">
+            <div class="col-12 col-lg-4">
+              <div class="in-wrap">
+                <input id="cp" [type]="show.curr ? 'text' : 'password'" formControlName="passwordActual"
+                  class="form-control neo" placeholder="••••••••" autocomplete="current-password" />
+                <button type="button" class="toggle" (click)="show.curr = !show.curr" aria-label="Mostrar/ocultar">
+                  <i class="fa" [class.fa-eye]="!show.curr" [class.fa-eye-slash]="show.curr"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+              <div class="in-wrap">
+                <input id="np" [type]="show.neu ? 'text' : 'password'" formControlName="passwordNueva"
+                  class="form-control neo" (input)="onPasswordInput()" placeholder="Mínimo 8 caracteres"
+                  autocomplete="new-password" />
+                <button type="button" class="toggle" (click)="show.neu = !show.neu" aria-label="Mostrar/ocultar">
+                  <i class="fa" [class.fa-eye]="!show.neu" [class.fa-eye-slash]="show.neu"></i>
+                </button>
+                <small class="hint" [@hintSwap]="hintVersion" [ngClass]="passwordStrengthColor" aria-live="polite"
+                  role="status">
+                  {{ passwordStrengthMsg }}
+                </small>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+              <div class="in-wrap">
+                <input id="cf" [type]="show.conf ? 'text' : 'password'" formControlName="passwordNuevaConfirmacion"
+                  class="form-control neo" (input)="updateConfirmState()" placeholder="Repite la contraseña"
+                  autocomplete="new-password" />
+                <button type="button" class="toggle" (click)="show.conf = !show.conf" aria-label="Mostrar/ocultar">
+                  <i class="fa" [class.fa-eye]="!show.conf" [class.fa-eye-slash]="show.conf"></i>
+                </button>
+                <small class="hint" [ngClass]="confirmState" *ngIf="confirmMsg">{{ confirmMsg }}</small>
+              </div>
+            </div>
+
+            <div class="col-12 d-flex flex-wrap gap-2 mt-3">
+              <button class="btn btn-primario" type="submit">Actualizar contraseña</button>
+              <button class="btn btn-lite" type="button" (click)="onResetPassword()"
+                [disabled]="loading">Cancelar</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
   </div>
 </div>

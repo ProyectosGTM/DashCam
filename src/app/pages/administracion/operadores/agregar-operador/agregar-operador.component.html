@@ -92,13 +92,14 @@
 
                                         <mat-progress-bar *ngIf="uploadingLic" mode="indeterminate"></mat-progress-bar>
 
-                                        <input #licFileInput type="file" class="d-none" accept="application/pdf"
+                                        <input #licFileInput type="file" class="d-none" accept="application/pdf,image/*"
                                             (change)="onLicFileSelected($event)">
                                     </div>
 
                                     <mat-error *ngIf="operadorForm.get('licencia')?.hasError('invalid')">
-                                        Archivo no permitido (solo PDF).
-                                    </mat-error>
+  Archivo no permitido (PDF o imagen).
+</mat-error>
+
                                 </div>
 
                                 <div class="col-12 col-md-6 col-lg-4">

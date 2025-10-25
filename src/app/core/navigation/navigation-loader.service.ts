@@ -162,13 +162,13 @@ export class NavigationLoaderService {
             label: 'Roles',
             route: '/administracion/roles',
             icon: 'mat:group'
-          }
-          // {
-          //   type: 'link',
-          //   label: 'Perfil de Usuario',
-          //   route: '/administracion/perfil-usuario',
-          //   icon: 'mat:person',
-          // },
+          },
+          {
+            type: 'link',
+            label: 'Perfil de Usuario',
+            route: '/administracion/perfil-usuario',
+            icon: 'mat:person',
+          },
         ]
       },
       {

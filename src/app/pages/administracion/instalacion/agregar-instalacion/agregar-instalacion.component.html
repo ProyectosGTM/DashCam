@@ -44,7 +44,7 @@
                                 <mat-form-field appearance="fill" class="w-100">
                                     <mat-select placeholder="Validador" formControlName="idValidador">
                                         <mat-option *ngFor="let d of listaValidadores" [value]="d.id">
-                                            {{ d.numeroSerie }} — {{ d.marca }} {{ d.modelo }}
+                                            {{ d.numeroSerie }} — {{ d.marca }} - {{ d.modelo }}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>

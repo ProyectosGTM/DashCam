@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -15,10 +15,10 @@ export class UsuariosService {
   }
 
   obtenerUsuariosData(page: number, pageSize: number): Observable<any> {
-		return this.http.get(`${environment.API_SECURITY}/usuarios/${page}/${pageSize}`);
-	}
+    return this.http.get(`${environment.API_SECURITY}/usuarios/${page}/${pageSize}`);
+  }
 
-  obtenerUsuariosRolOperador(): Observable <any>{
+  obtenerUsuariosRolOperador(): Observable<any> {
     return this.http.get<any>(`${environment.API_SECURITY}/usuarios/list/rol/operador`)
   }
 
@@ -27,17 +27,17 @@ export class UsuariosService {
   }
 
   eliminarUsuario(idUsuario: Number) {
-		return this.http.delete(environment.API_SECURITY + '/usuarios/' + idUsuario);
-	}
+    return this.http.delete(environment.API_SECURITY + '/usuarios/' + idUsuario);
+  }
 
   obtenerUsuario(idUsuario: number): Observable<any> {
-		return this.http.get<any>(environment.API_SECURITY + '/usuarios/' + idUsuario);
-	}
+    return this.http.get<any>(environment.API_SECURITY + '/usuarios/' + idUsuario);
+  }
 
   actualizarUsuario(idUsuario: number, saveForm: any): Observable<any> {
     return this.http.put(`${environment.API_SECURITY}/usuarios/` + idUsuario, saveForm);
   }
-  
+
   uploadFile(data: FormData): Observable<any> {
     return this.http.post<any>(`${environment.API_SECURITY}/s3/upload`, data);
   }
@@ -52,6 +52,27 @@ export class UsuariosService {
     const body = { estatus };
     return this.http.patch(url, body, { responseType: 'text' }).pipe(
       catchError(error => throwError(() => error))
+    );
+  }
+
+  solicitarCambioContrasena(data: any) {
+    return this.http.post(
+      environment.API_SECURITY + '/login/usuario/recuperar/acceso',
+      data,
+      { responseType: 'text' as const }
+    );
+  }
+
+
+  cambioContrasena(data: any, token: string) {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(
+      environment.API_SECURITY + '/login/cambiar/accesso',
+      data,
+      {
+        headers,
+        responseType: 'text' as const   // <- igual que el otro: texto plano
+      }
     );
   }
 }

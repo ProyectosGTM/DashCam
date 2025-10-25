@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'vex-ver-documento-operador',
   templateUrl: './ver-documento-operador.component.html',
-  styleUrl: './ver-documento-operador.component.scss'
+  styleUrls: ['./ver-documento-operador.component.scss']
 })
 export class VerDocumentoOperadorComponent implements OnInit {
 
@@ -14,6 +14,8 @@ export class VerDocumentoOperadorComponent implements OnInit {
   titulo = 'Documento';
   url?: string;
   urlSanitizada?: SafeResourceUrl;
+  urlImgSanitizada?: SafeUrl;
+  esImagen = false;
 
   constructor(
     private router: Router,
@@ -26,26 +28,29 @@ export class VerDocumentoOperadorComponent implements OnInit {
     this.url = state.url || this.route.snapshot.queryParamMap.get('url') || '';
     this.titulo = state.titulo || this.route.snapshot.queryParamMap.get('titulo') || 'Documento';
 
-    // LOG para verificar que sí llega
-    console.log('[VerDocumento] url:', this.url);
-    console.log('[VerDocumento] titulo:', this.titulo);
-
     if (this.url) {
-      this.urlSanitizada = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
+      this.esImagen = this.isImageUrl(this.url);
+      if (this.esImagen) {
+        this.urlImgSanitizada = this.sanitizer.bypassSecurityTrustUrl(this.url);
+        this.urlSanitizada = undefined;
+      } else {
+        this.urlSanitizada = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
+        this.urlImgSanitizada = undefined;
+      }
     }
   }
 
+  ngOnInit(): void {}
+
   abrirNuevaPestana() {
     if (this.url) window.open(this.url, '_blank', 'noopener');
-  }
-
-  ngOnInit(): void {
-
   }
 
   volver() {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-
+  private isImageUrl(u: string): boolean {
+    return /\.(png|jpe?g|webp|gif|bmp|svg)(\?.*)?$/i.test(u);
+  }
 }

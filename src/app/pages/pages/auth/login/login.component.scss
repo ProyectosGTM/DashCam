@@ -49,3 +49,39 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+:root {
+  --azul-oscuro: #0A2E57;
+  --azul: #1F5AA8;
+  --lime: #A6CE39;
+  --blanco: #FFFFFF;
+}
+
+.login-link-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.login-link {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: var(--azul);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: transform .15s ease, background-color .15s ease, color .15s ease;
+  background: rgba(31, 90, 168, 0.08);
+}
+
+.login-link:hover {
+  color: var(--azul-oscuro);
+  background: rgba(31, 90, 168, 0.14);
+  transform: translateY(-1px);
+}
+
+.login-link:active {
+  transform: translateY(0);
+  background: rgba(31, 90, 168, 0.2);
+}

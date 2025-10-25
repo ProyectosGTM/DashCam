@@ -85,3 +85,9 @@
   transform: translateY(0);
   background: rgba(31, 90, 168, 0.2);
 }
+
+.pw-hint, .match-hint { font-size: 12px; margin-top: 6px; display: flex; gap: 6px; align-items: center; }
+.ok  { color: #01a13c; }   /* verde */
+.bad { color: #ff6b6b; }   /* rojo  */
+.eyeButton { position: absolute; right: 12px; top: 38px; cursor: pointer; color: #a1a1a1; }
+.input-group { position: relative; }

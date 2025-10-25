@@ -151,7 +151,9 @@
 /* Scroll vertical en la lista de monederos */
 .recarga-list {
   list-style: none;
-  margin: 0;
+  align-items: flex-start;     /* no stretch */
+  align-content: flex-start;   /* por si hay una sola fila */
+  min-height: 0;   
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -169,7 +171,6 @@
   padding-right: .25rem;
 
   /* (opcional) alto mínimo para que el contenedor no se vea “enano” con pocos items */
-  min-height: 220px;
 }
 
 /* Opcional: estiliza la barra (WebKit) */
@@ -186,6 +187,7 @@
 
 
 .recarga-list-item {
+  align-self: flex-start;
   position: relative;
   flex: 1 1 calc(33.333% - 8px); /* 3 por fila */
   min-width: 260px;
